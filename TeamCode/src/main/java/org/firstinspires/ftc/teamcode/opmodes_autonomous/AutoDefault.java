@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 //import org.firstinspires.ftc.teamcode.bot.Robot;
 
 @Autonomous
-public class AutoBlue extends LinearOpMode {
+public class AutoDefault extends LinearOpMode {
     //Robot robot;
 
     @Override
