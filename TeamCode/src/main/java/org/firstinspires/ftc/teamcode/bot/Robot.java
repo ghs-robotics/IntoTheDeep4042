@@ -5,12 +5,14 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
+import org.firstinspires.ftc.teamcode.bot.drivemodes.MecanumDrive;
 //import org.firstinspires.ftc.teamcode.control.cv.Camera;
 
 public class Robot {
     HardwareMap hardwareMap;
     Telemetry telemetry;
 
+    public MecanumDrive drive;
     //public Camera cam;
 
     //FtcDashboard dashboard;
@@ -19,6 +21,7 @@ public class Robot {
 
     public Robot(HardwareMap hardwareMap, Telemetry telemetry, boolean red){
         this(hardwareMap, telemetry);
+        drive = new MecanumDrive(hardwareMap, telemetry);
         //cam = new Camera(hardwareMap, telemetry, red);
         RED = red;
         //cam.setCamera();

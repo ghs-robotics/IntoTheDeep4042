@@ -21,10 +21,10 @@ public class MecanumDrive {
     public MecanumDrive(HardwareMap hardwareMap, Telemetry telemetry){
 
         // Gets the motor from the hub, make sure the name matches the config on the Driver hub
-        leftFrontDrive = hardwareMap.get(DcMotor.class, "tarquinius");
-        leftBackDrive = hardwareMap.get(DcMotor.class, "jalsene");
-        rightFrontDrive = hardwareMap.get(DcMotor.class, "mctaggart");
-        rightBackDrive = hardwareMap.get(DcMotor.class, "bob");
+        leftFrontDrive = hardwareMap.get(DcMotor.class, "lf");
+        leftBackDrive = hardwareMap.get(DcMotor.class, "lb");
+        rightFrontDrive = hardwareMap.get(DcMotor.class, "rf");
+        rightBackDrive = hardwareMap.get(DcMotor.class, "rb");
 
         leftFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -42,6 +42,11 @@ public class MecanumDrive {
     }
 
     public void calculateDrivePowers(double x, double y, double rot) {
+        //scale input so motor doesn't necessarily run at full throttle
+        x *= inputScalerX;
+        y *= inputScalerY;
+        rot *= inputScalerRot;
+
         double leftFrontPower = y - x + rot;
         double leftBackPower = y + x + rot;
         double rightFrontPower = y + x - rot;
@@ -49,5 +54,4 @@ public class MecanumDrive {
 
         setDrivePowers(leftFrontPower, leftBackPower, rightFrontPower, rightBackPower);
     }
-
 }
