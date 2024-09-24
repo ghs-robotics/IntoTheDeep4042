@@ -19,20 +19,11 @@ public class Robot {
 
     public boolean RED;
 
-    public Robot(HardwareMap hardwareMap, Telemetry telemetry, boolean red){
-        this(hardwareMap, telemetry);
-        drive = new MecanumDrive(hardwareMap, telemetry);
-        //cam = new Camera(hardwareMap, telemetry, red);
-        RED = red;
-        //cam.setCamera();
-    }
-
-    public Robot(HardwareMap hardwareMap, Telemetry telemetry){
+    public Robot(HardwareMap hardwareMap, Telemetry telemetry) {
         this.hardwareMap = hardwareMap;
-        //dashboard = FtcDashboard.getInstance();
-        //this.telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
-
         this.telemetry = telemetry;
+
+        drive = new MecanumDrive(hardwareMap, telemetry);
     }
 
     /**
