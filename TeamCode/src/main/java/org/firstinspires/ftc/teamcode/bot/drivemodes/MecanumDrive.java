@@ -13,9 +13,9 @@ public class MecanumDrive {
     private DcMotor rightBackDrive;
 
     //Input
-    private double inputScalerX = 0.85;
-    private double inputScalerY = 0.85;
-    private double inputScalerRot = 0.6;
+    private double inputScalerX = 0.7;
+    private double inputScalerY = 0.7;
+    private double inputScalerRot = 0.5;
 
 
     public MecanumDrive(HardwareMap hardwareMap, Telemetry telemetry){
@@ -47,10 +47,10 @@ public class MecanumDrive {
         y *= inputScalerY;
         rot *= inputScalerRot;
 
-        double leftFrontPower = y - x + rot;
-        double leftBackPower = y + x + rot;
-        double rightFrontPower = y + x - rot;
-        double rightBackPower = y - x - rot;
+        double leftFrontPower = rot - x + y;
+        double leftBackPower = rot + x + y;
+        double rightFrontPower = rot - x - y;
+        double rightBackPower = rot + x - y;
 
         setDrivePowers(leftFrontPower, leftBackPower, rightFrontPower, rightBackPower);
     }
