@@ -43,7 +43,6 @@ public class Robot {
      */
     public void update(){
         //drive.update();
-        telemetry.update();
     }
 
     public void getAutoTelemetry(){

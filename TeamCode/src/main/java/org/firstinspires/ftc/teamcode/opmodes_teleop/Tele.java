@@ -44,15 +44,24 @@ public class Tele extends LinearOpMode {
             //                                  GAMEPAD 2
             //-------------------------------------------------------------------------------------
 
-            if (gp2.a.pressing()) testServo.setPosition(0);
-            if (gp2.y.pressing()) testServo.setPosition(1);
+            if (gp2.a.pressing()) {
+                testServo.setPosition(0);
+                telemetry.addLine("Pressing: A");
+            }
+            if (gp2.y.pressing()) {
+                testServo.setPosition(1);
+                telemetry.addLine("Pressing: Y");
+            }
+            else if (gp2.x.pressed()) {
+                double pos = testServo.getPosition();
+                telemetry.addLine("Servo Pos: " + pos);
+            }
 
             //-------------------------------------------------------------------------------------
             //                                  TELEMETRY
             //-------------------------------------------------------------------------------------
 
-            //robot.update();
-            //robot.getTeleOpTelemetry();
+            telemetry.update();
         }
     }
 }
