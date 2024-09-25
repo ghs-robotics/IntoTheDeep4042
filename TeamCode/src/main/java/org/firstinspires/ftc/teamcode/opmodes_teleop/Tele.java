@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.opmodes_teleop;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.bot.Robot;
 import org.firstinspires.ftc.teamcode.opmodes_teleop.input.Controller;
@@ -12,12 +13,16 @@ public class Tele extends LinearOpMode {
     Controller gp1;
     Controller gp2;
 
+    Servo testServo;
+
     @Override
     public void runOpMode() throws InterruptedException {
         robot = new Robot(hardwareMap, telemetry);
 
         gp1 = new Controller(gamepad1);
         gp2 = new Controller(gamepad2);
+
+        testServo = hardwareMap.get(Servo.class, "testServo");
 
         //robot.init();
         waitForStart();
@@ -33,20 +38,14 @@ public class Tele extends LinearOpMode {
             //                                  GAMEPAD 1
             //-------------------------------------------------------------------------------------
 
-            if (gp1.a.pressed()){
-                telemetry.addLine("DEBUGGING INPUT------------------------|");
-                telemetry.addLine("left_stick_x: " + (gp1.left_stick_x));
-                telemetry.addLine("left_stick_x: " + (gp1.left_stick_y));
-                telemetry.addLine("right_stick_x: " + (gp1.right_stick_x));
-                telemetry.update();
-            }
-
-            robot.drive.calculateDrivePowers(-gp1.left_stick_x, -gp1.left_stick_y, gp1.right_stick_x);
+            robot.drive.calculateDrivePowers(gp1.left_stick_x, gp1.left_stick_y, gp1.right_stick_x);
 
             //-------------------------------------------------------------------------------------
             //                                  GAMEPAD 2
             //-------------------------------------------------------------------------------------
 
+            if (gp2.a.pressed()) testServo.setPosition(0);
+            if (gp2.y.pressed()) testServo.setPosition(1);
 
             //-------------------------------------------------------------------------------------
             //                                  TELEMETRY
