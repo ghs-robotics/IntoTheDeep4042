@@ -32,6 +32,13 @@ public class Tele extends LinearOpMode {
             //                                  GAMEPAD 1
             //-------------------------------------------------------------------------------------
 
+            if (gp1.a.pressed()){
+                telemetry.addLine("DEBUGGING INPUT------------------------|");
+                telemetry.addLine("left_stick_x: " + (gp1.left_stick_x));
+                telemetry.addLine("left_stick_x: " + (gp1.left_stick_y));
+                telemetry.addLine("right_stick_x: " + (gp1.right_stick_x));
+            }
+
             robot.drive.calculateDrivePowers(gp1.left_stick_x, gp1.left_stick_y, gp1.right_stick_x);
 
             //-------------------------------------------------------------------------------------
