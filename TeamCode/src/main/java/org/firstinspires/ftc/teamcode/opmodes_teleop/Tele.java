@@ -22,6 +22,7 @@ public class Tele extends LinearOpMode {
         //robot.init();
         waitForStart();
         telemetry.addLine("Initializing");
+        telemetry.update();
         //robot.update();
 
         while (opModeIsActive()){
@@ -37,6 +38,7 @@ public class Tele extends LinearOpMode {
                 telemetry.addLine("left_stick_x: " + (gp1.left_stick_x));
                 telemetry.addLine("left_stick_x: " + (gp1.left_stick_y));
                 telemetry.addLine("right_stick_x: " + (gp1.right_stick_x));
+                telemetry.update();
             }
 
             robot.drive.calculateDrivePowers(gp1.left_stick_x, gp1.left_stick_y, gp1.right_stick_x);
