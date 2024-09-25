@@ -24,11 +24,9 @@ public class Tele extends LinearOpMode {
 
         testServo = hardwareMap.get(Servo.class, "testServo");
 
-        //robot.init();
         waitForStart();
         telemetry.addLine("Initializing");
         telemetry.update();
-        //robot.update();
 
         while (opModeIsActive()){
             gp1.update();
