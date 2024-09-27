@@ -7,23 +7,27 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class PIDController {
 
+    private double targetPos;
+
+//    private double maxOutput; Do I want this???
+
     private double integral = 0;
-    private double maxIntegral;
+    private static final double maxIntegral = 1;
 
     private double lastError;
 
     private double repetitions = 0;
 
-    private static PIDCoefficients PIDWeight = new PIDCoefficients(.152, .00165765, .0016622);
+    private static final PIDCoefficients PIDWeight = new PIDCoefficients(.152, .00165765, .0016622);
 
     private ElapsedTime PIDTimer;
 
-    public void init(double maxIntegral) {
-        this.maxIntegral = maxIntegral;
+    public PIDController(double targetPos) {
+        this.targetPos = targetPos;
         PIDTimer = new ElapsedTime();
     }
 
-    public double getPIDOutput (double currentPos, double targetPos ) {
+    public double getPIDOutput (double currentPos) {
         double error = currentPos - targetPos;
         if (repetitions == 0) lastError = error;
 
