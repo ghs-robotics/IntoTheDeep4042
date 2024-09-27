@@ -11,16 +11,17 @@ import static org.firstinspires.ftc.teamcode.control.presets.AutoPresets.rightSp
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.bot.Robot;
+import org.firstinspires.ftc.teamcode.bot.control.PIDController;
 //import org.firstinspires.ftc.teamcode.control.NavigationPID;
 
 public class AutoActions {
+
+    private Robot robot;
+
     // identities
     public static final int DONE = -1;
     public static final int MOVE = 0;
-    public static final int WAIT = 5;
-
-
-    private Robot robot;
+    public static final int WAIT = 1;
 
     private int identity;
     private boolean endAction;
@@ -36,21 +37,15 @@ public class AutoActions {
 
     double waitTime;
 
-    //private NavigationPID xPID;
-    //private NavigationPID yPID;
+    private PIDController xPID;
+    private PIDController yPID;
 
 
     public AutoActions(int id, Robot robot){
-        this.identity = id;
-        this.robot = robot;
-        timerReset = false;
-        timer = new ElapsedTime();
-
-        setDescription();
+        init(id, robot);
     }
 
     public AutoActions(int id, Robot robot, int x, int y, double heading){
-        this(id, robot);
         this.x = x;
         this.y = y;
         this.heading = heading;
@@ -62,15 +57,26 @@ public class AutoActions {
         //xPID.setTarget(x);
         //yPID.setTarget(y);
 
+        init(id, robot);
     }
     public AutoActions(int id, Robot robot, double value){
-        this(id, robot);
         if (id == WAIT){
             waitTime = value;
         }
+        init(id, robot);
     }
+
     public AutoActions (int id, Robot robot, double[] pos){
         this(id, robot, (int) pos[0], (int) pos[1], (int) pos[2]);
+    }
+
+    private void init(int id, Robot robot) {
+        this.identity = id;
+        this.robot = robot;
+        timerReset = false;
+        timer = new ElapsedTime();
+
+        setDescription();
     }
     /**
      * Driving the rob
@@ -255,24 +261,27 @@ public class AutoActions {
     }
 
     /**
-     * @return description of the specific object's action and status
-     */
-    public String getDescription() { return description; }
-
-    /**
      * helper method to get telemetry text
      */
     private void setDescription() {
-        description = "";
+        description = "id: " + identity + "; ";
         switch (identity){
+            case DONE:
+                description += "No Description Provided.";
+                break;
             case MOVE:
-                description = "Moving";
+                description += "Moving";
                 break;
             case WAIT:
-                description = "Waiting";
+                description += "Waiting";
                 break;
         }
     }
+
+    /**
+     * @return description of the specific object's action and status
+     */
+    public String getDescription() { return description; }
 
     /*private void setNavPID(){
         double outPutLimit = 2;

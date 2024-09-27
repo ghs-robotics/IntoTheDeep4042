@@ -14,7 +14,7 @@ public class PIDController {
 
     private double repetitions = 0;
 
-    public static PIDCoefficients PIDWeight = new PIDCoefficients(.152, .00165765, .0016622);
+    private static PIDCoefficients PIDWeight = new PIDCoefficients(.152, .00165765, .0016622);
 
     private ElapsedTime PIDTimer;
 
