@@ -1,8 +1,5 @@
 package org.firstinspires.ftc.teamcode.bot.control;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import com.qualcomm.hardware.bosch.BNO055IMU;
@@ -30,40 +27,56 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class PIDTurnController {
 
-    // get elapsed time
     private ElapsedTime PIDTimer = new ElapsedTime();
 
-    // i
     private double integral = 0;
 
-    // counter
     private double repetitions = 0;
 
-    // get FIRST pid coefficients to hold pid generated coefficients
-    private static PIDCoefficients testPID = new PIDCoefficients(0,0,0);
+    private static PIDCoefficients PIDGain = new PIDCoefficients(.152, .00165765, .0016622);
 
-    // TODO: Uncomment if using FTC dashboard
-    // FtcDashboard dashboard;
 
-    // constructor
     public PIDTurnController() {
-
+        // get imu
+        BNO055IMU imu;
+        Orientation angles;
+        Acceleration gravity;
+        BNO055IMU.Parameters imuParameters;
     }
 
-    // get motors
-    private DcMotor leftFront   = null;
-    private DcMotor rightFront  = null;
-    private DcMotor leftRear    = null;
-    private DcMotor rightRear   = null;
-    private HardwareMap hwMap = null;
+    // main pid turn with imu method
+//    public void turnPID(double targetAngle, double firstAngle) {
+//        double firstError = targetAngle - firstAngle;
+//        // first error used similarly to as placeholder
+//        double error = firstError;
+//        double lastError = 0;
+//        // error for use to stop while loop
+//        double imuError;
+//        /* ONLY FOR MOTOR TICKS IF NEEDED; USUALLY IGNORE
+//         * Comparison value dependent on motor tick count
+//         * Higher end motor tick count: higher value
+//         * Lower end motor tick count: lower value
+//         */
+//        while (error < targetAngle /*Modify if needed*/) {
+//            // DEV TODO: Look into Android Studio error for imu angular orientation LINES (125, 135 *subject to change*)
+//            error = firstError;//imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES) + firstError;
+//            double changeInError = lastError - error;
+//            integral += changeInError * PIDTimer.time();
+//            double derivative = changeInError / PIDTimer.time();
+//            double P = PIDGain.p * error;
+//            double I = PIDGain.i * integral;
+//            double D = PIDGain.d * derivative;
+//            leftFront.setPower(P + I + D);
+//            rightFront.setPower(-P + -I + -D);
+//            leftRear.setPower(P + I + D);
+//            rightRear.setPower(-P + -I + -D);
+//            error = lastError;
+//            PIDTimer.reset();
+//            imuError = firstError;//imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES) + firstError;
+//        }
+//    }
 
-    // get imu
-    BNO055IMU imu;
-    Orientation angles;
-    Acceleration gravity;
-    BNO055IMU.Parameters imuParameters;
-
-    public void init() {
+    /*public void init() {
         // Define and Initialize Motors.  Assign Names that match the setup on the RC Phone
         leftFront   = hwMap.dcMotor.get("leftfront");
         rightFront  = hwMap.dcMotor.get("rightfront");
@@ -97,43 +110,6 @@ public class PIDTurnController {
         imuParameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
         imuParameters.loggingEnabled = false;
         imu.initialize(imuParameters);
-    }
-
-    public void runOpMode() {
-        // TODO: Uncomment if using FTC dashboard
-        // dashboard = FtcDashboard.getInstance();
-    }
-
-    // main pid turn with imu method
-    public void turnPID(double targetAngle, double firstAngle) {
-        double firstError = targetAngle - firstAngle;
-        // first error used similarly to as placeholder
-        double error = firstError;
-        double lastError = 0;
-        // error for use to stop while loop
-        double imuError;
-        /* ONLY FOR MOTOR TICKS IF NEEDED; USUALLY IGNORE
-         * Comparison value dependent on motor tick count
-         * Higher end motor tick count: higher value
-         * Lower end motor tick count: lower value
-         */
-        while (error < targetAngle /*Modify if needed*/) {
-            // DEV TODO: Look into Android Studio error for imu angular orientation LINES (125, 135 *subject to change*)
-            error = firstError;//imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES) + firstError;
-            double changeInError = lastError - error;
-            integral += changeInError * PIDTimer.time();
-            double derivative = changeInError / PIDTimer.time();
-            double P = testPID.p * error;
-            double I = testPID.i * integral;
-            double D = testPID.d * derivative;
-            leftFront.setPower(P + I + D);
-            rightFront.setPower(-P + -I + -D);
-            leftRear.setPower(P + I + D);
-            rightRear.setPower(-P + -I + -D);
-            error = lastError;
-            PIDTimer.reset();
-            imuError = firstError;//imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES) + firstError;
-        }
-    }
+    }*/
 }
 

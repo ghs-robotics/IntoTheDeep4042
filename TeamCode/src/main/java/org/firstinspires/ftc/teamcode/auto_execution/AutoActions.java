@@ -39,6 +39,7 @@ public class AutoActions {
 
     private PIDController xPID;
     private PIDController yPID;
+    private PIDController rotPID;
 
 
     public AutoActions(int id, Robot robot){
@@ -54,9 +55,9 @@ public class AutoActions {
         //checkXSign();
 
         //MAYBE MAKE PID ONE DIMENSIONAL, NOT X AND Y AND ROT AT SAME TIME???
-        xPID = new PIDController(x);
-        yPID = new PIDController(y);
-        //Add rotationalPID
+        xPID = new PIDController(x, false);
+        yPID = new PIDController(y, false);
+        rotPID = new PIDController(heading, true);
 
         init(id, robot);
     }
@@ -86,11 +87,25 @@ public class AutoActions {
      * Driving the rob
      */
     private void moveTo(){
-        /*resetTimer();
+        resetTimer();
 
-        boolean there = robot.drive.runToPosition(xPID, yPID);
-        boolean timeOut = timer.milliseconds() > 4250;
-        endAction = there || timeOut;*/
+        //Theoretical position and rotation
+        //TODO: Change out for real measurements
+        double currentX = 0;
+        double currentY = 0;
+        double currentRot = 0;
+
+        double outputX = xPID.getPIDOutput(currentX);
+        double outputY = yPID.getPIDOutput(currentY);
+        double outputRot = rotPID.getPIDOutput(currentRot);
+
+        boolean hasArrived = xPID.hasArrived() && yPID.hasArrived() && rotPID.hasArrived();
+
+        if (!hasArrived) robot.drive.calculateDrivePowers(outputX, outputY, outputRot);
+        else robot.drive.calculateDrivePowers(0, 0, 0);
+
+        boolean timeOut = timer.milliseconds() > 5000;
+        endAction = hasArrived || timeOut;
     }
 
 

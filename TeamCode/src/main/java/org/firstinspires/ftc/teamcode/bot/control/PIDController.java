@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.bot.control;
 
 //import com.acmerobotics.dashboard.FtcDashboard;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDCoefficients;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -9,7 +8,9 @@ public class PIDController {
 
     private double targetPos;
 
-//    private double maxOutput; Do I want this???
+    private double error;
+
+    private static final double maxOutput = 1;
 
     private double integral = 0;
     private static final double maxIntegral = 1;
@@ -18,17 +19,25 @@ public class PIDController {
 
     private double repetitions = 0;
 
-    private static final PIDCoefficients PIDWeight = new PIDCoefficients(.152, .00165765, .0016622);
+    //Boolean to change constants depending on if PID is being used for position or rotation
+    private boolean isPIDRot;
+
+    private static final PIDCoefficients PIDGainPos = new PIDCoefficients(.152, .00165765, .0016622);
+    private static final PIDCoefficients PIDGainRot = new PIDCoefficients(.152, .00165765, .0016622);
+
+    private static final double arrivedDistThresholdPos = 1;
+    private static final double arrivedDistThresholdRot = 1;
 
     private ElapsedTime PIDTimer;
 
-    public PIDController(double targetPos) {
+    public PIDController(double targetPos, boolean isPIDRot) {
         this.targetPos = targetPos;
+        this.isPIDRot = isPIDRot;
         PIDTimer = new ElapsedTime();
     }
 
     public double getPIDOutput (double currentPos) {
-        double error = currentPos - targetPos;
+        error = currentPos - targetPos;
         if (repetitions == 0) lastError = error;
 
         double changeInError = lastError - error;
@@ -36,9 +45,15 @@ public class PIDController {
         integral = clamp(integral + changeInError * PIDTimer.time(), -maxIntegral, maxIntegral);
         double derivative = changeInError / PIDTimer.time();
 
-        double P = PIDWeight.p * error;
-        double I = PIDWeight.i * integral;
-        double D = PIDWeight.d * derivative;
+        //Determine PID Gain for either position of rotation
+        //k represents gain
+        double kp = isPIDRot ? PIDGainRot.p : PIDGainPos.p;
+        double ki = isPIDRot ? PIDGainRot.i : PIDGainPos.i;
+        double kd = isPIDRot ? PIDGainRot.d : PIDGainPos.d;
+
+        double P = kp * error;
+        double I = ki * integral;
+        double D = kd * derivative;
 
         lastError = error;
         PIDTimer.reset();
@@ -51,6 +66,11 @@ public class PIDController {
         if (value > max) return max;
         if (value < min) return min;
         return value;
+    }
+
+    //Returns whether or not the robot has moved close enough to its desired position or rotation.
+    public boolean hasArrived() {
+        return error < (isPIDRot ? arrivedDistThresholdRot : arrivedDistThresholdPos);
     }
 
 //    private void moveTestMotor(double targetPosition) {
