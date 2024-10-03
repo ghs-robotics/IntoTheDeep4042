@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.bot.Robot;
 //import org.firstinspires.ftc.teamcode.bot.Robot;
 
 @Autonomous
-public class AutoDefault extends LinearOpMode {
+public class AutoTesting extends LinearOpMode {
     Robot robot;
 
     @Override
@@ -20,6 +20,7 @@ public class AutoDefault extends LinearOpMode {
         telemetry.update();
 
         while (opModeIsActive()){
+
 
         }
     }
