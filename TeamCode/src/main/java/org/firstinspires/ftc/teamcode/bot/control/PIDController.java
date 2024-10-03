@@ -5,6 +5,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDCoefficients;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.util.MathHelper;
+
 public class PIDController {
 
     private double integral = 0;
@@ -29,7 +31,7 @@ public class PIDController {
 
         double changeInError = lastError - error;
 
-        integral = clamp(integral + changeInError * PIDTimer.time(), -maxIntegral, maxIntegral);
+        integral = MathHelper.clamp(integral + changeInError * PIDTimer.time(), -maxIntegral, maxIntegral);
         double derivative = changeInError / PIDTimer.time();
 
         double P = PIDWeight.p * error;
@@ -41,12 +43,6 @@ public class PIDController {
         repetitions ++;
 
         return P + I + D;
-    }
-
-    private double clamp(double value, double min, double max) {
-        if (value > max) return max;
-        if (value < min) return min;
-        return value;
     }
 
 //    private void moveTestMotor(double targetPosition) {

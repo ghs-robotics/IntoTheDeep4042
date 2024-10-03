@@ -2,18 +2,28 @@ package org.firstinspires.ftc.teamcode.opmodes_teleop;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.bot.Robot;
 import org.firstinspires.ftc.teamcode.opmodes_teleop.input.Controller;
+import org.firstinspires.ftc.teamcode.util.MathHelper;
 
 @TeleOp
 public class Tele extends LinearOpMode {
-    Robot robot;
-    Controller gp1;
-    Controller gp2;
+    private Robot robot;
+    private Controller gp1;
+    private Controller gp2;
 
-    Servo testServo;
+    private Servo testServo;
+
+    private DcMotor liftMotor1;
+    private DcMotor liftMotor2;
+
+    private boolean expInput = false;
+
+    //The percent speed of regular movement
+    private double DPadWeight = 0.5;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -23,6 +33,14 @@ public class Tele extends LinearOpMode {
         gp2 = new Controller(gamepad2);
 
         testServo = hardwareMap.get(Servo.class, "testServo");
+
+        liftMotor1 = hardwareMap.get(DcMotor.class, "liftMotor1");
+        liftMotor2 = hardwareMap.get(DcMotor.class, "liftMotor2");
+
+        liftMotor1.setDirection(DcMotor.Direction.REVERSE);
+        liftMotor2.setDirection(DcMotor.Direction.REVERSE);
+        liftMotor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        liftMotor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         //robot.init();
         waitForStart();
@@ -38,7 +56,13 @@ public class Tele extends LinearOpMode {
             //                                  GAMEPAD 1
             //-------------------------------------------------------------------------------------
 
-            robot.drive.calculateDrivePowers(-gp1.left_stick_x, -gp1.left_stick_y, gp1.right_stick_x);
+            if (gp1.a.pressing()) expInput = !expInput;
+
+            double[] input;
+            if (expInput) input = getExponentialInput();
+            else input = getInput();
+
+            robot.drive.calculateDrivePowers(-input[0], -input[1], input[2]);
 
             //-------------------------------------------------------------------------------------
             //                                  GAMEPAD 2
@@ -57,11 +81,42 @@ public class Tele extends LinearOpMode {
                 telemetry.addLine("Servo Pos: " + pos);
             }
 
+            liftMotor1.setPower(gp2.left_stick_y);
+            liftMotor2.setPower(gp2.left_stick_y);
+
             //-------------------------------------------------------------------------------------
             //                                  TELEMETRY
             //-------------------------------------------------------------------------------------
 
             telemetry.update();
         }
+    }
+
+    private double[] getInput() {
+        double xInput = MathHelper.clamp(
+                gp1.left_stick_x
+                        + (gp1.dpad_right.pressing() ? DPadWeight : 0)
+                        - (gp1.dpad_left.pressing() ? DPadWeight : 0),
+                -1f,
+                1f
+        );
+        double yInput = MathHelper.clamp(
+                gp1.left_stick_y
+                        + (gp1.dpad_up.pressing() ? DPadWeight : 0)
+                        - (gp1.dpad_down.pressing() ? DPadWeight : 0),
+                -1f,
+                1f
+        );
+        double rotInput = gp1.right_stick_x;
+
+        return new double[] {xInput, yInput, rotInput};
+    }
+
+    public double[] getExponentialInput() {
+        double sqrX = gp1.left_stick_x * gp1.left_stick_x;
+        double sqrY = gp1.left_stick_y * gp1.left_stick_y;
+        double sqrRot = gp1.right_stick_x * gp1.right_stick_x;
+
+        return new double[] {sqrX, sqrY, sqrRot};
     }
 }
