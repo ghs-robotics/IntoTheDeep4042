@@ -34,12 +34,22 @@ public class AutoActionHandler {
     }
 
     /**
+     * starts the queue
+     */
+    public void init(){
+        if (actionList.isEmpty())
+            return;
+
+        actionList.add(new AutoActions(AutoActions.DONE, robot));
+        current = actionList.get(0);
+        totalActions = actionList.size();
+    }
+
+    /**
      * runs the action and calls next action in case the current action is complete.
      */
     public void run(){
-        findAndSetZone();
         current.runAction();
-        checkTime();
         nextAction();
     }
 
@@ -91,15 +101,15 @@ public class AutoActionHandler {
         }*/
     }
 
-    /**
-     * Helper function that checks if we are close to the time ending and if we need to
-     * change course and park
-     */
-    private void checkTime(){
-        if (timer.milliseconds() > 25000 && actionList.size() > 2){
-
-        }
-    }
+//    /**
+//     * Helper function that checks if we are close to the time ending and if we need to
+//     * change course and park
+//     */
+//    private void checkTime(){
+//        if (timer.milliseconds() > 25000 && actionList.size() > 2){
+//
+//        }
+//    }
 
     /**
      * Checks the status of the current action and removes the action from queue if isFinished
@@ -114,13 +124,6 @@ public class AutoActionHandler {
     }
 
     /**
-     * Gets the zone (spike mark) that was detected by the camera.
-     */
-    public void findAndSetZone(){
-        //zone = robot.cam.getSpikeZone();
-    }
-
-    /**
      * @return The action list of this object.
      *
      * Made for getting presets and adding them to the main AutoRed queue
@@ -128,18 +131,6 @@ public class AutoActionHandler {
     public ArrayList<AutoActions> getActions(){
 
         return actionList;
-    }
-
-    /**
-     * starts the queue
-     */
-    public void init(){
-        if (actionList.isEmpty())
-            return;
-
-        actionList.add(new AutoActions(AutoActions.DONE, robot));
-        current = actionList.get(0);
-        totalActions = actionList.size();
     }
 
     /**
@@ -170,7 +161,7 @@ public class AutoActionHandler {
         telemetry.addLine();
         telemetry.addLine("Troubleshooting");
         //put troubleshooting telemetry here.
-        telemetry.addLine(String.valueOf(current.isFinished()));
+        telemetry.addLine("Action finished: " + String.valueOf(current.isFinished()));
 
         telemetry.addLine();
     }
