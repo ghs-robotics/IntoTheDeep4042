@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.bot;
 
+import com.arcrobotics.ftclib.hardware.motors.Motor.Encoder;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -16,8 +17,7 @@ public class Odometry {
     private HardwareMap hardwareMap;
     private Telemetry telemetry;
 
-    private Base64.Encoder parallelEncoder;
-    private Base64.Encoder perpendicularEncoder;
+    private Encoder parallelOdometer, perpendicularOdometer;
 
     private BNO055IMU imu;
     private Orientation angles;
@@ -28,6 +28,7 @@ public class Odometry {
         this.hardwareMap = hardwareMap;
         this.telemetry = telemetry;
 
-
+        //parallelOdometer = new Encoder(hardwareMap.get(Encoder.class, ""));
+        //perpendicularOdometer = new Encoder(hardwareMap.get(DcMotorEx.class, "perpendicularEncoder"));
     }
 }
