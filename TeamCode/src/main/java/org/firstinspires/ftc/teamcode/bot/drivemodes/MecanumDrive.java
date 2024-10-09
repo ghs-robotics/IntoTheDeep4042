@@ -54,4 +54,11 @@ public class MecanumDrive {
 
         setDrivePowers(leftFrontPower, leftBackPower, rightFrontPower, rightBackPower);
     }
+
+    public void setDriveZeroPowerBehaviorFloat() {
+        leftFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        leftBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        rightFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        rightBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+    }
 }

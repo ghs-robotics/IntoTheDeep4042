@@ -21,10 +21,12 @@ public class AutoTesting extends LinearOpMode {
         actionHandler = new AutoActionHandler(robot, telemetry);
 
 
-        actionHandler.add(MOVE,0,0,0);
+        //actionHandler.add(MOVE,0,0,0);
 
         actionHandler.init();
 
+
+        robot.drive.setDriveZeroPowerBehaviorFloat();
 
         waitForStart();
 
@@ -32,7 +34,8 @@ public class AutoTesting extends LinearOpMode {
         telemetry.update();
 
         while (opModeIsActive()){
-            actionHandler.run();
+            //actionHandler.run();
+            robot.positionTelemetry();
         }
     }
 }

@@ -56,7 +56,17 @@ public class Robot {
         positionTelemetry();
     }
 
-    private void positionTelemetry(){
+    public void positionTelemetry(){
+        double[] pos = odometry.getPosition();
+        double rot = odometry.getHeading();
+
+        telemetry.addLine();
+        telemetry.addLine("ROBOT ODOMETRY---------------------|");
+        telemetry.addLine("Current pos: {"+pos[0]+", "+pos[1]+"}");
+        telemetry.addLine("Current rot: " + rot);
+
+        telemetry.update();
+
         /*telemetry.addLine("Drivebase Telemetry");
         telemetry.addData("Meta Drive Mode On: ", drive.getDriveMode());
         telemetry.addData("x pos: ", drive.getX());
