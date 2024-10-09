@@ -12,7 +12,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.bot.Robot;
 import org.firstinspires.ftc.teamcode.bot.control.PIDController;
-//import org.firstinspires.ftc.teamcode.control.NavigationPID;
 
 public class AutoActions {
 
@@ -46,7 +45,7 @@ public class AutoActions {
         init(id, robot);
     }
 
-    //id's: MOVE...
+    //Used for id's: MOVE...
     public AutoActions(int id, Robot robot, int x, int y, double heading){
         this.x = x;
         this.y = y;
@@ -62,7 +61,7 @@ public class AutoActions {
         init(id, robot);
     }
 
-    //id's: WAIT...
+    //Used for id's: WAIT...
     public AutoActions(int id, Robot robot, double value){
         if (id == WAIT){
             waitTime = value;
@@ -70,7 +69,7 @@ public class AutoActions {
         init(id, robot);
     }
 
-    //id's: MOVE?...
+    //Used for id's: MOVE?...
     public AutoActions (int id, Robot robot, double[] pos){
         this(id, robot, (int) pos[0], (int) pos[1], (int) pos[2]);
     }
@@ -83,20 +82,18 @@ public class AutoActions {
 
         setDescription();
     }
+
     /**
      * Driving the rob
      */
     private void moveTo(){
         resetTimer();
 
-        //Theoretical position and rotation
-        //TODO: Change out for real measurements
-        double currentX = 0;
-        double currentY = 0;
-        double currentRot = 0;
+        double[] currentPos = robot.odometry.getPosition();
+        double currentRot = robot.odometry.getHeading();
 
-        double outputX = xPID.getPIDOutput(currentX);
-        double outputY = yPID.getPIDOutput(currentY);
+        double outputX = xPID.getPIDOutput(currentPos[0]);
+        double outputY = yPID.getPIDOutput(currentPos[1]);
         double outputRot = rotPID.getPIDOutput(currentRot);
 
         boolean hasArrived = xPID.hasArrived() && yPID.hasArrived() && rotPID.hasArrived();
@@ -155,13 +152,13 @@ public class AutoActions {
         description = "id: " + identity + "; ";
         switch (identity){
             case DONE:
-                description += "No Description Provided.";
+                description += "Done!";
                 break;
             case MOVE:
-                description += "Moving";
+                description += "Moving to target pos: {"+x+", "+y+", "+heading+"}";
                 break;
             case WAIT:
-                description += "Waiting";
+                description += "Waiting for " + waitTime + " seconds.";
                 break;
         }
     }

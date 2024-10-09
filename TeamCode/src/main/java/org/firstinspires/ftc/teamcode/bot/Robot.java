@@ -13,7 +13,8 @@ public class Robot {
     Telemetry telemetry;
 
     public MecanumDrive drive;
-    //public Camera cam;
+
+    public Odometry odometry;
 
     //FtcDashboard dashboard;
 
@@ -24,6 +25,7 @@ public class Robot {
         this.telemetry = telemetry;
 
         drive = new MecanumDrive(hardwareMap, telemetry);
+        odometry = new Odometry(hardwareMap, telemetry);
     }
 
     /**
