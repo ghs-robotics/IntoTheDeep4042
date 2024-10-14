@@ -12,6 +12,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.bot.Robot;
 import org.firstinspires.ftc.teamcode.bot.control.PIDController;
+import org.firstinspires.ftc.teamcode.util.MathHelper;
 
 public class AutoActions {
 
@@ -47,16 +48,16 @@ public class AutoActions {
 
     //Used for id's: MOVE...
     public AutoActions(int id, Robot robot, int x, int y, double heading){
-        this.x = x;
-        this.y = y;
+        this.x = MathHelper.tilesToMM(x);
+        this.y = MathHelper.tilesToMM(y);
         this.heading = heading;
 
         //checkXSign();
 
         //MAYBE MAKE PID ONE DIMENSIONAL, NOT X AND Y AND ROT AT SAME TIME???
-        xPID = new PIDController(x, false);
-        yPID = new PIDController(y, false);
-        rotPID = new PIDController(heading, true);
+        xPID = new PIDController(this.x, false);
+        yPID = new PIDController(this.y, false);
+        rotPID = new PIDController(this.heading, true);
 
         init(id, robot);
     }

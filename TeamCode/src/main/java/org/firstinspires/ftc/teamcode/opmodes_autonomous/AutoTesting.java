@@ -22,7 +22,7 @@ public class AutoTesting extends LinearOpMode {
         actionHandler = new AutoActionHandler(robot, telemetry);
 
 //        actionHandler.add(WAIT, 1);
-//        actionHandler.add(MOVE,0,0,0);
+        actionHandler.add(MOVE,1,0,0);
 
         actionHandler.init();
 

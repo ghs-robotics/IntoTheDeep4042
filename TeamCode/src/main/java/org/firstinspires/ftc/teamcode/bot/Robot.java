@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 import org.firstinspires.ftc.teamcode.bot.drivemodes.MecanumDrive;
+import org.firstinspires.ftc.teamcode.util.MathHelper;
 //import org.firstinspires.ftc.teamcode.control.cv.Camera;
 
 public class Robot {
@@ -63,6 +64,10 @@ public class Robot {
         telemetry.addLine();
         telemetry.addLine("ROBOT ODOMETRY---------------------|");
         telemetry.addLine("Current pos (mm): {"+pos[0]+", "+pos[1]+"}");
+
+        telemetry.addLine("Current pos (tiles): {" + MathHelper.mmToTiles(pos[0]) + ", "
+            + MathHelper.mmToTiles(pos[1]) + "}");
+
         telemetry.addLine("Current rot (deg):" + rot);
 
         telemetry.update();
