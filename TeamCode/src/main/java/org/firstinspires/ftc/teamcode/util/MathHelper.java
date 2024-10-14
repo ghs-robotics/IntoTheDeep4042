@@ -11,9 +11,8 @@ public class MathHelper {
     }
 
     //converts mm to length in floor tiles
-    public static double mmToTiles(double mm) {
-        return mm / TILES_TO_MM;
-    }
+    public static double mmToTiles(double mm) { return mm / TILES_TO_MM; }
+
     //converts length in floor tiles to mm
     public static double tilesToMM(double tiles) {
         return tiles * TILES_TO_MM;
