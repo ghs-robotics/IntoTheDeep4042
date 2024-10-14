@@ -90,7 +90,7 @@ public class AutoActions {
         resetTimer();
 
         double[] currentPos = robot.odometry.getPosition();
-        double currentRot = robot.odometry.getHeading();
+        double currentRot = robot.odometry.getHeadingDeg();
 
         double outputX = xPID.getPIDOutput(currentPos[0]);
         double outputY = yPID.getPIDOutput(currentPos[1]);
@@ -101,7 +101,7 @@ public class AutoActions {
         if (!hasArrived) robot.drive.calculateDrivePowers(outputX, outputY, outputRot);
         else robot.drive.calculateDrivePowers(0, 0, 0);
 
-        boolean timeOut = timer.milliseconds() > 5000;
+        boolean timeOut = timer.milliseconds() > 10000;
         endAction = hasArrived || timeOut;
     }
 

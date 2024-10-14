@@ -7,6 +7,7 @@ import org.firstinspires.ftc.teamcode.auto_execution.AutoActionHandler;
 import org.firstinspires.ftc.teamcode.bot.Robot;
 
 import static org.firstinspires.ftc.teamcode.auto_execution.AutoActions.MOVE;
+import static org.firstinspires.ftc.teamcode.auto_execution.AutoActions.WAIT;
 
 //import org.firstinspires.ftc.teamcode.bot.Robot;
 
@@ -20,8 +21,8 @@ public class AutoTesting extends LinearOpMode {
         robot = new Robot(hardwareMap, telemetry);
         actionHandler = new AutoActionHandler(robot, telemetry);
 
-
-        //actionHandler.add(MOVE,0,0,0);
+//        actionHandler.add(WAIT, 1);
+//        actionHandler.add(MOVE,0,0,0);
 
         actionHandler.init();
 
@@ -35,6 +36,8 @@ public class AutoTesting extends LinearOpMode {
 
         while (opModeIsActive()){
             //actionHandler.run();
+
+            //Push robot around to test odometry accuracy and troubleshoot
             robot.positionTelemetry();
         }
     }

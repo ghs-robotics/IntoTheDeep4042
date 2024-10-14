@@ -36,7 +36,7 @@ public class Robot {
     }
 
     public void shutOff(){
-        //drive.calculateDrivePowers(0,0,0);
+        drive.calculateDrivePowers(0,0,0);
         //cam.closeCamera();
     }
 
@@ -58,12 +58,12 @@ public class Robot {
 
     public void positionTelemetry(){
         double[] pos = odometry.getPosition();
-        double rot = odometry.getHeading();
+        double rot = odometry.getHeadingDeg();
 
         telemetry.addLine();
         telemetry.addLine("ROBOT ODOMETRY---------------------|");
-        telemetry.addLine("Current pos: {"+pos[0]+", "+pos[1]+"}");
-        telemetry.addLine("Current rot: " + rot);
+        telemetry.addLine("Current pos (mm): {"+pos[0]+", "+pos[1]+"}");
+        telemetry.addLine("Current rot (deg):" + rot);
 
         telemetry.update();
 

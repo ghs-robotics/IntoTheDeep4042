@@ -15,14 +15,14 @@ public class Odometry {
     public static double TICKS_PER_REV = 2000;
     public static double ODOMETRY_WHEEL_DIAMETER = 32; // mm
     //public static double GEAR_RATIO = 1; // output (wheel) speed / input (encoder) speed
-    public static double MM_TO_IN = 0.0393701; // millimeters to inches multiplier
+    //public static double MM_TO_IN = 0.0393701; // millimeters to inches multiplier
 
     private HardwareMap hardwareMap;
     private Telemetry telemetry;
 
     private Encoder parallelOdometer, perpendicularOdometer;
 
-    private BNO055IMU imu;
+    private BNO055IMU imu; //Degrees
 //    private Orientation angles;
 //    private Acceleration gravity;
 //    private BNO055IMU.Parameters imuParameters;
@@ -42,19 +42,19 @@ public class Odometry {
         imu.initialize(parameters);
     }
 
-    public static double encoderTicksToInches(double ticks) {
-        return ODOMETRY_WHEEL_DIAMETER * MM_TO_IN
-            * Math.PI * ticks / TICKS_PER_REV; // * GEAR_RATIO if applicable
+    public static double encoderTicksToMillimeters(double ticks) {
+        return ODOMETRY_WHEEL_DIAMETER * Math.PI * ticks / TICKS_PER_REV; // * GEAR_RATIO if applicable
     }
 
     public double[] getPosition() {
         return new double[] {
-                encoderTicksToInches(parallelOdometer.getCurrentPosition()),
-                encoderTicksToInches(perpendicularOdometer.getCurrentPosition())
+                encoderTicksToMillimeters(parallelOdometer.getCurrentPosition()),
+                encoderTicksToMillimeters(perpendicularOdometer.getCurrentPosition())
         };
     }
 
-    public double getHeading() {
+    //Returns heading in degrees
+    public double getHeadingDeg() {
         return imu.getAngularOrientation().firstAngle;
     }
 }

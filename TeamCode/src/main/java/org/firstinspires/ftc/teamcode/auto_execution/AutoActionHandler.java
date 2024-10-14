@@ -124,6 +124,11 @@ public class AutoActionHandler {
             //current = null; Maybe redundant?
             actionList.remove(0);
             current = actionList.get(0);
+
+            telemetry.addLine();
+            telemetry.addLine("Moving to next action:");
+            telemetry.addLine(current.getDescription());
+            telemetry.update();
         }
     }
 

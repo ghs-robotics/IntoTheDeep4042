@@ -25,8 +25,8 @@ public class PIDController {
     private static final PIDCoefficients PIDGainPos = new PIDCoefficients(.152, .00165765, .0016622);
     private static final PIDCoefficients PIDGainRot = new PIDCoefficients(.152, .00165765, .0016622);
 
-    private static final double arrivedDistThresholdPos = 1;
-    private static final double arrivedDistThresholdRot = 1;
+    private static final double arrivedDistThresholdPos = 10;
+    private static final double arrivedDistThresholdRot = 2;
 
     private ElapsedTime PIDTimer;
 
