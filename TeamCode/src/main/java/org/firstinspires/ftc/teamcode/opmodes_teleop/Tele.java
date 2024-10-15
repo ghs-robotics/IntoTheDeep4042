@@ -82,7 +82,9 @@ public class Tele extends LinearOpMode {
 //            }
 
             robot.arm.armControllerMovement(gp2.left_stick_x, gp2.right_stick_y);
-            robot.grabber.grabberControllerMovement(gp2.x.pressed(), gp2.b.pressed());
+            robot.grabber.grabberControllerMovement(
+                gp2.x.pressed(), gp2.b.pressed(),gp2.y.pressed(), gp2.a.pressed()
+            );
 
             //-------------------------------------------------------------------------------------
             //                                  TELEMETRY
