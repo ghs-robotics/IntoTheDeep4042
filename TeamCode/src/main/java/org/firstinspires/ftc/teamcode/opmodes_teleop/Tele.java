@@ -86,6 +86,10 @@ public class Tele extends LinearOpMode {
                 gp2.x.pressed(), gp2.b.pressed(),gp2.y.pressed(), gp2.a.pressed()
             );
 
+//            telemetry.addLine();
+//            telemetry.addLine("Input:");
+//            telemetry.addLine("X: " + gp2.x.pressed());
+
             //-------------------------------------------------------------------------------------
             //                                  TELEMETRY
             //-------------------------------------------------------------------------------------
