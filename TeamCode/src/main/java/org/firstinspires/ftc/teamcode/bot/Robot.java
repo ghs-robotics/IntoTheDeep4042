@@ -13,9 +13,9 @@ public class Robot {
     Telemetry telemetry;
 
     public MecanumDrive drive;
-    //public Camera cam;
 
-    //FtcDashboard dashboard;
+    public Arm arm;
+    public Grabber grabber;
 
     public boolean RED;
 
@@ -24,6 +24,9 @@ public class Robot {
         this.telemetry = telemetry;
 
         drive = new MecanumDrive(hardwareMap, telemetry);
+        arm = new Arm(hardwareMap, telemetry, false);
+        grabber = new Grabber(hardwareMap, telemetry);
+
     }
 
     /**
