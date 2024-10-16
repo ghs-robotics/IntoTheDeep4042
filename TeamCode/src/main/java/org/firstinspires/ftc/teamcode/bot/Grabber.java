@@ -25,8 +25,11 @@ public class Grabber {
         grabber = hardwareMap.get(Servo.class, "grabber");
         grabberRot = hardwareMap.get(Servo.class, "grabberRot");
 
-        //grabber.setPosition(grabberStartPos);
-        //grabberRot.setPosition(grabberRotForwardPos);
+        //enable if needed
+//        grabber.getController().pwmEnable();
+//        grabberRot.getController().pwmEnable();
+//        grabber.setPosition(grabberStartPos);
+//        grabberRot.setPosition(grabberRotForwardPos);
     }
 
     public void grabberControllerMovement(boolean open, boolean close, boolean forward, boolean down) {

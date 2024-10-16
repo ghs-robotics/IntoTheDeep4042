@@ -25,9 +25,9 @@ public class Arm {
     public Arm(HardwareMap hardwareMap, Telemetry telemetry, boolean auto) {
         this.telemetry = telemetry;
 
-        rotation1 = hardwareMap.get(DcMotor.class, "rotation1");
+        rotation1 = hardwareMap.get(DcMotor.class, "rotationLift");
         //rotation2 = hardwareMap.get(DcMotor.class, "rotation2");
-        extension1 = hardwareMap.get(DcMotor.class, "extension1");
+        extension1 = hardwareMap.get(DcMotor.class, "extensionLift");
         //extension2 = hardwareMap.get(DcMotor.class, "extension2");
 
         rotation1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
