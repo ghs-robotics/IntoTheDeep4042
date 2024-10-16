@@ -81,14 +81,20 @@ public class Tele extends LinearOpMode {
 //                telemetry.addLine("Servo Pos: " + pos);
 //            }
 
-            robot.arm.armControllerMovement(gp2.left_stick_x, gp2.right_stick_y);
+            robot.arm.armControllerMovement(gp2.left_stick_y, gp2.right_stick_y);
             robot.grabber.grabberControllerMovement(
                 gp2.x.pressed(), gp2.b.pressed(),gp2.y.pressed(), gp2.a.pressed()
             );
 
-//            telemetry.addLine();
-//            telemetry.addLine("Input:");
-//            telemetry.addLine("X: " + gp2.x.pressed());
+            telemetry.clear();
+            telemetry.addLine();
+            telemetry.addLine("Input-------------------|");
+            telemetry.addLine("Lift Rot:" + gp2.left_stick_y);
+            telemetry.addLine("Lift Ext:" + gp2.right_stick_y);
+            telemetry.addLine("open (x): " + gp2.x.pressed());
+            telemetry.addLine("closed (b): " + gp2.b.pressed());
+            telemetry.addLine("forward (y): " + gp2.y.pressed());
+            telemetry.addLine("down (a): " + gp2.a.pressed());
 
             //-------------------------------------------------------------------------------------
             //                                  TELEMETRY
