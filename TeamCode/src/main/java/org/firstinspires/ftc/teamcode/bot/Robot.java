@@ -26,7 +26,6 @@ public class Robot {
         drive = new MecanumDrive(hardwareMap, telemetry);
         arm = new Arm(hardwareMap, telemetry, false);
         grabber = new Grabber(hardwareMap, telemetry);
-
     }
 
     /**
