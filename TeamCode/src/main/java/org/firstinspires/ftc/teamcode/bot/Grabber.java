@@ -40,13 +40,25 @@ public class Grabber {
         else if (down) grabberRot.setPosition(grabberRotDownPos);
     }
 
-    public void setGrabberState(boolean open) {
-        if (open) grabber.setPosition(grabberOpenPos);
-        else grabber.setPosition(grabberClosePos);
+    //use int for boolean to simplify AutoAction constructor
+    public boolean setGrabberState(int open) {
+        double targetPos;
+        if (open == 1) targetPos = grabberOpenPos;
+        else targetPos = grabberClosePos;
+
+        grabber.setPosition(targetPos);
+
+        return grabber.getPosition() == targetPos;
     }
 
-    public void setGrabberRotState(boolean forward) {
-        if (forward) grabberRot.setPosition(grabberRotForwardPos);
-        else grabberRot.setPosition(grabberRotDownPos);
+    //use int for boolean to simplify AutoAction constructor
+    public boolean setGrabberRotState(int forward) {
+        double targetPos;
+        if (forward == 1) targetPos = grabberRotForwardPos;
+        else targetPos = grabberRotDownPos;
+
+        grabberRot.setPosition(targetPos);
+
+        return grabberRot.getPosition() == targetPos;
     }
 }
