@@ -79,13 +79,17 @@ public class AutoActionHandler {
         actionList.add(new AutoActions(action, robot, value));
     }
 
-    public void add(int action, int value){
-        actionList.add(new AutoActions(action, robot, value));
+    public void add(int action, int value, int value2) {
+        actionList.add(new AutoActions(action, robot, value, value2));
     }
 
-    public void add (int action, double[] pos){
-        actionList.add(new AutoActions(action, robot, pos));
-    }
+//    public void add(int action, int value){
+//        actionList.add(new AutoActions(action, robot, value));
+//    }
+
+//    public void add (int action, double[] pos){
+//        actionList.add(new AutoActions(action, robot, pos));
+//    }
 
     /**
      * @param action the identity of the action (see the public static constant in AutoActions)

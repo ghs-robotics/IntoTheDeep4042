@@ -22,6 +22,8 @@ public class AutoActions {
     public static final int DONE = -1;
     public static final int MOVE = 0;
     public static final int WAIT = 1;
+    public static final int GRABBER = 2;
+    public static final int ARM = 3;
 
     private int identity;
     private boolean endAction;
@@ -31,11 +33,14 @@ public class AutoActions {
 
     private String description;
 
-    double x;
-    double y;
-    double heading; // in degrees
+    private double x;
+    private double y;
+    private double heading; // in degrees
 
-    double waitTime;
+    private double waitTime;
+
+    private int state;
+    private int state2;
 
     private PIDController xPID;
     private PIDController yPID;
@@ -70,10 +75,19 @@ public class AutoActions {
         init(id, robot);
     }
 
-    //Used for id's: MOVE?...
-    public AutoActions (int id, Robot robot, double[] pos){
-        this(id, robot, (int) pos[0], (int) pos[1], (int) pos[2]);
+    //Used for id's: GRABBER ARM
+    public AutoActions(int id, Robot robot, int value, int  value2){
+        if (id == GRABBER || id == ARM) {
+            state = value;
+            state2 = value2;
+        }
+        init(id, robot);
     }
+
+//    //Used for id's: MOVE?...
+//    public AutoActions (int id, Robot robot, double[] pos){
+//        this(id, robot, (int) pos[0], (int) pos[1], (int) pos[2]);
+//    }
 
     private void init(int id, Robot robot) {
         this.identity = id;
@@ -118,6 +132,15 @@ public class AutoActions {
         endAction = timer.milliseconds() > (waitTime * 1000);
     }
 
+    //Sets grabber and grabberRot to specified state and ends when both reach their target position
+    private void grabberState() {
+        //endAction = robot.grabber.setGrabberState(state) && robot.grabber.setGrabberRotState(state2);
+    }
+
+    private void armPos() {
+
+    }
+
     private void shutOffBot(){
         robot.shutOff();
     }
@@ -142,6 +165,12 @@ public class AutoActions {
                 break;
             case WAIT:
                 waiting();
+                break;
+            case GRABBER:
+                grabberState();
+                break;
+            case ARM:
+                armPos();
                 break;
         }
     }
