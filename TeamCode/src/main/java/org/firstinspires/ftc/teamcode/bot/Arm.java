@@ -52,18 +52,18 @@ public class Arm {
     //Clamps controller input to keep motors for continuing past hardware limit
     //Then sets motor power to input
     public void armControllerMovement(double rotInput, double extInput) {
-        if (rotation1.getCurrentPosition() <= minRotPos /*|| rotation2.getCurrentPosition() <= minRotPos*/) {
-            rotInput = MathHelper.clamp(rotInput,0,1);
-        }
-        if (rotation1.getCurrentPosition() >= maxRotPos /*|| rotation2.getCurrentPosition() >= maxRotPos*/) {
-            rotInput = MathHelper.clamp(rotInput,-1,0);
-        }
-        if (extension1.getCurrentPosition() <= minExtPos /*|| extension2.getCurrentPosition() <= minExtPos*/) {
-            extInput = MathHelper.clamp(extInput,0,1);
-        }
-        if (extension1.getCurrentPosition() >= maxExtPos /*|| extension2.getCurrentPosition() >= maxExtPos*/) {
-            extInput = MathHelper.clamp(extInput,-1,0);
-        }
+//        if (rotation1.getCurrentPosition() <= minRotPos /*|| rotation2.getCurrentPosition() <= minRotPos*/) {
+//            rotInput = MathHelper.clamp(rotInput,0,1);
+//        }
+//        if (rotation1.getCurrentPosition() >= maxRotPos /*|| rotation2.getCurrentPosition() >= maxRotPos*/) {
+//            rotInput = MathHelper.clamp(rotInput,-1,0);
+//        }
+//        if (extension1.getCurrentPosition() <= minExtPos /*|| extension2.getCurrentPosition() <= minExtPos*/) {
+//            extInput = MathHelper.clamp(extInput,0,1);
+//        }
+//        if (extension1.getCurrentPosition() >= maxExtPos /*|| extension2.getCurrentPosition() >= maxExtPos*/) {
+//            extInput = MathHelper.clamp(extInput,-1,0);
+//        }
 
         rotation1.setPower(rotInput);
         //rotation2.setPower(rotInput);

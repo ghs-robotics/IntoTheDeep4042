@@ -13,11 +13,11 @@ public class Grabber {
     private Servo grabberRot;
 
     //private static final double grabberStartPos = 0.5;
-    private static final double grabberOpenPos = 0.7;
-    private static final double grabberClosePos = 0.3;
+    private static final double grabberOpenPos = 0.2;
+    private static final double grabberClosePos = 0.0;
 
-    private static final double grabberRotForwardPos = 0.7;
-    private static final double grabberRotDownPos = 0.3;
+    private static final double grabberRotForwardPos = 0.2;
+    private static final double grabberRotDownPos = 0.0;
 
     public Grabber (HardwareMap hardwareMap, Telemetry telemetry) {
         this.telemetry = telemetry;
@@ -26,8 +26,8 @@ public class Grabber {
         grabberRot = hardwareMap.get(Servo.class, "grabberRot");
 
         //enable if needed
-//        grabber.getController().pwmEnable();
-//        grabberRot.getController().pwmEnable();
+        grabber.getController().pwmEnable();
+        grabberRot.getController().pwmEnable();
 //        grabber.setPosition(grabberStartPos);
 //        grabberRot.setPosition(grabberRotForwardPos);
     }
@@ -36,7 +36,17 @@ public class Grabber {
         if (open) grabber.setPosition(grabberOpenPos);
         else if (close) grabber.setPosition(grabberClosePos);
 
-        if (forward) grabber.setPosition(grabberRotForwardPos);
-        else if (down) grabber.setPosition(grabberRotDownPos);
+        if (forward) grabberRot.setPosition(grabberRotForwardPos);
+        else if (down) grabberRot.setPosition(grabberRotDownPos);
+    }
+
+    public void setGrabberState(boolean open) {
+        if (open) grabber.setPosition(grabberOpenPos);
+        else grabber.setPosition(grabberClosePos);
+    }
+
+    public void setGrabberRotState(boolean forward) {
+        if (forward) grabberRot.setPosition(grabberRotForwardPos);
+        else grabberRot.setPosition(grabberRotDownPos);
     }
 }
