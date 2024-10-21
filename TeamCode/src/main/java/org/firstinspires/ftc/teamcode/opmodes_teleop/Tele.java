@@ -86,6 +86,10 @@ public class Tele extends LinearOpMode {
                 gp2.x.pressed(), gp2.b.pressed(),gp2.y.pressed(), gp2.a.pressed()
             );
 
+            //-------------------------------------------------------------------------------------
+            //                                  TELEMETRY
+            //-------------------------------------------------------------------------------------
+
             telemetry.clear();
             telemetry.addLine();
             telemetry.addLine("Input-------------------|");
@@ -96,11 +100,9 @@ public class Tele extends LinearOpMode {
             telemetry.addLine("forward (y): " + gp2.y.pressed());
             telemetry.addLine("down (a): " + gp2.a.pressed());
 
-            //-------------------------------------------------------------------------------------
-            //                                  TELEMETRY
-            //-------------------------------------------------------------------------------------
-
             telemetry.update();
+
+            robot.arm.printMotorPositions();
         }
     }
 

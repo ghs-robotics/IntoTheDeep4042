@@ -70,4 +70,12 @@ public class Arm {
         extension1.setPower(extInput);
         //extension2.setPower(extInput);
     }
+
+    public void printMotorPositions() {
+        telemetry.addLine();
+        telemetry.addLine("Arm Motor Positions---------|");
+        telemetry.addLine("Rot motor pos:" + rotation1.getCurrentPosition());
+        telemetry.addLine("Ext motor pos:" + extension1.getCurrentPosition());
+        telemetry.update();
+    }
 }
