@@ -32,21 +32,9 @@ public class Tele extends LinearOpMode {
         gp1 = new Controller(gamepad1);
         gp2 = new Controller(gamepad2);
 
-        testServo = hardwareMap.get(Servo.class, "testServo");
-
-        liftMotor1 = hardwareMap.get(DcMotor.class, "liftMotor1");
-        liftMotor2 = hardwareMap.get(DcMotor.class, "liftMotor2");
-
-        liftMotor1.setDirection(DcMotor.Direction.REVERSE);
-        liftMotor2.setDirection(DcMotor.Direction.REVERSE);
-        liftMotor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        liftMotor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        //robot.init();
         waitForStart();
         telemetry.addLine("Initializing");
         telemetry.update();
-        //robot.update();
 
         while (opModeIsActive()){
             gp1.update();
@@ -67,19 +55,6 @@ public class Tele extends LinearOpMode {
             //-------------------------------------------------------------------------------------
             //                                  GAMEPAD 2
             //-------------------------------------------------------------------------------------
-
-//            if (gp2.a.pressing()) {
-//                testServo.setPosition(0);
-//                telemetry.addLine("Pressing: A");
-//            }
-//            if (gp2.y.pressing()) {
-//                testServo.setPosition(1);
-//                telemetry.addLine("Pressing: Y");
-//            }
-//            else if (gp2.x.pressed()) {
-//                double pos = testServo.getPosition();
-//                telemetry.addLine("Servo Pos: " + pos);
-//            }
 
             robot.arm.armControllerMovement(gp2.left_stick_y, gp2.right_stick_y);
             robot.grabber.grabberControllerMovement(

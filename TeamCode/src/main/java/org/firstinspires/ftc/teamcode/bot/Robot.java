@@ -48,13 +48,10 @@ public class Robot {
     }
 
     public void getAutoTelemetry(){
-        //cam.getTelemetry();
         positionTelemetry();
     }
 
-    public void getTeleOpTelemetry(){
-        positionTelemetry();
-    }
+    public void getTeleOpTelemetry(){ positionTelemetry(); }
 
     private void positionTelemetry(){
         /*telemetry.addLine("Drivebase Telemetry");
@@ -68,13 +65,8 @@ public class Robot {
         telemetry.addLine();*/
     }
 
-    /*private void intakeTelemetry(){
-        telemetry.addLine("Intake Telemetry");
-        telemetry.addData("intake position: ", intake.getIntakePosition());
-        telemetry.addLine();
-    }
 
-    private void deliveryTelemetry () {
+    /*private void deliveryTelemetry () {
         telemetry.addLine("Delivery System Telemetry");
         telemetry.addData("hang mode status:", delivery.getHangModeStatus());
         telemetry.addData("lift position: ", delivery.getLift1Position());
