@@ -75,9 +75,12 @@ public class Arm {
 
     //Smooths input between 1 and 0 as the rotation motor approaches its min and max positions
     private double smoothRotInput(double rotInput) {
-        double vertexXCord = (minRotPos + maxRotPos) / 2;
-        double a = -1 / Math.pow(minRotPos - vertexXCord, 2);
-        return rotInput * (a * Math.pow(rotation1.getCurrentPosition() - vertexXCord, 2) + 1);
+        double h = (minRotPos + maxRotPos) / 2;
+        double k = 1;
+        double a = -1 / Math.pow(minRotPos - h, 2);
+        double x = rotation1.getCurrentPosition();
+
+        return rotInput * (a * Math.pow(x - h, 2) + k);
     }
 
     public void printMotorPositions() {
