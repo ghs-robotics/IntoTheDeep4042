@@ -65,10 +65,19 @@ public class Arm {
 //            extInput = MathHelper.clamp(extInput,-1,0);
 //        }
 
+        rotInput = smoothRotInput(rotInput);
+
         rotation1.setPower(rotInput);
         //rotation2.setPower(rotInput);
         extension1.setPower(extInput);
         //extension2.setPower(extInput);
+    }
+
+    //Smooths input between 1 and 0 as the rotation motor approaches its min and max positions
+    private double smoothRotInput(double rotInput) {
+        double vertexXCord = (minRotPos + maxRotPos) / 2;
+        double a = -1 / Math.pow(minRotPos - vertexXCord, 2);
+        return rotInput * (a * Math.pow(rotation1.getCurrentPosition() - vertexXCord, 2) + 1);
     }
 
     public void printMotorPositions() {

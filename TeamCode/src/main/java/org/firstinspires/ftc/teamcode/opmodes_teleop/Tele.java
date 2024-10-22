@@ -70,10 +70,10 @@ public class Tele extends LinearOpMode {
             telemetry.addLine("Input-------------------|");
             telemetry.addLine("Lift Rot:" + gp2.left_stick_y);
             telemetry.addLine("Lift Ext:" + gp2.right_stick_y);
-            telemetry.addLine("open (x): " + gp2.x.pressed());
-            telemetry.addLine("closed (b): " + gp2.b.pressed());
-            telemetry.addLine("forward (y): " + gp2.y.pressed());
-            telemetry.addLine("down (a): " + gp2.a.pressed());
+//            telemetry.addLine("open (x): " + gp2.x.pressed());
+//            telemetry.addLine("closed (b): " + gp2.b.pressed());
+//            telemetry.addLine("forward (y): " + gp2.y.pressed());
+//            telemetry.addLine("down (a): " + gp2.a.pressed());
 
             telemetry.update();
 
