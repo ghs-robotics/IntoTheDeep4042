@@ -41,11 +41,16 @@ public class Tele extends LinearOpMode {
 
             if (gp1.a.pressing()) expInput = !expInput;
 
-            double[] input;
-            if (expInput) input = getExponentialInput();
-            else input = getInput();
+//            double[] input;
+//            input = getExponentialInput();
 
-            robot.drive.calculateDrivePowers(-input[0], -input[1], input[2]);
+//            if (expInput) input = getExponentialInput();
+//            else input = getInput();
+
+
+//            robot.drive.calculateDrivePowers(input[0], input[1], input[2]);
+
+            robot.drive.calculateDrivePowers(gp1.left_stick_x, gp1.left_stick_y, gp1.right_stick_x);
 
             //-------------------------------------------------------------------------------------
             //                                  GAMEPAD 2
@@ -74,6 +79,7 @@ public class Tele extends LinearOpMode {
 //            telemetry.addLine("down (a): " + gp2.a.pressed());
 
             robot.arm.printMotorPositions();
+            robot.grabber.printServoPositions();
 
             telemetry.update();
         }
@@ -100,9 +106,9 @@ public class Tele extends LinearOpMode {
     }
 
     public double[] getExponentialInput() {
-        double sqrX = gp1.left_stick_x * gp1.left_stick_x;
-        double sqrY = gp1.left_stick_y * gp1.left_stick_y;
-        double sqrRot = gp1.right_stick_x * gp1.right_stick_x;
+        double sqrX = gp1.left_stick_x * gp1.left_stick_x * Math.signum(gp1.left_stick_x);
+        double sqrY = gp1.left_stick_y * gp1.left_stick_y * Math.signum(gp1.left_stick_y);
+        double sqrRot = gp1.right_stick_x * gp1.right_stick_x * Math.signum(gp1.right_stick_x);
 
         return new double[] {sqrX, sqrY, sqrRot};
     }

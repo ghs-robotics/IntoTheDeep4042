@@ -12,8 +12,8 @@ public class Grabber {
     private Servo grabber;
     private Servo grabberRot;
 
-    private static final double grabberOpenPos = 0.5;
-    private static final double grabberClosePos = 0.3;
+    private static final double grabberOpenPos = 0.11;
+    private static final double grabberClosePos = 0.019;
 
     private static final double grabberRotForwardPos = 0.84;
     private static final double grabberRotDownPos = 0.505;
@@ -60,5 +60,12 @@ public class Grabber {
         grabberRot.setPosition(targetPos);
 
         return grabberRot.getPosition() == targetPos;
+    }
+
+    public void printServoPositions() {
+        telemetry.addLine();
+        telemetry.addLine("Grabber Servo Positions-----------------|");
+        telemetry.addLine("Grabber pos: " + grabber.getPosition());
+        telemetry.addLine("GrabberRot pos: " + grabberRot.getPosition());
     }
 }

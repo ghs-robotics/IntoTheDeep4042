@@ -21,8 +21,9 @@ public class Arm {
 
     //min and max motor positions to prevent hardware issues.
     private static final double minRotPos = 0;
+    private static final double maxRotPos = 9315;
+
     private static final double minExtPos = 0;
-    private static final double maxRotPos = 5000;
     private static final double maxExtPos = 4000;
 
     public Arm(HardwareMap hardwareMap, Telemetry telemetry, boolean auto) {
@@ -93,7 +94,5 @@ public class Arm {
         telemetry.addLine("Arm Motor Positions---------|");
         telemetry.addLine("Rot motor pos:" + rotation1.getCurrentPosition());
         telemetry.addLine("Ext motor pos:" + extension1.getCurrentPosition());
-        telemetry.addLine("Rot port: " + rotation1.getPortNumber());
-        telemetry.addLine("Ext port: " + extension1.getPortNumber());
     }
 }
