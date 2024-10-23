@@ -12,12 +12,11 @@ public class Grabber {
     private Servo grabber;
     private Servo grabberRot;
 
-    //private static final double grabberStartPos = 0.5;
-    private static final double grabberOpenPos = 0.2;
-    private static final double grabberClosePos = 0.0;
+    private static final double grabberOpenPos = 0.5;
+    private static final double grabberClosePos = 0.3;
 
-    private static final double grabberRotForwardPos = 0.2;
-    private static final double grabberRotDownPos = 0.0;
+    private static final double grabberRotForwardPos = 0.84;
+    private static final double grabberRotDownPos = 0.505;
 
     public Grabber (HardwareMap hardwareMap, Telemetry telemetry) {
         this.telemetry = telemetry;
@@ -28,8 +27,9 @@ public class Grabber {
         //enable if needed
         grabber.getController().pwmEnable();
         grabberRot.getController().pwmEnable();
-//        grabber.setPosition(grabberStartPos);
-//        grabberRot.setPosition(grabberRotForwardPos);
+
+        grabber.setPosition(grabberOpenPos);
+        grabberRot.setPosition(grabberRotForwardPos);
     }
 
     public void grabberControllerMovement(boolean open, boolean close, boolean forward, boolean down) {

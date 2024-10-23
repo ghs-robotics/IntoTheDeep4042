@@ -51,7 +51,10 @@ public class Tele extends LinearOpMode {
             //                                  GAMEPAD 2
             //-------------------------------------------------------------------------------------
 
-            robot.arm.armControllerMovement(gp2.left_stick_y, gp2.right_stick_y);
+            robot.arm.armControllerMovement(gp2.left_stick_y, -gp2.right_stick_y);
+            robot.arm.setLimitState(gp2.dpad_left.pressing());
+            if (gp2.dpad_right.pressed()) robot.arm.resetEncoders();
+
             robot.grabber.grabberControllerMovement(
                 gp2.x.pressed(), gp2.b.pressed(),gp2.y.pressed(), gp2.a.pressed()
             );
@@ -61,10 +64,10 @@ public class Tele extends LinearOpMode {
             //-------------------------------------------------------------------------------------
 
             telemetry.clear();
-            telemetry.addLine();
-            telemetry.addLine("Input-------------------|");
-            telemetry.addLine("Lift Rot:" + gp2.left_stick_y);
-            telemetry.addLine("Lift Ext:" + gp2.right_stick_y);
+//            telemetry.addLine();
+//            telemetry.addLine("Input-------------------|");
+//            telemetry.addLine("Lift Rot:" + gp2.left_stick_y);
+//            telemetry.addLine("Lift Ext:" + gp2.right_stick_y);
 //            telemetry.addLine("open (x): " + gp2.x.pressed());
 //            telemetry.addLine("closed (b): " + gp2.b.pressed());
 //            telemetry.addLine("forward (y): " + gp2.y.pressed());
