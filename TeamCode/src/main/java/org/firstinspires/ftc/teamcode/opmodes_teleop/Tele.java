@@ -15,10 +15,8 @@ public class Tele extends LinearOpMode {
     private Controller gp1;
     private Controller gp2;
 
-    private boolean expInput = false;
-
     //The percent speed of regular movement
-    private double DPadWeight = 0.5;
+    private double DPadWeight = 0.4;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -37,16 +35,13 @@ public class Tele extends LinearOpMode {
 
             //-------------------------------------------------------------------------------------
             //                                  GAMEPAD 1
+            //                                   Input:
+            //            Forward and Strafe: left_stick | Rotation: right_stick_x
             //-------------------------------------------------------------------------------------
 
-            if (gp1.a.pressing()) expInput = !expInput;
 
 //            double[] input;
-//            input = getExponentialInput();
-
-//            if (expInput) input = getExponentialInput();
-//            else input = getInput();
-
+//            input = getInput();
 
 //            robot.drive.calculateDrivePowers(input[0], input[1], input[2]);
 
@@ -54,6 +49,10 @@ public class Tele extends LinearOpMode {
 
             //-------------------------------------------------------------------------------------
             //                                  GAMEPAD 2
+            //                                   Input:
+            //            Arm Rotation: left_stick_y | Arm Extension: right_stick_y
+            //               Grabber Open: x | Close: b | Forward: y | Down: a
+            //        Remove Limits: dpad_left (held) | Reset lift 0 positions: dpad_right
             //-------------------------------------------------------------------------------------
 
             robot.arm.armControllerMovement(gp2.left_stick_y, -gp2.right_stick_y);
