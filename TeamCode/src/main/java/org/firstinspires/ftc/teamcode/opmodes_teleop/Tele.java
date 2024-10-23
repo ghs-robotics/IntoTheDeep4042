@@ -15,11 +15,6 @@ public class Tele extends LinearOpMode {
     private Controller gp1;
     private Controller gp2;
 
-    private Servo testServo;
-
-    private DcMotor liftMotor1;
-    private DcMotor liftMotor2;
-
     private boolean expInput = false;
 
     //The percent speed of regular movement
@@ -75,9 +70,9 @@ public class Tele extends LinearOpMode {
 //            telemetry.addLine("forward (y): " + gp2.y.pressed());
 //            telemetry.addLine("down (a): " + gp2.a.pressed());
 
-            telemetry.update();
-
             robot.arm.printMotorPositions();
+
+            telemetry.update();
         }
     }
 

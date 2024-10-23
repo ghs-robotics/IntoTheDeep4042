@@ -35,6 +35,9 @@ public class Arm {
         extension1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         //extension2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
+        rotation1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        extension1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
         if (auto) {
             rotation1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             //rotation2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -65,7 +68,7 @@ public class Arm {
 //            extInput = MathHelper.clamp(extInput,-1,0);
 //        }
 
-        rotInput = smoothRotInput(rotInput);
+        //rotInput = smoothRotInput(rotInput);
 
         rotation1.setPower(rotInput);
         //rotation2.setPower(rotInput);
@@ -88,6 +91,5 @@ public class Arm {
         telemetry.addLine("Arm Motor Positions---------|");
         telemetry.addLine("Rot motor pos:" + rotation1.getCurrentPosition());
         telemetry.addLine("Ext motor pos:" + extension1.getCurrentPosition());
-        telemetry.update();
     }
 }
