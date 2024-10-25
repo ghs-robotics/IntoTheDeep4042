@@ -28,8 +28,8 @@ public class Grabber {
         grabber.getController().pwmEnable();
         grabberRot.getController().pwmEnable();
 
-        grabber.setPosition(grabberOpenPos);
-        grabberRot.setPosition(grabberRotForwardPos);
+        grabber.setPosition(grabberClosePos);
+        grabberRot.setPosition(grabberRotDownPos);
     }
 
     public void grabberControllerMovement(boolean open, boolean close, boolean forward, boolean down) {

@@ -2,8 +2,6 @@ package org.firstinspires.ftc.teamcode.opmodes_teleop;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.bot.Robot;
 import org.firstinspires.ftc.teamcode.opmodes_teleop.input.Controller;
@@ -16,7 +14,12 @@ public class Tele extends LinearOpMode {
     private Controller gp2;
 
     //The percent speed of regular movement
-    private double DPadWeight = 0.4;
+    private double dpadMaxWeight = 0.4;
+    private double[] dpadCurrentWeight = new double[] {0, 0};
+    private double dpadWeightChangeRate = 0.025;
+
+    private double extLiftSlowScaler = 0.5;
+
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -40,12 +43,12 @@ public class Tele extends LinearOpMode {
             //-------------------------------------------------------------------------------------
 
 
-//            double[] input;
-//            input = getInput();
+            double[] input;
+            input = getInput();
 
-//            robot.drive.calculateDrivePowers(input[0], input[1], input[2]);
+            robot.drive.calculateDrivePowers(input[0], input[1], input[2]);
 
-            robot.drive.calculateDrivePowers(gp1.left_stick_x, gp1.left_stick_y, gp1.right_stick_x);
+//            robot.drive.calculateDrivePowers(gp1.left_stick_x, gp1.left_stick_y, gp1.right_stick_x);
 
             //-------------------------------------------------------------------------------------
             //                                  GAMEPAD 2
@@ -55,7 +58,10 @@ public class Tele extends LinearOpMode {
             //        Remove Limits: dpad_left (held) | Reset lift 0 positions: dpad_right
             //-------------------------------------------------------------------------------------
 
-            robot.arm.armControllerMovement(gp2.left_stick_y, -gp2.right_stick_y);
+            double extLiftInput = -gp2.right_stick_y;
+            if (gp2.right_bumper.pressing()) extLiftInput *= extLiftSlowScaler;
+            robot.arm.armControllerMovement(gp2.left_stick_y, extLiftInput);
+
             robot.arm.setLimitState(gp2.dpad_left.pressing());
             if (gp2.dpad_right.pressed()) robot.arm.resetEncoders();
 
@@ -85,20 +91,55 @@ public class Tele extends LinearOpMode {
     }
 
     private double[] getInput() {
-        double xInput = MathHelper.clamp(
-                gp1.left_stick_x
-                        + (gp1.dpad_right.pressing() ? DPadWeight : 0)
-                        - (gp1.dpad_left.pressing() ? DPadWeight : 0),
-                -1f,
-                1f
-        );
-        double yInput = MathHelper.clamp(
-                gp1.left_stick_y
-                        + (gp1.dpad_up.pressing() ? DPadWeight : 0)
-                        - (gp1.dpad_down.pressing() ? DPadWeight : 0),
-                -1f,
-                1f
-        );
+        if (gp1.dpad_right.pressing())  {
+            dpadCurrentWeight[0] = MathHelper.clamp(
+                dpadCurrentWeight[0] + dpadWeightChangeRate,
+                -dpadMaxWeight,
+                dpadMaxWeight
+            );
+        }
+        else if (gp1.dpad_left.pressing()) {
+            dpadCurrentWeight[0] = MathHelper.clamp(
+                dpadCurrentWeight[0] - dpadWeightChangeRate,
+                -dpadMaxWeight,
+                dpadMaxWeight
+            );
+        }
+        else dpadCurrentWeight[0] = 0;
+
+        if (gp1.dpad_up.pressing()) {
+            dpadCurrentWeight[1] = MathHelper.clamp(
+                dpadCurrentWeight[1] + dpadWeightChangeRate,
+                -dpadMaxWeight,
+                dpadMaxWeight
+            );
+        }
+        else if (gp1.dpad_down.pressing()) {
+            dpadCurrentWeight[1] = MathHelper.clamp(
+                dpadCurrentWeight[1] - dpadWeightChangeRate,
+                -dpadMaxWeight,
+                dpadMaxWeight
+            );
+        }
+        else dpadCurrentWeight[1] = 0;
+
+        double xInput = MathHelper.clamp(gp1.left_stick_x + dpadCurrentWeight[0], -1f, 1f);
+        double yInput = MathHelper.clamp(gp1.left_stick_y - dpadCurrentWeight[1], -1f, 1f);
+
+//        double xInput = MathHelper.clamp(
+//                gp1.left_stick_x
+//                        + (gp1.dpad_right.pressing() ? dpadCurrentWeight[0] : 0)
+//                        - (gp1.dpad_left.pressing() ? dpadCurrentWeight[0] : 0),
+//                -1f,
+//                1f
+//        );
+//        double yInput = MathHelper.clamp(
+//                gp1.left_stick_y
+//                        - (gp1.dpad_up.pressing() ? dpadCurrentWeight[1] : 0)
+//                        + (gp1.dpad_down.pressing() ? dpadCurrentWeight[1] : 0),
+//                -1f,
+//                1f
+//        );
         double rotInput = gp1.right_stick_x;
 
         return new double[] {xInput, yInput, rotInput};
