@@ -12,11 +12,14 @@ public class Grabber {
     private Servo grabber;
     private Servo grabberRot;
 
+    private boolean grabberOpen;
+    private boolean rotForward;
+
     private static final double grabberOpenPos = 0.11;
     private static final double grabberClosePos = 0.017;
 
     private static final double grabberRotForwardPos = 0.84;
-    private static final double grabberRotDownPos = 0.505;
+    private static final double grabberRotSidePos = 0.505;
 
     public Grabber (HardwareMap hardwareMap, Telemetry telemetry) {
         this.telemetry = telemetry;
@@ -29,16 +32,21 @@ public class Grabber {
         grabberRot.getController().pwmEnable();
 
         grabber.setPosition(grabberClosePos);
-        grabberRot.setPosition(grabberRotDownPos);
+        grabberRot.setPosition(grabberRotSidePos);
+
+        grabberOpen = false;
+        rotForward = false;
     }
 
-    public void grabberControllerMovement(boolean open, boolean close, boolean forward, boolean down) {
-        if (open) grabber.setPosition(grabberOpenPos);
-        else if (close) grabber.setPosition(grabberClosePos);
+    public void grabberControllerMovement(boolean toggleGrabber, boolean toggleRot) {
+        if (toggleGrabber) grabberOpen = !grabberOpen;
+        if (toggleRot) rotForward = !rotForward;
 
-//        if (forward) grabberRot.setPosition(grabberRotForwardPos);
-//        else if (down) grabberRot.setPosition(grabberRotDownPos);
-        grabberRot.setPosition(grabberRotDownPos);
+        if (grabberOpen) grabber.setPosition(grabberOpenPos);
+        else grabber.setPosition(grabberClosePos);
+
+        if (rotForward) grabberRot.setPosition(grabberRotForwardPos);
+        else grabberRot.setPosition(grabberRotSidePos);
     }
 
     //use int for boolean to simplify AutoAction constructor
@@ -56,7 +64,7 @@ public class Grabber {
     public boolean setGrabberRotState(int forward) {
         double targetPos;
         if (forward == 1) targetPos = grabberRotForwardPos;
-        else targetPos = grabberRotDownPos;
+        else targetPos = grabberRotSidePos;
 
         grabberRot.setPosition(targetPos);
 

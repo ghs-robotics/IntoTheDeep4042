@@ -68,9 +68,7 @@ public class Tele extends LinearOpMode {
             robot.arm.setLimitState(gp2.dpad_left.pressing());
             if (gp2.dpad_right.pressed()) robot.arm.resetEncoders();
 
-            robot.grabber.grabberControllerMovement(
-                gp2.left_bumper.pressed(),gp2.right_bumper.pressed(),false, false
-            );
+            robot.grabber.grabberControllerMovement(gp2.left_bumper.pressed(),gp2.right_bumper.pressed());
 
             //-------------------------------------------------------------------------------------
             //                                  TELEMETRY
@@ -108,7 +106,18 @@ public class Tele extends LinearOpMode {
                 dpadMaxWeight
             );
         }
-        else dpadCurrentWeight[0] = 0;
+        else {
+            if (dpadCurrentWeight[0] > 0) {
+                dpadCurrentWeight[0] = MathHelper.clamp(
+                    dpadCurrentWeight[0] - dpadWeightChangeRate, 0, dpadMaxWeight
+                );
+            }
+            else if (dpadCurrentWeight[0] < 0) {
+                dpadCurrentWeight[0] = MathHelper.clamp(
+                        dpadCurrentWeight[0] + dpadWeightChangeRate, -dpadMaxWeight, 0
+                );
+            }
+        }
 
         if (gp1.dpad_up.pressing()) {
             dpadCurrentWeight[1] = MathHelper.clamp(
@@ -124,7 +133,18 @@ public class Tele extends LinearOpMode {
                 dpadMaxWeight
             );
         }
-        else dpadCurrentWeight[1] = 0;
+        else {
+            if (dpadCurrentWeight[1] > 0) {
+                dpadCurrentWeight[1] = MathHelper.clamp(
+                        dpadCurrentWeight[1] - dpadWeightChangeRate, 0, dpadMaxWeight
+                );
+            }
+            else if (dpadCurrentWeight[1] < 0) {
+                dpadCurrentWeight[1] = MathHelper.clamp(
+                        dpadCurrentWeight[1] + dpadWeightChangeRate, -dpadMaxWeight, 0
+                );
+            }
+        }
 
         double xInput = MathHelper.clamp(gp1.left_stick_x + dpadCurrentWeight[0], -1f, 1f);
         double yInput = MathHelper.clamp(gp1.left_stick_y - dpadCurrentWeight[1], -1f, 1f);
