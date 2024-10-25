@@ -13,12 +13,13 @@ public class Grabber {
     private Servo grabberRot;
 
     private boolean grabberOpen;
-    private boolean rotForward;
+    private int grabberRotState;
 
     private static final double grabberOpenPos = 0.11;
     private static final double grabberClosePos = 0.017;
 
     private static final double grabberRotForwardPos = 0.84;
+    private static final double grabberRotMiddlePos = 0.6725;
     private static final double grabberRotSidePos = 0.505;
 
     public Grabber (HardwareMap hardwareMap, Telemetry telemetry) {
@@ -35,18 +36,19 @@ public class Grabber {
         grabberRot.setPosition(grabberRotSidePos);
 
         grabberOpen = false;
-        rotForward = false;
+        grabberRotState = 0;
     }
 
     public void grabberControllerMovement(boolean toggleGrabber, boolean toggleRot) {
         if (toggleGrabber) grabberOpen = !grabberOpen;
-        if (toggleRot) rotForward = !rotForward;
+        if (toggleRot) grabberRotState = (grabberRotState + 1) % 3;
 
         if (grabberOpen) grabber.setPosition(grabberOpenPos);
         else grabber.setPosition(grabberClosePos);
 
-        if (rotForward) grabberRot.setPosition(grabberRotForwardPos);
-        else grabberRot.setPosition(grabberRotSidePos);
+        if (grabberRotState == 0) grabberRot.setPosition(grabberRotSidePos);
+        else if (grabberRotState == 1) grabberRot.setPosition(grabberRotMiddlePos);
+        else grabberRot.setPosition(grabberRotForwardPos);
     }
 
     //use int for boolean to simplify AutoAction constructor
