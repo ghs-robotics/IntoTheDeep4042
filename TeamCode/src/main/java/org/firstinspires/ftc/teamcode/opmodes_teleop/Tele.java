@@ -16,7 +16,7 @@ public class Tele extends LinearOpMode {
     //The percent speed of regular movement
     private double dpadMaxWeight = 0.4;
     private double[] dpadCurrentWeight = new double[] {0, 0};
-    private double dpadWeightChangeRate = 0.025;
+    private double dpadWeightChangeRate = 0.1;
 
     private double extLiftSlowScaler = 0.5;
 
@@ -58,6 +58,9 @@ public class Tele extends LinearOpMode {
             //        Remove Limits: dpad_left (held) | Reset lift 0 positions: dpad_right
             //-------------------------------------------------------------------------------------
 
+            if (gp2.a.pressed()) robot.arm.setAutoMove(0);
+            else if (gp2.b.pressed()) robot.arm.setAutoMove(1);
+
             double extLiftInput = -gp2.right_stick_y;
             if (gp2.right_bumper.pressing()) extLiftInput *= extLiftSlowScaler;
             robot.arm.armControllerMovement(gp2.left_stick_y, extLiftInput);
@@ -66,7 +69,7 @@ public class Tele extends LinearOpMode {
             if (gp2.dpad_right.pressed()) robot.arm.resetEncoders();
 
             robot.grabber.grabberControllerMovement(
-                gp2.x.pressed(), gp2.b.pressed(),gp2.y.pressed(), gp2.a.pressed()
+                gp2.left_bumper.pressed(),gp2.right_bumper.pressed(),false, false
             );
 
             //-------------------------------------------------------------------------------------

@@ -13,7 +13,7 @@ public class Grabber {
     private Servo grabberRot;
 
     private static final double grabberOpenPos = 0.11;
-    private static final double grabberClosePos = 0.019;
+    private static final double grabberClosePos = 0.017;
 
     private static final double grabberRotForwardPos = 0.84;
     private static final double grabberRotDownPos = 0.505;
@@ -36,8 +36,9 @@ public class Grabber {
         if (open) grabber.setPosition(grabberOpenPos);
         else if (close) grabber.setPosition(grabberClosePos);
 
-        if (forward) grabberRot.setPosition(grabberRotForwardPos);
-        else if (down) grabberRot.setPosition(grabberRotDownPos);
+//        if (forward) grabberRot.setPosition(grabberRotForwardPos);
+//        else if (down) grabberRot.setPosition(grabberRotDownPos);
+        grabberRot.setPosition(grabberRotDownPos);
     }
 
     //use int for boolean to simplify AutoAction constructor
