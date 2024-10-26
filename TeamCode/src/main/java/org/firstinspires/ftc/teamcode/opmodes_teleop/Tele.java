@@ -92,58 +92,25 @@ public class Tele extends LinearOpMode {
     }
 
     private double[] getInput() {
-        if (gp1.dpad_right.pressing())  {
-            dpadCurrentWeight[0] = MathHelper.clamp(
-                dpadCurrentWeight[0] + dpadWeightChangeRate,
-                -dpadMaxWeight,
-                dpadMaxWeight
-            );
-        }
-        else if (gp1.dpad_left.pressing()) {
-            dpadCurrentWeight[0] = MathHelper.clamp(
-                dpadCurrentWeight[0] - dpadWeightChangeRate,
-                -dpadMaxWeight,
-                dpadMaxWeight
-            );
-        }
+        if (gp1.dpad_right.pressing()) dpadCurrentWeight[0] = MathHelper.clamp(
+                dpadCurrentWeight[0] + dpadWeightChangeRate, -dpadMaxWeight, dpadMaxWeight);
+        else if (gp1.dpad_left.pressing()) dpadCurrentWeight[0] = MathHelper.clamp(
+                dpadCurrentWeight[0] - dpadWeightChangeRate, -dpadMaxWeight, dpadMaxWeight);
         else {
-            if (dpadCurrentWeight[0] > 0) {
-                dpadCurrentWeight[0] = MathHelper.clamp(
-                    dpadCurrentWeight[0] - dpadWeightChangeRate, 0, dpadMaxWeight
-                );
-            }
-            else if (dpadCurrentWeight[0] < 0) {
-                dpadCurrentWeight[0] = MathHelper.clamp(
-                        dpadCurrentWeight[0] + dpadWeightChangeRate, -dpadMaxWeight, 0
-                );
-            }
+            double startSign = Math.signum(dpadCurrentWeight[0]);
+            dpadCurrentWeight[0] -= dpadWeightChangeRate * startSign;
+            if (Math.signum(dpadCurrentWeight[0]) != startSign) dpadCurrentWeight[0] = 0;
         }
 
-        if (gp1.dpad_up.pressing()) {
-            dpadCurrentWeight[1] = MathHelper.clamp(
-                dpadCurrentWeight[1] + dpadWeightChangeRate,
-                -dpadMaxWeight,
-                dpadMaxWeight
-            );
-        }
-        else if (gp1.dpad_down.pressing()) {
-            dpadCurrentWeight[1] = MathHelper.clamp(
-                dpadCurrentWeight[1] - dpadWeightChangeRate,
-                -dpadMaxWeight,
-                dpadMaxWeight
-            );
-        }
+
+        if (gp1.dpad_up.pressing()) dpadCurrentWeight[1] = MathHelper.clamp(
+                dpadCurrentWeight[1] + dpadWeightChangeRate, -dpadMaxWeight, dpadMaxWeight);
+        else if (gp1.dpad_down.pressing()) dpadCurrentWeight[1] = MathHelper.clamp(
+                dpadCurrentWeight[1] - dpadWeightChangeRate, -dpadMaxWeight, dpadMaxWeight);
         else {
-            if (dpadCurrentWeight[1] > 0) {
-                dpadCurrentWeight[1] = MathHelper.clamp(
-                        dpadCurrentWeight[1] - dpadWeightChangeRate, 0, dpadMaxWeight
-                );
-            }
-            else if (dpadCurrentWeight[1] < 0) {
-                dpadCurrentWeight[1] = MathHelper.clamp(
-                        dpadCurrentWeight[1] + dpadWeightChangeRate, -dpadMaxWeight, 0
-                );
-            }
+            double startSign = Math.signum(dpadCurrentWeight[1]);
+            dpadCurrentWeight[1] -= dpadWeightChangeRate * startSign;
+            if (Math.signum(dpadCurrentWeight[1]) != startSign) dpadCurrentWeight[1] = 0;
         }
 
         double xInput = MathHelper.clamp(gp1.left_stick_x + dpadCurrentWeight[0], -1f, 1f);

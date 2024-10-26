@@ -24,7 +24,7 @@ public class Robot {
         this.telemetry = telemetry;
 
         drive = new MecanumDrive(hardwareMap, telemetry);
-        arm = new Arm(hardwareMap, telemetry, false);
+        arm = new Arm(hardwareMap, telemetry);
         grabber = new Grabber(hardwareMap, telemetry);
     }
 

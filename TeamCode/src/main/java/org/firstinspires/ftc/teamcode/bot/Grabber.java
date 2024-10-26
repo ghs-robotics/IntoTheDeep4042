@@ -15,12 +15,12 @@ public class Grabber {
     private boolean grabberOpen;
     private int grabberRotState;
 
-    private static final double grabberOpenPos = 0.11;
-    private static final double grabberClosePos = 0.017;
+    private static final double grabberOpenPos = 0.88;
+    private static final double grabberClosePos = 0.805;
 
-    private static final double grabberRotForwardPos = 0.84;
-    private static final double grabberRotMiddlePos = 0.6725;
-    private static final double grabberRotSidePos = 0.505;
+    private static final double grabberRotSidePos = 0.805;
+    private static final double grabberRotForwardPos = 0.475;
+    private static final double grabberRotMiddlePos = 0.64;
 
     public Grabber (HardwareMap hardwareMap, Telemetry telemetry) {
         this.telemetry = telemetry;

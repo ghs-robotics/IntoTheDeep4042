@@ -18,17 +18,19 @@ public class Arm {
     private boolean limitsEnabled = true;
 
     private boolean autoMoving = false;
+    private int currentAutoStep = 0;
+
     private int rotTargetPos;
     private int extTargetPos;
 
     //min and max motor positions to prevent hardware issues.
     private static final int minRotPos = 0;
-    private static final int maxRotPos = 9315;
+    private static final int maxRotPos = 3200;
 
     private static final int minExtPos = 0;
     private static final int maxExtPos = 4000;
 
-    public Arm(HardwareMap hardwareMap, Telemetry telemetry, boolean auto) {
+    public Arm(HardwareMap hardwareMap, Telemetry telemetry) {
         this.telemetry = telemetry;
 
         rotationMotor = hardwareMap.get(DcMotor.class, "rotationLift");
@@ -41,11 +43,6 @@ public class Arm {
         extensionMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         resetEncoders();
-
-        if (auto) {
-            rotationMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            extensionMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        }
     }
 
     //Clamps controller input to keep motors for continuing past hardware limit
@@ -53,9 +50,6 @@ public class Arm {
     public void armControllerMovement(double rotInput, double extInput) {
         if (autoMoving) autoMove();
         else {
-            rotationMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            extensionMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
             if (limitsEnabled) {
                 if (rotationMotor.getCurrentPosition() <= minRotPos) {
                     rotInput = MathHelper.clamp(rotInput,0,1);
@@ -106,35 +100,38 @@ public class Arm {
                 extTargetPos = minExtPos;
                 break;
             case 1: //top bin position
-                rotTargetPos = 1000;
+                rotTargetPos = 250;
                 extTargetPos = maxExtPos;
                 break;
         }
     }
 
     public void autoMove() {
-        rotationMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        extensionMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        double difference;
+        switch (currentAutoStep) {
+            case 0:
+                difference = rotTargetPos - rotationMotor.getCurrentPosition();
+                if(Math.abs(difference) > 15) rotationMotor.setPower(Math.signum(difference) * 0.75);
+                else {
+                    rotationMotor.setPower(0);
+                    currentAutoStep++;
+                }
+                break;
 
-        int finished = 0;
+            case 1:
+                difference = extTargetPos - extensionMotor.getCurrentPosition();
+                if(Math.abs(difference) > 15) extensionMotor.setPower(Math.signum(difference) * 0.6);
+                else {
+                    extensionMotor.setPower(0);
+                    currentAutoStep++;
+                }
+                break;
 
-        if(Math.abs(rotationMotor.getCurrentPosition() - rotTargetPos) > 10) {
-            rotationMotor.setTargetPosition(rotTargetPos);
+            case 2:
+                autoMoving = false;
+                currentAutoStep = 0;
+                break;
         }
-        else {
-            rotationMotor.setPower(0);
-            finished++;
-        }
-
-        if(Math.abs(extensionMotor.getCurrentPosition() - rotTargetPos) > 10) {
-            rotationMotor.setTargetPosition(rotTargetPos);
-        }
-        else {
-            rotationMotor.setPower(0);
-            finished++;
-        }
-
-        if (finished == 2) autoMoving = false;
     }
 
     public void printMotorPositions() {
