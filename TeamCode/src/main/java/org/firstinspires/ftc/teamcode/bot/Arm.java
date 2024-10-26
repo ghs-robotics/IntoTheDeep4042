@@ -18,6 +18,7 @@ public class Arm {
     private boolean limitsEnabled = true;
 
     private boolean autoMoving = false;
+    private boolean startAutoOnExt = false;
     private int currentAutoStep = 0;
 
     private int rotTargetPos;
@@ -93,6 +94,8 @@ public class Arm {
 
     public void setAutoMove(int posID) {
         autoMoving = true;
+        if(extensionMotor.getCurrentPosition() > 1000) startAutoOnExt = true;
+        else startAutoOnExt = false;
 
         switch (posID) {
             case 0: //min position
@@ -108,29 +111,38 @@ public class Arm {
 
     public void autoMove() {
         double difference;
+
         switch (currentAutoStep) {
             case 0:
-                difference = rotTargetPos - rotationMotor.getCurrentPosition();
-                if(Math.abs(difference) > 15) rotationMotor.setPower(Math.signum(difference) * 0.75);
-                else {
-                    rotationMotor.setPower(0);
-                    currentAutoStep++;
-                }
+                if (startAutoOnExt) autoDriveExt();
+                else autoDriveRot();
                 break;
 
             case 1:
-                difference = extTargetPos - extensionMotor.getCurrentPosition();
-                if(Math.abs(difference) > 15) extensionMotor.setPower(Math.signum(difference) * 0.6);
-                else {
-                    extensionMotor.setPower(0);
-                    currentAutoStep++;
-                }
+                if (!startAutoOnExt) autoDriveExt();
+                else autoDriveRot();
                 break;
 
             case 2:
                 autoMoving = false;
                 currentAutoStep = 0;
                 break;
+        }
+    }
+    private void autoDriveRot() {
+        double difference = rotTargetPos - rotationMotor.getCurrentPosition();
+        if(Math.abs(difference) > 15) rotationMotor.setPower(Math.signum(difference) * 0.75);
+        else {
+            rotationMotor.setPower(0);
+            currentAutoStep++;
+        }
+    }
+    private void autoDriveExt() {
+        double difference = extTargetPos - extensionMotor.getCurrentPosition();
+        if(Math.abs(difference) > 15) extensionMotor.setPower(Math.signum(difference) * 0.75);
+        else {
+            extensionMotor.setPower(0);
+            currentAutoStep++;
         }
     }
 
