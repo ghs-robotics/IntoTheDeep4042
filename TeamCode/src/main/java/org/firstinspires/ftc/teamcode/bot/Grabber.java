@@ -15,8 +15,8 @@ public class Grabber {
     private boolean grabberOpen;
     private int grabberRotState;
 
-    private static final double grabberOpenPos = 0.88;
-    private static final double grabberClosePos = 0.805;
+    private static final double grabberOpenPos = 0.83;
+    private static final double grabberClosePos = 0.755;
 
     private static final double grabberRotSidePos = 0.805;
     private static final double grabberRotForwardPos = 0.475;
@@ -32,11 +32,19 @@ public class Grabber {
         grabber.getController().pwmEnable();
         grabberRot.getController().pwmEnable();
 
-        grabber.setPosition(grabberClosePos);
-        grabberRot.setPosition(grabberRotSidePos);
-
         grabberOpen = false;
         grabberRotState = 0;
+    }
+
+    public void teleStartPos() {
+        grabberOpen = false;
+        grabberRotState = 0;
+        grabber.setPosition(grabberClosePos);
+        grabberRot.setPosition(grabberRotSidePos);
+    }
+
+    public void openGrabber() {
+        grabber.setPosition(grabberOpenPos);
     }
 
     public void grabberControllerMovement(boolean toggleGrabber, boolean toggleRot) {

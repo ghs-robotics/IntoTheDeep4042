@@ -16,6 +16,7 @@ public class Controller {
     public Button dpad_up = new Button();
     public Button dpad_down = new Button();
 
+
     public double left_stick_x;
     public double left_stick_y;
     public double right_stick_x;

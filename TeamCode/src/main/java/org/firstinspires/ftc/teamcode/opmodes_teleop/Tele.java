@@ -48,6 +48,11 @@ public class Tele extends LinearOpMode {
 
             robot.drive.calculateDrivePowers(input[0], input[1], input[2]);
 
+            if (gp1.left_bumper.pressing() && gp1.right_bumper.pressing()) {
+                robot.grabber.teleStartPos();
+                robot.arm.setAutoMove(2);
+            }
+
 //            robot.drive.calculateDrivePowers(gp1.left_stick_x, gp1.left_stick_y, gp1.right_stick_x);
 
             //-------------------------------------------------------------------------------------
@@ -58,8 +63,14 @@ public class Tele extends LinearOpMode {
             //        Remove Limits: dpad_left (held) | Reset lift 0 positions: dpad_right
             //-------------------------------------------------------------------------------------
 
-            if (gp2.a.pressed()) robot.arm.setAutoMove(0);
-            else if (gp2.b.pressed()) robot.arm.setAutoMove(1);
+            if (gp2.dpad_up.pressed()) robot.arm.setTeleEncodersStartPos();
+
+            if (gp2.a.pressed()) robot.arm.cancelAuto();
+            if (gp2.x.pressed()) {
+                robot.grabber.openGrabber();
+                robot.arm.setAutoMove(0);
+            }
+            else if (gp2.y.pressed()) robot.arm.setAutoMove(1);
 
             double extLiftInput = -gp2.right_stick_y;
             if (gp2.right_bumper.pressing()) extLiftInput *= extLiftSlowScaler;
