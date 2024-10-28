@@ -110,8 +110,8 @@ public class Arm {
 
         switch (posID) {
             case 0: //min position
-                rotTargetPos = maxRotPos - 100;
-                extTargetPos = minExtPos;
+                rotTargetPos = maxRotPos - 400;
+                extTargetPos = minExtPos + 250;
                 break;
             case 1: //top bin position
                 rotTargetPos = 250;

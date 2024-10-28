@@ -16,7 +16,7 @@ public class Grabber {
     private int grabberRotState;
 
     private static final double grabberOpenPos = 0.83;
-    private static final double grabberClosePos = 0.755;
+    private static final double grabberClosePos = 0.750;
 
     private static final double grabberRotSidePos = 0.805;
     private static final double grabberRotForwardPos = 0.475;
@@ -45,6 +45,10 @@ public class Grabber {
 
     public void openGrabber() {
         grabber.setPosition(grabberOpenPos);
+    }
+
+    public void closeGrabber() {
+        grabber.setPosition(grabberClosePos);
     }
 
     public void grabberControllerMovement(boolean toggleGrabber, boolean toggleRot) {
