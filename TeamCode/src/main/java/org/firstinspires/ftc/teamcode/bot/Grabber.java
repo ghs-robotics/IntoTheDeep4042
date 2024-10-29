@@ -18,9 +18,10 @@ public class Grabber {
     private static final double grabberOpenPos = 0.83;
     private static final double grabberClosePos = 0.750;
 
-    private static final double grabberRotSidePos = 0.805;
+    private static final double grabberRotLeftPos = 0.805;
+    private static final double grabberRotLeftMiddlePos = 0.64;
     private static final double grabberRotForwardPos = 0.475;
-    private static final double grabberRotMiddlePos = 0.64;
+    private static final double grabberRotRightMiddlePos = 0.31;
 
     public Grabber (HardwareMap hardwareMap, Telemetry telemetry) {
         this.telemetry = telemetry;
@@ -40,27 +41,26 @@ public class Grabber {
         grabberOpen = false;
         grabberRotState = 0;
         grabber.setPosition(grabberClosePos);
-        grabberRot.setPosition(grabberRotSidePos);
+        grabberRot.setPosition(grabberRotLeftPos);
     }
 
     public void openGrabber() {
         grabber.setPosition(grabberOpenPos);
     }
 
-    public void closeGrabber() {
-        grabber.setPosition(grabberClosePos);
-    }
-
     public void grabberControllerMovement(boolean toggleGrabber, boolean toggleRot) {
         if (toggleGrabber) grabberOpen = !grabberOpen;
-        if (toggleRot) grabberRotState = (grabberRotState + 1) % 3;
+        if (toggleRot) grabberRotState = (grabberRotState + 1) % 4;
 
         if (grabberOpen) grabber.setPosition(grabberOpenPos);
         else grabber.setPosition(grabberClosePos);
 
-        if (grabberRotState == 0) grabberRot.setPosition(grabberRotSidePos);
-        else if (grabberRotState == 1) grabberRot.setPosition(grabberRotMiddlePos);
-        else grabberRot.setPosition(grabberRotForwardPos);
+        switch (grabberRotState) {
+            case 0: grabberRot.setPosition(grabberRotLeftPos); break;
+            case 1: grabberRot.setPosition(grabberRotLeftMiddlePos); break;
+            case 2: grabberRot.setPosition(grabberRotForwardPos); break;
+            case 3: grabberRot.setPosition(grabberRotRightMiddlePos); break;
+        }
     }
 
     //use int for boolean to simplify AutoAction constructor
@@ -78,7 +78,7 @@ public class Grabber {
     public boolean setGrabberRotState(int forward) {
         double targetPos;
         if (forward == 1) targetPos = grabberRotForwardPos;
-        else targetPos = grabberRotSidePos;
+        else targetPos = grabberRotLeftPos;
 
         grabberRot.setPosition(targetPos);
 
