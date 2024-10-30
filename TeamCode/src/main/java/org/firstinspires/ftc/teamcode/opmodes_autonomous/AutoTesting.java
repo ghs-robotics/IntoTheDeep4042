@@ -21,8 +21,8 @@ public class AutoTesting extends LinearOpMode {
         robot = new Robot(hardwareMap, telemetry);
         actionHandler = new AutoActionHandler(robot, telemetry);
 
-//        actionHandler.add(WAIT, 1);
-        actionHandler.add(MOVE,1,0,0);
+        actionHandler.add(WAIT,false,1);
+        actionHandler.add(MOVE,false,1,0,0);
 
         actionHandler.init();
 

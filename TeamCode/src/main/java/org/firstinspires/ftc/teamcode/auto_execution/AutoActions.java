@@ -26,6 +26,7 @@ public class AutoActions {
     public static final int ARM = 3;
 
     private int identity;
+    private boolean async;
     private boolean endAction;
 
     private ElapsedTime timer;
@@ -47,12 +48,14 @@ public class AutoActions {
     private PIDController rotPID;
 
 
-    public AutoActions(int id, Robot robot){
+    public AutoActions(int id, boolean async, Robot robot){
+        this.async = async;
         init(id, robot);
     }
 
     //Used for id's: MOVE...
-    public AutoActions(int id, Robot robot, int x, int y, double heading){
+    public AutoActions(int id, boolean async, Robot robot, int x, int y, double heading){
+        this.async = async;
         this.x = MathHelper.tilesToMM(x);
         this.y = MathHelper.tilesToMM(y);
         this.heading = heading;
@@ -68,7 +71,8 @@ public class AutoActions {
     }
 
     //Used for id's: WAIT...
-    public AutoActions(int id, Robot robot, double value){
+    public AutoActions(int id, boolean async, Robot robot, double value){
+        this.async = async;
         if (id == WAIT){
             waitTime = value;
         }
@@ -76,7 +80,8 @@ public class AutoActions {
     }
 
     //Used for id's: GRABBER ARM
-    public AutoActions(int id, Robot robot, int value, int  value2){
+    public AutoActions(int id, boolean async, Robot robot, int value, int  value2){
+        this.async = async;
         if (id == GRABBER || id == ARM) {
             state = value;
             state2 = value2;
@@ -196,6 +201,7 @@ public class AutoActions {
     public String getDescription() { return description; }
 
     public int getIdentity() { return identity; }
+    public boolean getAsync() { return async; }
 
     private void resetTimer(){
         if (!timerReset){

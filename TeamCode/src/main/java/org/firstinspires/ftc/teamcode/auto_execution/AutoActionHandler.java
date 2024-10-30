@@ -6,17 +6,19 @@ package org.firstinspires.ftc.teamcode.auto_execution;
 //import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.LIFT;
 //import static org.firstinspires.ftc.teamcode.control.cv.Camera.SPIKE_ZONE;
 
-import com.qualcomm.robotcore.hardware.HardwareMap;
+import android.drm.DrmStore;
+
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.bot.Robot;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class AutoActionHandler {
     private ArrayList<AutoActions> actionList;
-    private AutoActions current;
+    private List<AutoActions> currentActions;
 
     private Robot robot;
     private Telemetry telemetry;
@@ -41,8 +43,8 @@ public class AutoActionHandler {
         if (actionList.isEmpty())
             return;
 
-        actionList.add(new AutoActions(AutoActions.DONE, robot));
-        current = actionList.get(0);
+        actionList.add(new AutoActions(AutoActions.DONE, false, robot));
+        addNextAction();
         totalActions = actionList.size();
     }
 
@@ -50,7 +52,7 @@ public class AutoActionHandler {
      * runs the action and calls next action in case the current action is complete.
      */
     public void run(){
-        current.runAction();
+        for (AutoActions action : currentActions) action.runAction();
         tryNextAction();
     }
 
@@ -71,16 +73,16 @@ public class AutoActionHandler {
         actionList.addAll(actionHandler.getActions());
     }
 
-    public void add (int action, int x, int y, double heading){
-        actionList.add(new AutoActions(action, robot, x, y, heading));
+    public void add (int action, boolean async, int x, int y, double heading){
+        actionList.add(new AutoActions(action, async, robot, x, y, heading));
     }
 
-    public void add(int action, double value) {
-        actionList.add(new AutoActions(action, robot, value));
+    public void add(int action, boolean async, double value) {
+        actionList.add(new AutoActions(action, async, robot, value));
     }
 
-    public void add(int action, int value, int value2) {
-        actionList.add(new AutoActions(action, robot, value, value2));
+    public void add(int action, boolean async, int value, int value2) {
+        actionList.add(new AutoActions(action, async, robot, value, value2));
     }
 
 //    public void add(int action, int value){
@@ -95,8 +97,8 @@ public class AutoActionHandler {
      * @param action the identity of the action (see the public static constant in AutoActions)
      *               This one is for actions that do not require parameters
      */
-    public void add(int action){
-        actionList.add(new AutoActions(action, robot));
+    public void add(int action, boolean async){
+        actionList.add(new AutoActions(action, async, robot));
     }
 
 
@@ -124,15 +126,29 @@ public class AutoActionHandler {
      * returns true.
      */
     private void tryNextAction(){
-        if (current.isFinished()) {
-            //current = null; Maybe redundant?
-            actionList.remove(0);
-            current = actionList.get(0);
+        for (int i = 0; i < currentActions.size(); i++) {
+            if (currentActions.get(i).isFinished()) currentActions.remove(i);
+        }
+
+        if (currentActions.isEmpty()) {
+            addNextAction();
 
             telemetry.addLine();
-            telemetry.addLine("Moving to next action:");
-            telemetry.addLine(current.getDescription());
+            telemetry.addLine("Moving to next actions:");
+            for (AutoActions action : currentActions) telemetry.addLine(action.getDescription());
             telemetry.update();
+        }
+    }
+
+    public void addNextAction() {
+        boolean isAsync = true;
+        while (isAsync) {
+            AutoActions action = actionList.get(0);
+            currentActions.add(action);
+
+            actionList.remove(0);
+
+            isAsync = action.getAsync();
         }
     }
 
@@ -147,10 +163,10 @@ public class AutoActionHandler {
 
         int currentStep = totalActions - actionList.size() + 1;
 
-        if (current.getIdentity() != AutoActions.DONE) {
+        if (currentActions.get(0).getIdentity() != AutoActions.DONE) {
             telemetry.addLine(currentStep + " of " + totalActions + " actions");
-            telemetry.addLine("Current action description:");
-            telemetry.addLine(current.getDescription());
+            telemetry.addLine("Current actions description:");
+            for (AutoActions action : currentActions) telemetry.addLine(action.getDescription());
         }
         else telemetry.addLine( "Done!");
     }
