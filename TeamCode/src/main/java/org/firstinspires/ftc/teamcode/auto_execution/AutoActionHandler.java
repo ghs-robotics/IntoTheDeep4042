@@ -6,8 +6,6 @@ package org.firstinspires.ftc.teamcode.auto_execution;
 //import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.LIFT;
 //import static org.firstinspires.ftc.teamcode.control.cv.Camera.SPIKE_ZONE;
 
-import android.drm.DrmStore;
-
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -26,14 +24,15 @@ public class AutoActionHandler {
     private ElapsedTime timer;
 
     private int totalActions;
-    public int zone;
 
 
     public AutoActionHandler(Robot robot, Telemetry telemetry){
-        this.actionList = new ArrayList<AutoActions>();
-        this.timer = new ElapsedTime();
         this.robot = robot;
         this.telemetry = telemetry;
+
+        actionList = new ArrayList<AutoActions>();
+        currentActions = new ArrayList<AutoActions>();
+        timer = new ElapsedTime();
     }
 
     /**
@@ -44,8 +43,9 @@ public class AutoActionHandler {
             return;
 
         actionList.add(new AutoActions(AutoActions.DONE, false, robot));
-        addNextAction();
         totalActions = actionList.size();
+
+        addNextActionsToCurrent();
     }
 
     /**
@@ -126,12 +126,12 @@ public class AutoActionHandler {
      * returns true.
      */
     private void tryNextAction(){
-        for (int i = 0; i < currentActions.size(); i++) {
+        for (int i = currentActions.size() - 1; i >= 0; i--) {
             if (currentActions.get(i).isFinished()) currentActions.remove(i);
         }
 
         if (currentActions.isEmpty()) {
-            addNextAction();
+            addNextActionsToCurrent();
 
             telemetry.addLine();
             telemetry.addLine("Moving to next actions:");
@@ -140,7 +140,7 @@ public class AutoActionHandler {
         }
     }
 
-    public void addNextAction() {
+    public void addNextActionsToCurrent() {
         boolean isAsync = true;
         while (isAsync) {
             AutoActions action = actionList.get(0);

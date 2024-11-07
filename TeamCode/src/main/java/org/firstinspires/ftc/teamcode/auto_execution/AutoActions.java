@@ -146,7 +146,7 @@ public class AutoActions {
 
     }
 
-    private void shutOffBot(){
+    private void setEndAutoState(){
         robot.shutOff();
     }
 
@@ -163,7 +163,7 @@ public class AutoActions {
     public void runAction(){
         switch (identity){
             case DONE:
-                shutOffBot();
+                setEndAutoState();
                 break;
             case MOVE:
                 moveTo();

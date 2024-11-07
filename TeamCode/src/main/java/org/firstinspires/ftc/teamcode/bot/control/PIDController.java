@@ -4,6 +4,8 @@ package org.firstinspires.ftc.teamcode.bot.control;
 import com.qualcomm.robotcore.hardware.PIDCoefficients;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.util.MathHelper;
+
 public class PIDController {
 
     private double targetPos;
@@ -22,8 +24,8 @@ public class PIDController {
     //Boolean to change constants depending on if PID is being used for position or rotation
     private boolean isPIDRot;
 
-    private static final PIDCoefficients PIDGainPos = new PIDCoefficients(.152, .00165765, .0016622);
-    private static final PIDCoefficients PIDGainRot = new PIDCoefficients(.152, .00165765, .0016622);
+    private static final PIDCoefficients PIDGainPos = new PIDCoefficients(.1, 0, 0);
+    private static final PIDCoefficients PIDGainRot = new PIDCoefficients(.1, 0, 0);
 
     private static final double arrivedDistThresholdPos = 10;
     private static final double arrivedDistThresholdRot = 2;
@@ -40,9 +42,9 @@ public class PIDController {
         error = currentPos - targetPos;
         if (repetitions == 0) lastError = error;
 
-        double changeInError = lastError - error;
+        double changeInError = error - lastError;
 
-        integral = clamp(integral + changeInError * PIDTimer.time(), -maxIntegral, maxIntegral);
+        integral = MathHelper.clamp(integral + error * PIDTimer.time(), -maxIntegral, maxIntegral);
         double derivative = changeInError / PIDTimer.time();
 
         //Determine PID Gain for either position of rotation
@@ -51,26 +53,20 @@ public class PIDController {
         double ki = isPIDRot ? PIDGainRot.i : PIDGainPos.i;
         double kd = isPIDRot ? PIDGainRot.d : PIDGainPos.d;
 
-        double P = kp * error;
-        double I = ki * integral;
-        double D = kd * derivative;
+        double P = kp * -error;
+        double I = ki * -integral;
+        double D = kd * -derivative;
 
         lastError = error;
         PIDTimer.reset();
-        repetitions ++;
+        repetitions++;
 
         return P + I + D;
     }
 
-    private double clamp(double value, double min, double max) {
-        if (value > max) return max;
-        if (value < min) return min;
-        return value;
-    }
-
     //Returns whether or not the robot has moved close enough to its desired position or rotation.
     public boolean hasArrived() {
-        return error < (isPIDRot ? arrivedDistThresholdRot : arrivedDistThresholdPos);
+        return Math.abs(error) <= (isPIDRot ? arrivedDistThresholdRot : arrivedDistThresholdPos);
     }
 
 //    private void moveTestMotor(double targetPosition) {
