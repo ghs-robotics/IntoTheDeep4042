@@ -7,7 +7,7 @@ import org.firstinspires.ftc.teamcode.bot.Robot;
 import org.firstinspires.ftc.teamcode.opmodes_teleop.input.Controller;
 
 @TeleOp
-public class Tele extends LinearOpMode {
+public class Tele_OdometryTest extends LinearOpMode {
     Robot robot;
     Controller gp1;
     Controller gp2;
@@ -23,6 +23,8 @@ public class Tele extends LinearOpMode {
         telemetry.addLine("Initializing");
         telemetry.update();
 
+        robot.drive.setDriveZeroPowerBehaviorFloat();
+
         while (opModeIsActive()){
             gp1.update();
             gp2.update();
@@ -31,7 +33,6 @@ public class Tele extends LinearOpMode {
             //                                  GAMEPAD 1
             //-------------------------------------------------------------------------------------
 
-            robot.drive.calculateDrivePowers(-gp1.left_stick_x, -gp1.left_stick_y, gp1.right_stick_x);
 
             //-------------------------------------------------------------------------------------
             //                                  GAMEPAD 2
@@ -42,7 +43,12 @@ public class Tele extends LinearOpMode {
             //                                  TELEMETRY
             //-------------------------------------------------------------------------------------
 
+            telemetry.clear();
+
+            robot.getAutoTelemetry();
+
             telemetry.update();
         }
     }
 }
+
