@@ -56,8 +56,6 @@ public class AutoActionHandler {
         tryNextAction();
     }
 
-
-
     /**
      * @param actionSet a pre-existing set of autoActions to add to this list
      */
@@ -77,6 +75,10 @@ public class AutoActionHandler {
         actionList.add(new AutoActions(action, async, robot, x, y, heading));
     }
 
+    public void add (int action, boolean async, double[] pos){
+        actionList.add(new AutoActions(action, async, robot, pos));
+    }
+
     public void add(int action, boolean async, double value) {
         actionList.add(new AutoActions(action, async, robot, value));
     }
@@ -87,10 +89,6 @@ public class AutoActionHandler {
 
 //    public void add(int action, int value){
 //        actionList.add(new AutoActions(action, robot, value));
-//    }
-
-//    public void add (int action, double[] pos){
-//        actionList.add(new AutoActions(action, robot, pos));
 //    }
 
     /**

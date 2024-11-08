@@ -70,6 +70,11 @@ public class AutoActions {
         init(id, robot);
     }
 
+    //Used for id's: MOVE...
+    public AutoActions (int id, boolean async, Robot robot, double[] pos){
+        this(id, async, robot, (int) pos[0], (int) pos[1], pos[2]);
+    }
+
     //Used for id's: WAIT...
     public AutoActions(int id, boolean async, Robot robot, double value){
         this.async = async;
@@ -88,11 +93,6 @@ public class AutoActions {
         }
         init(id, robot);
     }
-
-//    //Used for id's: MOVE?...
-//    public AutoActions (int id, Robot robot, double[] pos){
-//        this(id, robot, (int) pos[0], (int) pos[1], (int) pos[2]);
-//    }
 
     private void init(int id, Robot robot) {
         this.identity = id;

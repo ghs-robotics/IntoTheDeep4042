@@ -48,6 +48,11 @@ public class Odometry {
             pos.getHeading(AngleUnit.DEGREES)
         };
     }
+
+    public double[] getRelativePosition(double x, double y, double heading) {
+        double[] currentPos = getPosition();
+        return new double[] {currentPos[0] + x, currentPos[1] + y, currentPos[2] + heading};
+    }
 //    public void printPos() {
 //        PPD.update();
 //

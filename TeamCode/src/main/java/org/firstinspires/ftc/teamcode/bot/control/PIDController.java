@@ -27,8 +27,8 @@ public class PIDController {
     private static final PIDCoefficients PIDGainPos = new PIDCoefficients(.1, 0, 0);
     private static final PIDCoefficients PIDGainRot = new PIDCoefficients(.1, 0, 0);
 
-    private static final double arrivedDistThresholdPos = 10;
-    private static final double arrivedDistThresholdRot = 2;
+    private static final double arrivedDistThresholdPos = 10; //mm
+    private static final double arrivedDistThresholdRot = 2; //deg
 
     private ElapsedTime PIDTimer;
 
@@ -61,39 +61,11 @@ public class PIDController {
         PIDTimer.reset();
         repetitions++;
 
-        return P + I + D;
+        return MathHelper.clamp(P + I + D, -maxOutput, maxOutput);
     }
 
     //Returns whether or not the robot has moved close enough to its desired position or rotation.
     public boolean hasArrived() {
         return Math.abs(error) <= (isPIDRot ? arrivedDistThresholdRot : arrivedDistThresholdPos);
     }
-
-//    private void moveTestMotor(double targetPosition) {
-//        double error = testMotor.getCurrentPosition();
-//        double lastError = 0;
-//
-//        /*
-//         * Comparison value dependent on motor tick count
-//         * Higher end motor tick count: higher value
-//         * Lower end motor tick count: lower value
-//         */
-//        while (Math.abs(error) <= 9 /*Modify with above comments*/ && repetitions < 40 /*Modify*/) {
-//            error = testMotor.getCurrentPosition() - targetPosition;
-//            double changeInError = lastError - error;
-//
-//            integral += changeInError * PIDTimer.time();
-//            double derivative = changeInError / PIDTimer.time();
-//
-//            double P = PIDWeight.p * error;
-//            double I = PIDWeight.i * integral;
-//            double D = PIDWeight.d * derivative;
-//
-//            testMotor.setPower(P + I + D);
-//
-//            error = lastError;
-//            PIDTimer.reset();
-//            repetitions ++;
-//        }
-//    }
 }
