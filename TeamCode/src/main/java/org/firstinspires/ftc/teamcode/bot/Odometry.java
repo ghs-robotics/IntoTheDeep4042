@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 
 import org.firstinspires.ftc.teamcode.util.Encoder;
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -20,7 +21,7 @@ public class Odometry {
     private HardwareMap hardwareMap;
     private Telemetry telemetry;
 
-    private Encoder parallelOdometer, perpendicularOdometer;
+    private DcMotor parallelOdometer, perpendicularOdometer;
 
     private BNO055IMU imu; //Degrees
 //    private Orientation angles;
@@ -31,8 +32,12 @@ public class Odometry {
         this.hardwareMap = hardwareMap;
         this.telemetry = telemetry;
 
-        parallelOdometer = new Encoder(hardwareMap.get(DcMotorEx.class, "parallelEncoder"));
-        perpendicularOdometer = new Encoder(hardwareMap.get(DcMotorEx.class, "perpendicularEncoder"));
+        //Using encoder ports of Motors _ and _ for odometry wheels
+        parallelOdometer = hardwareMap.get(DcMotor.class, "lf");
+        perpendicularOdometer = hardwareMap.get(DcMotor.class, "lb");
+
+        //parallelOdometer = new Encoder(hardwareMap.get(DcMotorEx.class, "parallelEncoder"));
+        //perpendicularOdometer = new Encoder(hardwareMap.get(DcMotorEx.class, "perpendicularEncoder"));
 
         // TODO: reverse any encoders using Encoder.setDirection(Encoder.Direction.REVERSE)
 
