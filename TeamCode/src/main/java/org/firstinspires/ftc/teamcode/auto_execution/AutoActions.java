@@ -110,11 +110,10 @@ public class AutoActions {
         resetTimer();
 
         double[] currentPos = robot.odometry.getPosition();
-        double currentRot = robot.odometry.getHeadingDeg();
 
         double outputX = xPID.getPIDOutput(currentPos[0]);
         double outputY = yPID.getPIDOutput(currentPos[1]);
-        double outputRot = rotPID.getPIDOutput(currentRot);
+        double outputRot = rotPID.getPIDOutput(currentPos[2]);
 
         boolean hasArrived = xPID.hasArrived() && yPID.hasArrived() && rotPID.hasArrived();
 

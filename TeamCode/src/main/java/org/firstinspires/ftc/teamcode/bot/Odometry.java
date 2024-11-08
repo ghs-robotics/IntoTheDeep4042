@@ -1,65 +1,58 @@
 package org.firstinspires.ftc.teamcode.bot;
 
-import androidx.annotation.NonNull;
-
-import org.firstinspires.ftc.teamcode.util.Encoder;
-import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
+
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-//import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
-//import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 
 public class Odometry {
-
-    public static double TICKS_PER_REV = 2000;
-    public static double ODOMETRY_WHEEL_DIAMETER = 32; // mm
-    //public static double GEAR_RATIO = 1; // output (wheel) speed / input (encoder) speed
-    //public static double MM_TO_IN = 0.0393701; // millimeters to inches multiplier
 
     private HardwareMap hardwareMap;
     private Telemetry telemetry;
 
-    private DcMotor parallelOdometer, perpendicularOdometer;
+    private GoBildaPinpointDriver PPD;
 
-    private BNO055IMU imu; //Degrees
-//    private Orientation angles;
-//    private Acceleration gravity;
-//    private BNO055IMU.Parameters imuParameters;
-
-    public Odometry (HardwareMap hardwareMap, Telemetry telemetry) {
+    public Odometry(HardwareMap hardwareMap, Telemetry telemetry) {
         this.hardwareMap = hardwareMap;
         this.telemetry = telemetry;
 
-        //Using encoder ports of Motors _ and _ for odometry wheels
-        parallelOdometer = hardwareMap.get(DcMotor.class, "lf");
-        perpendicularOdometer = hardwareMap.get(DcMotor.class, "lb");
+        PPD = hardwareMap.get(GoBildaPinpointDriver.class,"PinpointComputer");
 
-        //parallelOdometer = new Encoder(hardwareMap.get(DcMotorEx.class, "parallelEncoder"));
-        //perpendicularOdometer = new Encoder(hardwareMap.get(DcMotorEx.class, "perpendicularEncoder"));
+        /*
+        Set the odometry pod positions relative to the point that the odometry computer tracks around.
+        The X pod offset refers to how far sideways from the tracking point the
+        X (forward) odometry pod is. Left of the center is a positive number,
+        right of center is a negative number. the Y pod offset refers to how far forwards from
+        the tracking point the Y (strafe) odometry pod is. forward of center is a positive number,
+        backwards is a negative number.
+         */
+        PPD.setOffsets(0, 20);
 
-        // TODO: reverse any encoders using Encoder.setDirection(Encoder.Direction.REVERSE)
+        PPD.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
 
-        imu = hardwareMap.get(BNO055IMU.class, "imu");
-        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
-        imu.initialize(parameters);
-    }
+        PPD.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD,
+            GoBildaPinpointDriver.EncoderDirection.FORWARD);
 
-    public static double encoderTicksToMillimeters(double ticks) {
-        return ODOMETRY_WHEEL_DIAMETER * Math.PI * ticks / TICKS_PER_REV; // * GEAR_RATIO if applicable
+        PPD.resetPosAndIMU();
     }
 
     public double[] getPosition() {
+        PPD.update();
+
+        Pose2D pos = PPD.getPosition();
         return new double[] {
-                encoderTicksToMillimeters(parallelOdometer.getCurrentPosition()),
-                encoderTicksToMillimeters(perpendicularOdometer.getCurrentPosition())
+            pos.getX(DistanceUnit.MM),
+            pos.getY(DistanceUnit.MM),
+            pos.getHeading(AngleUnit.DEGREES)
         };
     }
-
-    //Returns heading in degrees
-    public double getHeadingDeg() {
-        return imu.getAngularOrientation().firstAngle;
-    }
+//    public void printPos() {
+//        PPD.update();
+//
+//        Pose2D pos = PPD.getPosition();
+//        String data = String.format(Locale.US, "{X: %.3f, Y: %.3f, H: %.3f}", pos.getX(DistanceUnit.MM), pos.getY(DistanceUnit.MM), pos.getHeading(AngleUnit.DEGREES));
+//        telemetry.addData("Position", data);
+//    }
 }

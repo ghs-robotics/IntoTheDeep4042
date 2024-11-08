@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.util;
 
 public class MathHelper {
 
-    private static final double TILES_TO_MM = 66;
+    private static final double TILES_TO_MM = 609.6;
 
     public static double clamp(double value, double min, double max) {
         if (value > max) return max;

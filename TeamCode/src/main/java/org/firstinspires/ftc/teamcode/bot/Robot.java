@@ -59,7 +59,6 @@ public class Robot {
 
     public void positionTelemetry(){
         double[] pos = odometry.getPosition();
-        double rot = odometry.getHeadingDeg();
 
         telemetry.addLine();
         telemetry.addLine("ROBOT ODOMETRY---------------------|");
@@ -68,7 +67,7 @@ public class Robot {
         telemetry.addLine("Current pos (tiles): {" + MathHelper.mmToTiles(pos[0]) + ", "
             + MathHelper.mmToTiles(pos[1]) + "}");
 
-        telemetry.addLine("Current rot (deg):" + rot);
+        telemetry.addLine("Current rot (deg):" + pos[2]);
 
         telemetry.update();
 
