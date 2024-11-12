@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.bot;
+package org.firstinspires.ftc.teamcode.bot.Odometry;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -45,7 +45,7 @@ public class Odometry {
         return new double[] {
             pos.getX(DistanceUnit.MM),
             pos.getY(DistanceUnit.MM),
-            pos.getHeading(AngleUnit.DEGREES)
+            pos.getHeading(AngleUnit.DEGREES) // -180 to 180
         };
     }
 
