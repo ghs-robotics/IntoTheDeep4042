@@ -10,6 +10,10 @@ public class MathHelper {
         return value;
     }
 
+    public static double round100(double num) {
+        return Math.round(num * 100) / 100.0;
+    }
+
     //converts mm to length in floor tiles
     public static double mmToTiles(double mm) { return mm / TILES_TO_MM; }
 

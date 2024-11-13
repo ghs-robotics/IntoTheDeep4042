@@ -28,7 +28,7 @@ public class Odometry {
         the tracking point the Y (strafe) odometry pod is. forward of center is a positive number,
         backwards is a negative number.
          */
-        PPD.setOffsets(0, 20);
+        PPD.setOffsets(0, 75);
 
         PPD.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
 
