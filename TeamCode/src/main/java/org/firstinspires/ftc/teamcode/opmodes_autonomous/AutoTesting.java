@@ -22,7 +22,7 @@ public class AutoTesting extends LinearOpMode {
         actionHandler = new AutoActionHandler(robot, telemetry);
 
         actionHandler.add(WAIT,false,1);
-        actionHandler.add(MOVE,false, robot.odometry.getRelativePosition(100, 100, 0));
+        actionHandler.add(MOVE,false, 100, 100, 0);
 
         actionHandler.init();
 
@@ -35,10 +35,11 @@ public class AutoTesting extends LinearOpMode {
         telemetry.update();
 
         while (opModeIsActive()){
-            //actionHandler.run();
+            actionHandler.run();
 
-            //Push robot around to test odometry accuracy and troubleshoot
             robot.positionTelemetry();
+
+            telemetry.update();
         }
     }
 }

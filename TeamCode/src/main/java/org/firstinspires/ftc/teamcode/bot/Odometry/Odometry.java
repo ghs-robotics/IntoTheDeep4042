@@ -45,7 +45,7 @@ public class Odometry {
         return new double[] {
             pos.getX(DistanceUnit.MM),
             pos.getY(DistanceUnit.MM),
-            pos.getHeading(AngleUnit.DEGREES) // -180 to 180
+            -pos.getHeading(AngleUnit.DEGREES) // -180 to 180
         };
     }
 

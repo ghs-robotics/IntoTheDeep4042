@@ -46,6 +46,8 @@ public class AutoActionHandler {
         totalActions = actionList.size();
 
         addNextActionsToCurrent();
+
+        printStatus();
     }
 
     /**
@@ -53,6 +55,9 @@ public class AutoActionHandler {
      */
     public void run(){
         for (AutoActions action : currentActions) action.runAction();
+
+        printStatus();
+
         tryNextAction();
     }
 
@@ -165,6 +170,10 @@ public class AutoActionHandler {
             telemetry.addLine(currentStep + " of " + totalActions + " actions");
             telemetry.addLine("Current actions description:");
             for (AutoActions action : currentActions) telemetry.addLine(action.getDescription());
+
+//            telemetry.addLine();
+//            telemetry.addLine("Actions Queued:");
+//            for (AutoActions action : actionList) telemetry.addLine(action.getDescription());
         }
         else telemetry.addLine( "Done!");
     }

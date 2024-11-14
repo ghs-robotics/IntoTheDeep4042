@@ -27,10 +27,10 @@ public class AutoActions {
 
     private int identity;
     private boolean async;
+    private boolean currentAction = false;
     private boolean endAction;
 
     private ElapsedTime timer;
-    private boolean timerReset;
 
     private String description;
 
@@ -97,23 +97,20 @@ public class AutoActions {
     private void init(int id, Robot robot) {
         this.identity = id;
         this.robot = robot;
-        timerReset = false;
         timer = new ElapsedTime();
-
-        setDescription();
     }
 
     /**
      * Driving the rob
      */
     private void moveTo(){
-        resetTimer();
+        initAction();
 
         double[] currentPos = robot.odometry.getPosition();
 
-        double outputX = xPID.getPIDOutput(currentPos[0]);
-        double outputY = yPID.getPIDOutput(currentPos[1]);
-        double outputRot = rotPID.getPIDOutput(currentPos[2]);
+        double outputX = xPID.getPIDOutput(currentPos[0]) * 0.25;
+        double outputY = yPID.getPIDOutput(currentPos[1]) * 0.25;
+        double outputRot = rotPID.getPIDOutput(currentPos[2]) * 0.25;
 
         boolean hasArrived = xPID.hasArrived() && yPID.hasArrived() && rotPID.hasArrived();
 
@@ -129,7 +126,7 @@ public class AutoActions {
      * waits out timer until timer is greater than or equal to the parameter wait time
      */
     private void waiting() {
-        resetTimer();
+        initAction();
 
         robot.drive.calculateDrivePowers(0,0,0);
 
@@ -138,11 +135,12 @@ public class AutoActions {
 
     //Sets grabber and grabberRot to specified state and ends when both reach their target position
     private void grabberState() {
+        initAction();
         //endAction = robot.grabber.setGrabberState(state) && robot.grabber.setGrabberRotState(state2);
     }
 
     private void armPos() {
-
+        initAction();
     }
 
     private void setEndAutoState(){
@@ -182,8 +180,8 @@ public class AutoActions {
     /**
      * helper method to get telemetry text
      */
-    private void setDescription() {
-        description = "id: " + identity + "; ";
+    public String getDescription() {
+        String description = "id: " + identity + "; ";
         switch (identity){
             case DONE:
                 description += "Done!";
@@ -192,20 +190,22 @@ public class AutoActions {
                 description += "Moving to target pos: {"+x+", "+y+", "+heading+"}";
                 break;
             case WAIT:
-                description += "Waiting for " + waitTime + " seconds.";
+                description += "Waiting for "
+                    + (currentAction ? MathHelper.round100(timer.milliseconds() / 1000) : 0)
+                    +  " / " + waitTime + " seconds.";
                 break;
         }
-    }
 
-    public String getDescription() { return description; }
+        return description;
+    }
 
     public int getIdentity() { return identity; }
     public boolean getAsync() { return async; }
 
-    private void resetTimer(){
-        if (!timerReset){
+    private void initAction(){
+        if (!currentAction){
             timer.reset();
-            timerReset = true;
+            currentAction = true;
         }
     }
 
