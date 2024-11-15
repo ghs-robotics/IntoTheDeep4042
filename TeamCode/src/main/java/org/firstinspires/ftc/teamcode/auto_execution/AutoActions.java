@@ -117,7 +117,6 @@ public class AutoActions {
         double outputY = yPID.getPIDOutput(currentPos[1]);
         TeleSingle.tele.addLine("ROT-------------|");
         double outputRot = rotPID.getPIDOutput(currentPos[2]);
-        TeleSingle.tele.update();
 
         pidOutput = new double[] {outputX, outputY, outputRot};
 

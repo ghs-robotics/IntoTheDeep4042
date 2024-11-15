@@ -15,10 +15,10 @@ public class PIDController {
 
     private static final double maxOutput = 1;
 
-    private double maxP = 0.9;
+    //private double maxP = 0.95;
 
     private double integral = 0;
-    private static final double maxIntegral = 20;
+    private static final double maxIntegral = 6;
 
     private double lastError;
 
@@ -28,22 +28,27 @@ public class PIDController {
     private boolean isPIDRot;
 
     //private static final PIDCoefficients PIDGainPos = new PIDCoefficients(.0015, 0.00075, 0);
-    private static final PIDCoefficients PIDGainPos = new PIDCoefficients(.001, 0.005, 0);
-    private static final PIDCoefficients PIDGainRot = new PIDCoefficients(.001, 0.005, 0);
+    private static final PIDCoefficients PIDGainPos = new PIDCoefficients(.0055, 0.02, 0.0016);
+    private static final PIDCoefficients PIDGainRot = new PIDCoefficients(.0055, 0.02, 0.0016);
 
-    private static final double arrivedDistThresholdPos = 3; //mm
+    private static final double arrivedDistThresholdPos = 8; //mm
     private static final double arrivedDistThresholdRot = 2; //deg
 
     private ElapsedTime PIDTimer;
 
     public PIDController(double targetPos, boolean isPIDRot) {
-        this.targetPos = targetPos;
+        this.targetPos = (targetPos + 360) % 360;
         this.isPIDRot = isPIDRot;
         PIDTimer = new ElapsedTime();
     }
 
     public double getPIDOutput (double currentPos) {
-        error = currentPos - targetPos;
+        if (isPIDRot) {
+            error = ((currentPos + 360) % 360) - targetPos;
+            if (error > 180) error -= 360;
+        }
+        else error = currentPos - targetPos;
+
         if (repetitions == 0) lastError = error;
 
         double changeInError = error - lastError;
@@ -57,7 +62,7 @@ public class PIDController {
         double ki = isPIDRot ? PIDGainRot.i : PIDGainPos.i;
         double kd = isPIDRot ? PIDGainRot.d : PIDGainPos.d;
 
-        double P = MathHelper.clamp(kp * -error, -maxP, maxP);
+        double P = kp * -error;
         double I = ki * -integral;
         double D = kd * -derivative;
 
@@ -66,8 +71,8 @@ public class PIDController {
         repetitions++;
 
         //TeleSingle.tele.addLine("P: " + MathHelper.round10k(P));
-        TeleSingle.tele.addLine("I: " + MathHelper.round10k(I));
-        TeleSingle.tele.addLine("Int: " + MathHelper.round10k(integral));
+        TeleSingle.tele.addLine("PID: "
+                + MathHelper.round10k(MathHelper.clamp(P + I + D, -maxOutput, maxOutput)));
         //TeleSingle.tele.addLine("D: " + MathHelper.round10k(D));
 
         return MathHelper.clamp(P + I + D, -maxOutput, maxOutput);
