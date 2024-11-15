@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.PIDCoefficients;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.util.MathHelper;
+import org.firstinspires.ftc.teamcode.util.TeleSingle;
 
 public class PIDController {
 
@@ -14,8 +15,10 @@ public class PIDController {
 
     private static final double maxOutput = 1;
 
+    private double maxP = 0.9;
+
     private double integral = 0;
-    private static final double maxIntegral = 1;
+    private static final double maxIntegral = 20;
 
     private double lastError;
 
@@ -24,10 +27,11 @@ public class PIDController {
     //Boolean to change constants depending on if PID is being used for position or rotation
     private boolean isPIDRot;
 
-    private static final PIDCoefficients PIDGainPos = new PIDCoefficients(.1, 0, 0);
-    private static final PIDCoefficients PIDGainRot = new PIDCoefficients(.1, 0, 0);
+    //private static final PIDCoefficients PIDGainPos = new PIDCoefficients(.0015, 0.00075, 0);
+    private static final PIDCoefficients PIDGainPos = new PIDCoefficients(.001, 0.005, 0);
+    private static final PIDCoefficients PIDGainRot = new PIDCoefficients(.001, 0.005, 0);
 
-    private static final double arrivedDistThresholdPos = 10; //mm
+    private static final double arrivedDistThresholdPos = 3; //mm
     private static final double arrivedDistThresholdRot = 2; //deg
 
     private ElapsedTime PIDTimer;
@@ -53,13 +57,18 @@ public class PIDController {
         double ki = isPIDRot ? PIDGainRot.i : PIDGainPos.i;
         double kd = isPIDRot ? PIDGainRot.d : PIDGainPos.d;
 
-        double P = kp * -error;
+        double P = MathHelper.clamp(kp * -error, -maxP, maxP);
         double I = ki * -integral;
         double D = kd * -derivative;
 
         lastError = error;
         PIDTimer.reset();
         repetitions++;
+
+        //TeleSingle.tele.addLine("P: " + MathHelper.round10k(P));
+        TeleSingle.tele.addLine("I: " + MathHelper.round10k(I));
+        TeleSingle.tele.addLine("Int: " + MathHelper.round10k(integral));
+        //TeleSingle.tele.addLine("D: " + MathHelper.round10k(D));
 
         return MathHelper.clamp(P + I + D, -maxOutput, maxOutput);
     }

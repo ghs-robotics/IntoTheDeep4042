@@ -5,6 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.auto_execution.AutoActionHandler;
 import org.firstinspires.ftc.teamcode.bot.Robot;
+import org.firstinspires.ftc.teamcode.util.MathHelper;
+import org.firstinspires.ftc.teamcode.util.TeleSingle;
 
 import static org.firstinspires.ftc.teamcode.auto_execution.AutoActions.MOVE;
 import static org.firstinspires.ftc.teamcode.auto_execution.AutoActions.WAIT;
@@ -19,10 +21,13 @@ public class AutoTesting extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         robot = new Robot(hardwareMap, telemetry);
+
+        TeleSingle.init(telemetry);
+
         actionHandler = new AutoActionHandler(robot, telemetry);
 
-        actionHandler.add(WAIT,false,1);
-        actionHandler.add(MOVE,false, 100, 100, 0);
+        actionHandler.add(WAIT,false,0.33);
+        actionHandler.add(MOVE,false, MathHelper.tilesToMM(1), MathHelper.tilesToMM(1), 0);
 
         actionHandler.init();
 
@@ -37,9 +42,9 @@ public class AutoTesting extends LinearOpMode {
         while (opModeIsActive()){
             actionHandler.run();
 
-            robot.positionTelemetry();
+            //robot.positionTelemetry();
 
-            telemetry.update();
+            //telemetry.update();
         }
     }
 }

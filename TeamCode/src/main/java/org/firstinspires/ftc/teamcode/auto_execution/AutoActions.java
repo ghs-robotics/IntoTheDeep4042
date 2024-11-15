@@ -13,6 +13,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.bot.Robot;
 import org.firstinspires.ftc.teamcode.bot.control.PIDController;
 import org.firstinspires.ftc.teamcode.util.MathHelper;
+import org.firstinspires.ftc.teamcode.util.TeleSingle;
 
 public class AutoActions {
 
@@ -47,6 +48,8 @@ public class AutoActions {
     private PIDController yPID;
     private PIDController rotPID;
 
+    private double[] pidOutput = new double[] {0,0,0};
+
 
     public AutoActions(int id, boolean async, Robot robot){
         this.async = async;
@@ -54,10 +57,10 @@ public class AutoActions {
     }
 
     //Used for id's: MOVE...
-    public AutoActions(int id, boolean async, Robot robot, int x, int y, double heading){
+    public AutoActions(int id, boolean async, Robot robot, double x, double y, double heading){
         this.async = async;
-        this.x = MathHelper.tilesToMM(x);
-        this.y = MathHelper.tilesToMM(y);
+        this.x = x;
+        this.y = y;
         this.heading = heading;
 
         //checkXSign();
@@ -108,13 +111,19 @@ public class AutoActions {
 
         double[] currentPos = robot.odometry.getPosition();
 
-        double outputX = xPID.getPIDOutput(currentPos[0]) * 0.25;
-        double outputY = yPID.getPIDOutput(currentPos[1]) * 0.25;
-        double outputRot = rotPID.getPIDOutput(currentPos[2]) * 0.25;
+        TeleSingle.tele.addLine("X---------------|");
+        double outputX = xPID.getPIDOutput(currentPos[0]);
+        TeleSingle.tele.addLine("Y---------------|");
+        double outputY = yPID.getPIDOutput(currentPos[1]);
+        TeleSingle.tele.addLine("ROT-------------|");
+        double outputRot = rotPID.getPIDOutput(currentPos[2]);
+        TeleSingle.tele.update();
+
+        pidOutput = new double[] {outputX, outputY, outputRot};
 
         boolean hasArrived = xPID.hasArrived() && yPID.hasArrived() && rotPID.hasArrived();
 
-        if (!hasArrived) robot.drive.calculateDrivePowers(outputX, outputY, outputRot);
+        if (!hasArrived) robot.drive.calculateDrivePowers(outputX, -outputY, outputRot);
         else robot.drive.calculateDrivePowers(0, 0, 0);
 
         boolean timeOut = timer.milliseconds() > 10000;
@@ -188,6 +197,10 @@ public class AutoActions {
                 break;
             case MOVE:
                 description += "Moving to target pos: {"+x+", "+y+", "+heading+"}";
+                if (currentAction) description += "; PID output: {"
+                        + MathHelper.round100(pidOutput[0]) + ", "
+                        + MathHelper.round100(pidOutput[1]) + ", "
+                        + MathHelper.round100(pidOutput[2]) + "}";
                 break;
             case WAIT:
                 description += "Waiting for "

@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.bot.Robot;
 import org.firstinspires.ftc.teamcode.opmodes_teleop.input.Controller;
+import org.firstinspires.ftc.teamcode.util.TeleSingle;
 
 @TeleOp
 public class Tele extends LinearOpMode {
@@ -18,6 +19,8 @@ public class Tele extends LinearOpMode {
 
         gp1 = new Controller(gamepad1);
         gp2 = new Controller(gamepad2);
+
+        TeleSingle.init(telemetry);
 
         waitForStart();
         telemetry.addLine("Initializing");

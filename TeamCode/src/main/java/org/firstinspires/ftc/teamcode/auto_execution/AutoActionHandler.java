@@ -56,7 +56,7 @@ public class AutoActionHandler {
     public void run(){
         for (AutoActions action : currentActions) action.runAction();
 
-        printStatus();
+        //printStatus();
 
         tryNextAction();
     }
@@ -76,7 +76,7 @@ public class AutoActionHandler {
         actionList.addAll(actionHandler.getActions());
     }
 
-    public void add (int action, boolean async, int x, int y, double heading){
+    public void add (int action, boolean async, double x, double y, double heading){
         actionList.add(new AutoActions(action, async, robot, x, y, heading));
     }
 

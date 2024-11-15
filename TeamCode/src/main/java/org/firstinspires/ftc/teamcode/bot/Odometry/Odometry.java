@@ -32,8 +32,8 @@ public class Odometry {
 
         PPD.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
 
-        PPD.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD,
-            GoBildaPinpointDriver.EncoderDirection.FORWARD);
+        PPD.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.REVERSED,
+            GoBildaPinpointDriver.EncoderDirection.REVERSED);
 
         PPD.resetPosAndIMU();
     }
