@@ -35,9 +35,6 @@ public class AutoTesting extends LinearOpMode {
 
         actionHandler.init();
 
-
-        robot.drive.setDriveZeroPowerBehaviorFloat();
-
         waitForStart();
 
         telemetry.addLine("Initializing");

@@ -47,7 +47,7 @@ public class AutoActionHandler {
 
         addNextActionsToCurrent();
 
-        printStatus();
+        //printStatus();
     }
 
     /**
@@ -136,10 +136,10 @@ public class AutoActionHandler {
         if (currentActions.isEmpty()) {
             addNextActionsToCurrent();
 
-            telemetry.addLine();
-            telemetry.addLine("Moving to next actions:");
-            for (AutoActions action : currentActions) telemetry.addLine(action.getDescription());
-            telemetry.update();
+//            telemetry.addLine();
+//            telemetry.addLine("Moving to next actions:");
+//            for (AutoActions action : currentActions) telemetry.addLine(action.getDescription());
+//            telemetry.update();
         }
     }
 

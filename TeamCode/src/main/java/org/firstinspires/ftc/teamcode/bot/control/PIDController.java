@@ -27,7 +27,6 @@ public class PIDController {
     //Boolean to change constants depending on if PID is being used for position or rotation
     private boolean isPIDRot;
 
-    //private static final PIDCoefficients PIDGainPos = new PIDCoefficients(.0015, 0.00075, 0);
     private static final PIDCoefficients PIDGainPos = new PIDCoefficients(.0055, 0.02, 0.0016);
     private static final PIDCoefficients PIDGainRot = new PIDCoefficients(.0055, 0.02, 0.0016);
 
@@ -37,7 +36,7 @@ public class PIDController {
     private ElapsedTime PIDTimer;
 
     public PIDController(double targetPos, boolean isPIDRot) {
-        this.targetPos = (targetPos + 360) % 360;
+        this.targetPos = isPIDRot ? ((targetPos + 360) % 360) : targetPos;
         this.isPIDRot = isPIDRot;
         PIDTimer = new ElapsedTime();
     }
@@ -71,8 +70,10 @@ public class PIDController {
         repetitions++;
 
         //TeleSingle.tele.addLine("P: " + MathHelper.round10k(P));
-        TeleSingle.tele.addLine("PID: "
-                + MathHelper.round10k(MathHelper.clamp(P + I + D, -maxOutput, maxOutput)));
+//        TeleSingle.tele.addLine("PID: "
+//                + MathHelper.round10k(MathHelper.clamp(P + I + D, -maxOutput, maxOutput)));
+        TeleSingle.tele.addLine("Error: "
+                + MathHelper.round10k(error));
         //TeleSingle.tele.addLine("D: " + MathHelper.round10k(D));
 
         return MathHelper.clamp(P + I + D, -maxOutput, maxOutput);

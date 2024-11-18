@@ -28,25 +28,31 @@ public class Odometry {
         the tracking point the Y (strafe) odometry pod is. forward of center is a positive number,
         backwards is a negative number.
          */
-        PPD.setOffsets(0, 75);
+        PPD.setOffsets(-14, -135); // 355 x 285 : 177.5 x 142.5
 
         PPD.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
 
-        PPD.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.REVERSED,
+        PPD.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD,
             GoBildaPinpointDriver.EncoderDirection.REVERSED);
 
         PPD.resetPosAndIMU();
     }
 
-    public double[] getPosition() {
+    public double[] getRawPosition() {
         PPD.update();
 
         Pose2D pos = PPD.getPosition();
         return new double[] {
-            pos.getX(DistanceUnit.MM),
-            pos.getY(DistanceUnit.MM),
-            -pos.getHeading(AngleUnit.DEGREES) // -180 to 180
+                pos.getX(DistanceUnit.MM),
+                pos.getY(DistanceUnit.MM),
+                pos.getHeading(AngleUnit.DEGREES) // -180 to 180
         };
+    }
+
+    public double[] getPosition() {
+        double[] pos = getRawPosition();
+
+        return new double[] {-pos[1], pos[0], -pos[2]};
     }
 
     public double[] getRelativePosition(double x, double y, double heading) {

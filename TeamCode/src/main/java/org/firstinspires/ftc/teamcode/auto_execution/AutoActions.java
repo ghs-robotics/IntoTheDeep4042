@@ -12,6 +12,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.bot.Robot;
 import org.firstinspires.ftc.teamcode.bot.control.PIDController;
+import org.firstinspires.ftc.teamcode.opmodes_teleop.Tele;
 import org.firstinspires.ftc.teamcode.util.MathHelper;
 import org.firstinspires.ftc.teamcode.util.TeleSingle;
 
@@ -75,7 +76,7 @@ public class AutoActions {
 
     //Used for id's: MOVE...
     public AutoActions (int id, boolean async, Robot robot, double[] pos){
-        this(id, async, robot, (int) pos[0], (int) pos[1], pos[2]);
+        this(id, async, robot, pos[0], pos[1], pos[2]);
     }
 
     //Used for id's: WAIT...
@@ -111,12 +112,14 @@ public class AutoActions {
 
         double[] currentPos = robot.odometry.getPosition();
 
+        TeleSingle.tele.clear();
         TeleSingle.tele.addLine("X---------------|");
         double outputX = xPID.getPIDOutput(currentPos[0]);
         TeleSingle.tele.addLine("Y---------------|");
         double outputY = yPID.getPIDOutput(currentPos[1]);
         TeleSingle.tele.addLine("ROT-------------|");
         double outputRot = rotPID.getPIDOutput(currentPos[2]);
+        TeleSingle.tele.update();
 
         pidOutput = new double[] {outputX, outputY, outputRot};
 

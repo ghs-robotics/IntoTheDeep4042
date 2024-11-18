@@ -46,9 +46,9 @@ public class Robot {
         telemetry.addLine("Current pos (mm): {"
             + MathHelper.round100(pos[0]) + ", "
             + MathHelper.round100(pos[1]) + "}");
-        telemetry.addLine("Current pos (tiles): {"
-            + MathHelper.round100(MathHelper.mmToTiles(pos[0])) + ", "
-            + MathHelper.round100(MathHelper.mmToTiles(pos[1])) + "}");
+//        telemetry.addLine("Current pos (tiles): {"
+//            + MathHelper.round100(MathHelper.mmToTiles(pos[0])) + ", "
+//            + MathHelper.round100(MathHelper.mmToTiles(pos[1])) + "}");
 
         telemetry.addLine("Current rot (deg):" + MathHelper.round100(pos[2]));
     }
