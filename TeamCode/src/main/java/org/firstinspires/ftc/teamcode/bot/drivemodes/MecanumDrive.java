@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.bot.drivemodes;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.bot.Odometry.Odometry;
 
 public class MecanumDrive {
 
@@ -17,9 +17,11 @@ public class MecanumDrive {
     private double inputScalerY = 0.7; //0.7
     private double inputScalerRot = 0.5; //0.5
 
+    private Odometry odo;
 
-    public MecanumDrive(HardwareMap hardwareMap, Telemetry telemetry){
 
+    public MecanumDrive(HardwareMap hardwareMap, Odometry odo){
+        this.odo = odo;
         // Gets the motor from the hub, make sure the name matches the config on the Driver hub
         leftFrontDrive = hardwareMap.get(DcMotor.class, "lf");
         leftBackDrive = hardwareMap.get(DcMotor.class, "lb");
@@ -30,8 +32,6 @@ public class MecanumDrive {
         leftBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        telemetry.update();
     }
 
     public void setDrivePowers(double lf, double lb, double rf, double rb){
@@ -41,12 +41,31 @@ public class MecanumDrive {
         rightBackDrive.setPower(rb);
     }
 
-    public void calculateDrivePowers(double x, double y, double rot) {
-        //scale input so motor doesn't necessarily run at full throttle
-        x *= inputScalerX;
-        y *= inputScalerY;
-        rot *= inputScalerRot;
+    public void globalDrive(double xInput, double yInput, double rotInput) {
+        double currentRot = odo.getPosition()[2];
 
+        double rotR = Math.toRadians(currentRot - 45);
+        double rotXAxisR = Math.toRadians(currentRot + 45);
+
+        double[] globalX = new double[] {
+            xInput * Math.cos(-rotXAxisR) - yInput * Math.sin(-rotXAxisR),
+            xInput * Math.sin(-rotXAxisR) + yInput * Math.cos(-rotXAxisR)
+        };
+        double[] globalY = new double[] {
+            xInput * Math.cos(-rotR) - yInput * Math.sin(-rotR),
+            xInput * Math.sin(-rotR) + yInput * Math.cos(-rotR)
+        };
+
+        calculateDrivePowers(
+            globalX[0] + globalY[0],
+            globalX[1] + globalY[1],
+            rotInput
+        );
+    }
+    public void localScaledDrive(double x, double y, double rot){
+        calculateDrivePowers(x * inputScalerX, y * inputScalerY, rot * inputScalerRot);
+    }
+    public void calculateDrivePowers(double x, double y, double rot) {
         double leftFrontPower = rot - x + y;
         double leftBackPower = rot + x + y;
         double rightFrontPower = rot - x - y;

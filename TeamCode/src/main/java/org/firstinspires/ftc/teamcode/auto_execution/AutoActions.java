@@ -12,7 +12,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.bot.Robot;
 import org.firstinspires.ftc.teamcode.bot.control.PIDController;
-import org.firstinspires.ftc.teamcode.opmodes_teleop.Tele;
 import org.firstinspires.ftc.teamcode.util.MathHelper;
 import org.firstinspires.ftc.teamcode.util.TeleSingle;
 
@@ -110,7 +109,7 @@ public class AutoActions {
     private void moveTo(){
         initAction();
 
-        double[] currentPos = robot.odometry.getPosition();
+        double[] currentPos = robot.odo.getPosition();
 
         TeleSingle.tele.clear();
         TeleSingle.tele.addLine("X---------------|");
@@ -125,7 +124,7 @@ public class AutoActions {
 
         boolean hasArrived = xPID.hasArrived() && yPID.hasArrived() && rotPID.hasArrived();
 
-        if (!hasArrived) robot.drive.calculateDrivePowers(outputX, -outputY, outputRot);
+        if (!hasArrived) robot.drive.globalDrive(outputX, -outputY, outputRot);
         else robot.drive.calculateDrivePowers(0, 0, 0);
 
         boolean timeOut = timer.milliseconds() > 10000;

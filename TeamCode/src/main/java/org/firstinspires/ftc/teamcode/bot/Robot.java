@@ -14,7 +14,7 @@ public class Robot {
 
     public MecanumDrive drive;
 
-    public Odometry odometry;
+    public Odometry odo;
 
     public boolean RED;
 
@@ -22,8 +22,8 @@ public class Robot {
         this.hardwareMap = hardwareMap;
         this.telemetry = telemetry;
 
-        drive = new MecanumDrive(hardwareMap, telemetry);
-        odometry = new Odometry(hardwareMap, telemetry);
+        odo = new Odometry(hardwareMap, telemetry);
+        drive = new MecanumDrive(hardwareMap, odo);
     }
 
     public void shutOff(){
@@ -39,7 +39,7 @@ public class Robot {
     }
 
     public void positionTelemetry(){
-        double[] pos = odometry.getPosition();
+        double[] pos = odo.getPosition();
 
         telemetry.addLine();
         telemetry.addLine("ROBOT ODOMETRY---------------------|");
