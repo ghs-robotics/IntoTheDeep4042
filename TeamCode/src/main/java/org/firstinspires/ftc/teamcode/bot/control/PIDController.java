@@ -14,13 +14,13 @@ public class PIDController {
     private double error;
 
     private static final double maxOutputPos = 1;
-    private static final double maxOutputRot = 0.7;
+    private static final double maxOutputRot = 0.75;
 
     //private double maxP = 0.95;
 
     private double integral = 0;
     private static final double maxIntegralPos = 10;
-    private static final double maxIntegralRot = 1.5;
+    private static final double maxIntegralRot = 1.25;
 
     private double lastError;
 
@@ -29,14 +29,12 @@ public class PIDController {
     //Boolean to change constants depending on if PID is being used for position or rotation
     private boolean isPIDRot;
 
-//    private static final PIDCoefficients PIDGainPos = new PIDCoefficients(.006, 0.007, 0.004);
-//    private static final PIDCoefficients PIDGainRot = new PIDCoefficients(.0095, 0.01, 0.002);
 
-    private static final PIDCoefficients PIDGainPos = new PIDCoefficients(.002, 0.005, 0.0005);
-    private static final PIDCoefficients PIDGainRot = new PIDCoefficients(.01, 0.06, 0.0004);
+    private static final PIDCoefficients PIDGainPos = new PIDCoefficients(.0023, 0.006, 0.0009);
+    private static final PIDCoefficients PIDGainRot = new PIDCoefficients(.012, 0.07, 0.0006);
 
     private static final double arrivedDistThresholdPos = 8; //mm
-    private static final double arrivedDistThresholdRot = 0; //deg
+    private static final double arrivedDistThresholdRot = 1; //deg
 
     private ElapsedTime PIDTimer;
 
@@ -81,8 +79,8 @@ public class PIDController {
 //                + MathHelper.round10k(MathHelper.clamp(P + I + D, -maxOutput, maxOutput)));
 //        TeleSingle.tele.addLine("Error: "
 //                + MathHelper.round10k(error));
-        TeleSingle.tele.addLine("Integral: "
-                + MathHelper.round10k(integral));
+//        TeleSingle.tele.addLine("Integral: "
+//                + MathHelper.round10k(integral));
         //TeleSingle.tele.addLine("D: " + MathHelper.round10k(D));
 
         double maxOutput = isPIDRot ? maxOutputRot : maxOutputPos;

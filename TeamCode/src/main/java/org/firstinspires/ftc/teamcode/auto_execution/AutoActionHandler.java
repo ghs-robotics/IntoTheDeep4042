@@ -81,7 +81,7 @@ public class AutoActionHandler {
     }
 
     public void add (int action, boolean async, double[] pos){
-        actionList.add(new AutoActions(action, async, robot, pos));
+        actionList.add(new AutoActions(action, async, robot, pos[0], pos[1], pos[2]));
     }
 
     public void add(int action, boolean async, double value) {

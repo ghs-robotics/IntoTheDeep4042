@@ -73,11 +73,6 @@ public class AutoActions {
         init(id, robot);
     }
 
-    //Used for id's: MOVE...
-    public AutoActions (int id, boolean async, Robot robot, double[] pos){
-        this(id, async, robot, pos[0], pos[1], pos[2]);
-    }
-
     //Used for id's: WAIT...
     public AutoActions(int id, boolean async, Robot robot, double value){
         this.async = async;
@@ -111,13 +106,15 @@ public class AutoActions {
 
         double[] currentPos = robot.odo.getPosition();
 
+        double PIDRampLimit = timer.seconds() * 3;
+
         TeleSingle.tele.clear();
-        TeleSingle.tele.addLine("X---------------|");
-        double outputX = xPID.getPIDOutput(currentPos[0]);
-        TeleSingle.tele.addLine("Y---------------|");
-        double outputY = yPID.getPIDOutput(currentPos[1]);
-        TeleSingle.tele.addLine("ROT-------------|");
-        double outputRot = rotPID.getPIDOutput(currentPos[2]);
+        //TeleSingle.tele.addLine("X---------------|");
+        double outputX = MathHelper.clamp(xPID.getPIDOutput(currentPos[0]), -PIDRampLimit, PIDRampLimit);
+        //TeleSingle.tele.addLine("Y---------------|");
+        double outputY = MathHelper.clamp(yPID.getPIDOutput(currentPos[1]), -PIDRampLimit, PIDRampLimit);
+        //TeleSingle.tele.addLine("ROT-------------|");
+        double outputRot = MathHelper.clamp(rotPID.getPIDOutput(currentPos[2]), -PIDRampLimit, PIDRampLimit);
         TeleSingle.tele.update();
 
         pidOutput = new double[] {outputX, outputY, outputRot};
