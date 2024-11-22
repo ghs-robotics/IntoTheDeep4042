@@ -37,20 +37,17 @@ public class Grabber {
         grabberRotState = 0;
     }
 
-    public void teleStartPos() {
-        grabberOpen = false;
-        grabberRotState = 0;
-        grabber.setPosition(grabberClosePos);
-        grabberRot.setPosition(grabberRotLeftPos);
+    public void grabberControllerMovement(boolean toggleGrabber, boolean changeRot) {
+        setGrabberState(
+            toggleGrabber ? !grabberOpen : grabberOpen,
+            changeRot ? (grabberRotState + 1) % 4: grabberRotState
+        );
     }
 
-    public void openGrabber() {
-        grabber.setPosition(grabberOpenPos);
-    }
-
-    public void grabberControllerMovement(boolean toggleGrabber, boolean toggleRot) {
-        if (toggleGrabber) grabberOpen = !grabberOpen;
-        if (toggleRot) grabberRotState = (grabberRotState + 1) % 4;
+    //use int for boolean to simplify AutoAction constructor
+    public void setGrabberState(boolean grabberOpen, int grabberRotState) {
+        this.grabberOpen = grabberOpen;
+        this.grabberRotState = grabberRotState == -1 ? this.grabberRotState : grabberRotState;
 
         if (grabberOpen) grabber.setPosition(grabberOpenPos);
         else grabber.setPosition(grabberClosePos);
@@ -61,28 +58,6 @@ public class Grabber {
             case 2: grabberRot.setPosition(grabberRotForwardPos); break;
             case 3: grabberRot.setPosition(grabberRotRightMiddlePos); break;
         }
-    }
-
-    //use int for boolean to simplify AutoAction constructor
-    public boolean setGrabberState(int open) {
-        double targetPos;
-        if (open == 1) targetPos = grabberOpenPos;
-        else targetPos = grabberClosePos;
-
-        grabber.setPosition(targetPos);
-
-        return grabber.getPosition() == targetPos;
-    }
-
-    //use int for boolean to simplify AutoAction constructor
-    public boolean setGrabberRotState(int forward) {
-        double targetPos;
-        if (forward == 1) targetPos = grabberRotForwardPos;
-        else targetPos = grabberRotLeftPos;
-
-        grabberRot.setPosition(targetPos);
-
-        return grabberRot.getPosition() == targetPos;
     }
 
     public void printServoPositions() {

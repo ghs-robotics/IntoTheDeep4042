@@ -42,14 +42,13 @@ public class Tele extends LinearOpMode {
             //            Forward and Strafe: left_stick | Rotation: right_stick_x
             //-------------------------------------------------------------------------------------
 
-
-            double[] input;
-            input = getInput();
+            double[] input = getInput();
 
             robot.drive.calculateDrivePowers(input[0], input[1], input[2]);
 
+            //TODO: MOVE TO AutoSetStart
             if (gp1.left_bumper.pressing() && gp1.right_bumper.pressing()) {
-                robot.grabber.teleStartPos();
+                robot.grabber.setGrabberState(false, 0);
                 robot.arm.setAutoMove(2);
             }
 
@@ -63,18 +62,23 @@ public class Tele extends LinearOpMode {
             //        Remove Limits: dpad_left (held) | Reset lift 0 positions: dpad_right
             //-------------------------------------------------------------------------------------
 
-            if (gp2.dpad_up.pressed()) robot.arm.setTeleEncodersStartPos();
+            //TODO: Move to TeleStartPos
+            if (gp2.dpad_up.pressed()) robot.arm.setEncodersTeleStartPos();
 
-            if (gp2.a.pressed()) robot.arm.cancelAuto();
+            if (gp2.a.pressed()) robot.arm.stopAuto();
+            else if (gp2.y.pressed()) {
+                robot.grabber.setGrabberState(false, 2);
+                robot.arm.setAutoMove(1);
+            }
             if (gp2.x.pressed()) {
-                robot.grabber.openGrabber();
+                robot.grabber.setGrabberState(true, -1);
                 robot.arm.setAutoMove(0);
             }
-            else if (gp2.y.pressed()) robot.arm.setAutoMove(1);
 
-            double extLiftInput = -gp2.right_stick_y;
-            if (gp2.right_bumper.pressing()) extLiftInput *= extLiftSlowScaler;
-            robot.arm.armControllerMovement(gp2.left_stick_y, extLiftInput);
+            robot.arm.armControllerMovement(
+                gp2.left_stick_y,
+                gp2.right_bumper.pressing() ? gp2.right_stick_y * extLiftSlowScaler : gp2.right_stick_y
+            );
 
             robot.arm.setLimitState(gp2.dpad_left.pressing());
             if (gp2.dpad_right.pressed()) robot.arm.resetEncoders();

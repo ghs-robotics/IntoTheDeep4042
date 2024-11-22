@@ -11,9 +11,11 @@ public class Arm {
 
     private Telemetry telemetry;
 
-    private DcMotor rotationMotor;
+    private DcMotor rotationM1;
+    private DcMotor rotationM2;
 
-    private DcMotor extensionMotor;
+    private DcMotor extensionM1;
+    private DcMotor extensionM2;
 
     private boolean limitsEnabled = true;
 
@@ -34,17 +36,27 @@ public class Arm {
     private static final int maxLoweredExtPos = 2500;
     private static final int maxRaisedExtPos = 4000;
 
+    private static final int startRotPos = 1600;
+
+    private static final int loweredRotThreshold = 2250;
+
     public Arm(HardwareMap hardwareMap, Telemetry telemetry) {
         this.telemetry = telemetry;
 
-        rotationMotor = hardwareMap.get(DcMotor.class, "rotationLift");
-        extensionMotor = hardwareMap.get(DcMotor.class, "extensionLift");
+        rotationM1 = hardwareMap.get(DcMotor.class, "rotationLift1");
+        rotationM2 = hardwareMap.get(DcMotor.class, "rotationLift2");
+        extensionM1 = hardwareMap.get(DcMotor.class, "extensionLift1");
+        //extensionM2 = hardwareMap.get(DcMotor.class, "extensionLift2");
 
-        rotationMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        extensionMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rotationM1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rotationM2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        extensionM1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        //extensionM2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        rotationMotor.setDirection(DcMotorSimple.Direction.FORWARD);
-        extensionMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        rotationM1.setDirection(DcMotorSimple.Direction.FORWARD);
+        rotationM2.setDirection(DcMotorSimple.Direction.FORWARD);
+        extensionM1.setDirection(DcMotorSimple.Direction.FORWARD);
+        //extensionM2.setDirection(DcMotorSimple.Direction.FORWARD);
 
         resetEncoders();
     }
@@ -54,59 +66,27 @@ public class Arm {
     public void armControllerMovement(double rotInput, double extInput) {
         if (autoMoving) autoMove();
         else {
-            double maxExtPos = getRotPosition() > 2250 ? maxLoweredExtPos : maxRaisedExtPos;
+            double maxExtPos = getRotM1Position() > loweredRotThreshold ? maxLoweredExtPos : maxRaisedExtPos;
 
             if (limitsEnabled) {
-                if (getRotPosition() <= minRotPos) {
-                    rotInput = MathHelper.clamp(rotInput,0,1);
-                }
-                if (getRotPosition() >= maxRotPos) {
-                    rotInput = MathHelper.clamp(rotInput,-1,0);
-                }
-                if (extensionMotor.getCurrentPosition() <= minExtPos) {
-                    extInput = MathHelper.clamp(extInput,0,1);
-                }
-                if (extensionMotor.getCurrentPosition() >= maxExtPos) {
-                    extInput = MathHelper.clamp(extInput,-1,0);
-                }
+                if (getRotM1Position() <= minRotPos) rotInput = MathHelper.clamp(rotInput,0,1);
+                if (getRotM1Position() >= maxRotPos) rotInput = MathHelper.clamp(rotInput,-1,0);
+                if (extensionM1.getCurrentPosition() <= minExtPos) extInput = MathHelper.clamp(extInput,0,1);
+                if (extensionM1.getCurrentPosition() >= maxExtPos) extInput = MathHelper.clamp(extInput,-1,0);
             }
 
-            //rotInput = smoothRotInput(rotInput);
+            rotInput = smoothRotInput(rotInput);
 
-            rotationMotor.setPower(rotInput);
-            extensionMotor.setPower(extInput);
+            rotationM1.setPower(-rotInput);
+            rotationM2.setPower(-rotInput);
+            extensionM1.setPower(extInput);
+            //extensionM2.setPower(extInput);
         }
     }
 
-    //Smooths input between 1 and 0 as the rotation motor approaches its min and max positions
-    private double smoothRotInput(double rotInput) {
-        double h = (minRotPos + maxRotPos) / 2;
-        double k = 1;
-        double a = -1 / Math.pow(minRotPos - h, 2);
-        double x = getRotPosition();
-
-        return rotInput * (a * Math.pow(x - h, 2) + k);
-    }
-
-    public void resetEncoders() {
-        rotationMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        extensionMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        rotationMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        extensionMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        relativeRotPos = 0;
-    }
-    public void setTeleEncodersStartPos() {
-        resetEncoders();
-        relativeRotPos = 1600;
-    }
-    public void setLimitState(boolean buttonPressed) { limitsEnabled = !buttonPressed; }
-
     public void setAutoMove(int posID) {
         autoMoving = true;
-        if(extensionMotor.getCurrentPosition() > 1500) startAutoOnExt = true;
-        else startAutoOnExt = false;
+        startAutoOnExt = extensionM1.getCurrentPosition() > 1500;
 
         switch (posID) {
             case 0: //min position
@@ -118,15 +98,13 @@ public class Arm {
                 extTargetPos = maxRaisedExtPos - 115;
                 break;
             case 2: //Fit in box
-                rotTargetPos = 1600;
+                rotTargetPos = startRotPos;
                 extTargetPos = minExtPos;
                 break;
         }
     }
 
-    public void autoMove() {
-        double difference;
-
+    private void autoMove() {
         switch (currentAutoStep) {
             case 0:
                 if (startAutoOnExt) autoDriveExt();
@@ -139,39 +117,80 @@ public class Arm {
                 break;
 
             case 2:
-                cancelAuto();
+                stopAuto();
                 break;
         }
     }
 
-    public void cancelAuto() {
-        autoMoving = false;
-        currentAutoStep = 0;
-    }
-
     private void autoDriveRot() {
-        double difference = rotTargetPos - getRotPosition();
-        if(Math.abs(difference) > 15) rotationMotor.setPower(Math.signum(difference) * 0.75);
+        double error = getRotM1Position() - rotTargetPos;
+        if (Math.abs(error) > 15) {
+            rotationM1.setPower(Math.signum(error) * -0.75);
+            rotationM2.setPower(Math.signum(error) * -0.75);
+        }
         else {
-            rotationMotor.setPower(0);
+            rotationM1.setPower(0);
+            rotationM2.setPower(0);
             currentAutoStep++;
         }
     }
     private void autoDriveExt() {
-        double difference = extTargetPos - extensionMotor.getCurrentPosition();
-        if(Math.abs(difference) > 15) extensionMotor.setPower(Math.signum(difference) * 0.75);
+        double error = extensionM1.getCurrentPosition() - extTargetPos;
+        if (Math.abs(error) > 15) {
+            extensionM1.setPower(Math.signum(error) * -0.75);
+            //extensionM2.setPower(Math.signum(error) * -0.75);
+        }
         else {
-            extensionMotor.setPower(0);
+            extensionM1.setPower(0);
+            //extensionM2.setPower(0);
             currentAutoStep++;
         }
+    }
+
+    public void stopAuto() {
+        autoMoving = false;
+        currentAutoStep = 0;
+    }
+
+    public void resetEncoders() {
+        rotationM1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rotationM2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        extensionM1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //extensionM2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        rotationM1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rotationM2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        extensionM1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        //extensionM2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        relativeRotPos = 0;
+    }
+    public void setEncodersTeleStartPos() {
+        resetEncoders();
+        relativeRotPos = startRotPos;
+    }
+    public void setLimitState(boolean buttonPressed) { limitsEnabled = !buttonPressed; }
+
+    //Smooths input between 1 and 0 as the rotation motor approaches its min and max positions
+    private double smoothRotInput(double rotInput) {
+        double p = 6; // must be even and >= 2; adjusts aggressiveness of dampening curve
+        double h = (minRotPos + maxRotPos) / 2;
+        double k = 1;
+        double a = -1 / Math.pow(minRotPos - h, p);
+        double x = getRotM1Position();
+
+        return rotInput * (a * Math.pow(x - h, p) + k);
     }
 
     public void printMotorPositions() {
         telemetry.addLine();
         telemetry.addLine("Arm Motor Positions---------|");
-        telemetry.addLine("Rot motor pos:" + getRotPosition());
-        telemetry.addLine("Ext motor pos:" + extensionMotor.getCurrentPosition());
+        telemetry.addLine("Rot motor 1 pos:" + getRotM1Position());
+        telemetry.addLine("Rot motor 2 pos:" + getRotM2Position());
+        telemetry.addLine("Ext motor 1 pos:" + extensionM1.getCurrentPosition());
+        //telemetry.addLine("Ext motor 2 pos:" + extensionM2.getCurrentPosition());
     }
 
-    private int getRotPosition() { return rotationMotor.getCurrentPosition() + relativeRotPos; }
+    private int getRotM1Position() { return rotationM1.getCurrentPosition() + relativeRotPos; }
+    private int getRotM2Position() { return rotationM2.getCurrentPosition() + relativeRotPos; }
 }
