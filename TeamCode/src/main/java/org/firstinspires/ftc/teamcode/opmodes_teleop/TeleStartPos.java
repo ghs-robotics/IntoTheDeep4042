@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.util.MathHelper;
 import org.firstinspires.ftc.teamcode.util.TeleSingle;
 
 @TeleOp
-public class Tele extends LinearOpMode {
+public class TeleStartPos extends LinearOpMode {
     private Robot robot;
     private Controller gp1;
     private Controller gp2;
@@ -30,6 +30,8 @@ public class Tele extends LinearOpMode {
         gp2 = new Controller(gamepad2);
 
         TeleSingle.init(telemetry);
+
+        robot.arm.setEncodersTeleStartPos();
 
         waitForStart();
 
