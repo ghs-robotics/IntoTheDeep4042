@@ -21,6 +21,7 @@ public class Arm {
 
     private boolean autoMoving = false;
     private boolean startAutoOnExt = false;
+    private static final int autoRotThreshold = 1500;
     private int currentAutoStep = 0;
 
     private int rotTargetPos;
@@ -86,7 +87,7 @@ public class Arm {
 
     public void setAutoMove(int posID) {
         autoMoving = true;
-        startAutoOnExt = extensionM1.getCurrentPosition() > 1500;
+        startAutoOnExt = extensionM1.getCurrentPosition() > autoRotThreshold;
 
         switch (posID) {
             case 0: //min position
@@ -94,7 +95,7 @@ public class Arm {
                 extTargetPos = minExtPos + 250;
                 break;
             case 1: //top bin position
-                rotTargetPos = 250;
+                rotTargetPos = minRotPos + 250;
                 extTargetPos = maxRaisedExtPos - 115;
                 break;
             case 2: //Fit in box
