@@ -181,7 +181,9 @@ public class Arm {
         double a = -1 / Math.pow(minRotPos - h, p);
         double x = getRotM1Position();
 
-        return rotInput * (a * Math.pow(x - h, p) + k);
+        double minOutput = 0.2;
+
+        return rotInput * MathHelper.clamp(a * Math.pow(x - h, p) + k, minOutput, 1);
     }
 
     public void printMotorPositions() {
