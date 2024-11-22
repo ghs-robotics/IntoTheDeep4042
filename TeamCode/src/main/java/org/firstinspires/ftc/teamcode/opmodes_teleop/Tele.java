@@ -47,15 +47,7 @@ public class Tele extends LinearOpMode {
 
             double[] input = getInput();
 
-            robot.drive.calculateDrivePowers(input[0], input[1], input[2]);
-
-            //TODO: MOVE TO AutoSetStart
-            if (gp1.left_bumper.pressing() && gp1.right_bumper.pressing()) {
-                robot.grabber.setGrabberState(false, 0);
-                robot.arm.setAutoMove(2);
-            }
-
-//            robot.drive.calculateDrivePowers(gp1.left_stick_x, gp1.left_stick_y, gp1.right_stick_x);
+            robot.drive.localScaledDrive(input[0], input[1], input[2]);
 
             //-------------------------------------------------------------------------------------
             //                                  GAMEPAD 2
@@ -80,7 +72,7 @@ public class Tele extends LinearOpMode {
 
             robot.arm.armControllerMovement(
                 gp2.left_stick_y,
-                gp2.right_bumper.pressing() ? gp2.right_stick_y * extLiftSlowScaler : gp2.right_stick_y
+                gp2.right_trigger.pressing() ? gp2.right_stick_y * extLiftSlowScaler : gp2.right_stick_y
             );
 
             robot.arm.setLimitState(gp2.dpad_left.pressing());

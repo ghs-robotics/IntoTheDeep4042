@@ -16,13 +16,13 @@ public class Controller {
     public Button dpad_up = new Button();
     public Button dpad_down = new Button();
 
+    public Trigger left_trigger;
+    public Trigger right_trigger;
 
     public double left_stick_x;
     public double left_stick_y;
     public double right_stick_x;
     public double right_stick_y;
-    public double left_trigger;
-    public double right_trigger;
 
     public Controller(Gamepad gamepad){
         this.gamepad = gamepad;
@@ -41,12 +41,12 @@ public class Controller {
         dpad_up.update(gamepad.dpad_up);
         dpad_down.update(gamepad.dpad_down);
 
+        left_trigger.update(gamepad.left_trigger);
+        right_trigger.update(gamepad.right_trigger);
+
         left_stick_x = gamepad.left_stick_x;
         left_stick_y = gamepad.left_stick_y;
         right_stick_x = gamepad.right_stick_x;
         right_stick_y = gamepad.right_stick_y;
-        left_trigger = gamepad.left_trigger;
-        right_trigger = gamepad.right_trigger;
-
     }
 }
