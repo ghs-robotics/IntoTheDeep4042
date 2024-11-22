@@ -16,6 +16,9 @@ public class Robot {
 
     public Odometry odo;
 
+    public Arm arm;
+    public Grabber grabber;
+
     public boolean RED;
 
     public Robot(HardwareMap hardwareMap, Telemetry telemetry) {
@@ -24,6 +27,9 @@ public class Robot {
 
         odo = new Odometry(hardwareMap, telemetry);
         drive = new MecanumDrive(hardwareMap, odo);
+
+        arm = new Arm(hardwareMap, telemetry);
+        grabber = new Grabber(hardwareMap, telemetry);
     }
 
     public void shutOff(){
