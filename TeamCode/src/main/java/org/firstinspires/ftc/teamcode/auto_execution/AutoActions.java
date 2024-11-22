@@ -143,11 +143,18 @@ public class AutoActions {
     //Sets grabber and grabberRot to specified state and ends when both reach their target position
     private void grabberState() {
         initAction();
-        //endAction = robot.grabber.setGrabberState(state) && robot.grabber.setGrabberRotState(state2);
+
+        robot.grabber.setGrabberState(false, 0); //positions here
+
+        endAction = true;
     }
 
     private void armPos() {
+        if (!currentAction) robot.arm.setAutoMove(0);//Id here
+
         initAction();
+
+        endAction = robot.arm.autoMove();
     }
 
     private void setEndAutoState(){

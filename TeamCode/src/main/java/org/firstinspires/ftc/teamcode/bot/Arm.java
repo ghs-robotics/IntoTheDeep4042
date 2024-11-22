@@ -105,22 +105,23 @@ public class Arm {
         }
     }
 
-    private void autoMove() {
+    public boolean autoMove() {
         switch (currentAutoStep) {
             case 0:
                 if (startAutoOnExt) autoDriveExt();
                 else autoDriveRot();
-                break;
+                return false;
 
             case 1:
                 if (!startAutoOnExt) autoDriveExt();
                 else autoDriveRot();
-                break;
+                return false;
 
             case 2:
                 stopAuto();
                 break;
         }
+        return true;
     }
 
     private void autoDriveRot() {
