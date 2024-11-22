@@ -41,8 +41,8 @@ public class AutoActions {
 
     private double waitTime;
 
-    private int state;
-    private int state2;
+    private int value;
+    private int value2;
 
     private PIDController xPID;
     private PIDController yPID;
@@ -56,16 +56,13 @@ public class AutoActions {
         init(id, robot);
     }
 
-    //Used for id's: MOVE...
+    //Used for id's: MOVE
     public AutoActions(int id, boolean async, Robot robot, double x, double y, double heading){
         this.async = async;
         this.x = x;
         this.y = y;
         this.heading = heading;
 
-        //checkXSign();
-
-        //MAYBE MAKE PID ONE DIMENSIONAL, NOT X AND Y AND ROT AT SAME TIME???
         xPID = new PIDController(this.x, false);
         yPID = new PIDController(this.y, false);
         rotPID = new PIDController(this.heading, true);
@@ -73,21 +70,26 @@ public class AutoActions {
         init(id, robot);
     }
 
-    //Used for id's: WAIT...
+    //Used for id's: WAIT
     public AutoActions(int id, boolean async, Robot robot, double value){
         this.async = async;
-        if (id == WAIT){
-            waitTime = value;
-        }
+        if (id == WAIT) waitTime = value;
         init(id, robot);
     }
 
-    //Used for id's: GRABBER ARM
+    //Used for id's: ARM
+    public AutoActions(int id, boolean async, Robot robot, int value){
+        this.async = async;
+        if (id == ARM) this.value = value;
+        init(id, robot);
+    }
+
+    //Used for id's: GRABBER
     public AutoActions(int id, boolean async, Robot robot, int value, int  value2){
         this.async = async;
-        if (id == GRABBER || id == ARM) {
-            state = value;
-            state2 = value2;
+        if (id == GRABBER) {
+            this.value = value;
+            this.value2 = value2;
         }
         init(id, robot);
     }
@@ -144,13 +146,13 @@ public class AutoActions {
     private void grabberState() {
         initAction();
 
-        robot.grabber.setGrabberState(false, 0); //positions here
+        robot.grabber.setGrabberState(value == 1, value2);
 
         endAction = true;
     }
 
     private void armPos() {
-        if (!currentAction) robot.arm.setAutoMove(0);//Id here
+        if (!currentAction) robot.arm.setAutoMove(value);
 
         initAction();
 
@@ -211,6 +213,12 @@ public class AutoActions {
                 description += "Waiting for "
                     + (currentAction ? MathHelper.round100(timer.milliseconds() / 1000) : 0)
                     +  " / " + waitTime + " seconds.";
+                break;
+            case GRABBER:
+                description += "Setting Grabber Open: " + (value == 1) + " | Rot State: " + value2;
+                break;
+            case ARM:
+                description += "Moving Arm to PosID: " + value;
                 break;
         }
 

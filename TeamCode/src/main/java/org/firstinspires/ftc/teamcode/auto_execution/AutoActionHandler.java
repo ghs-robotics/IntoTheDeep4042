@@ -47,7 +47,7 @@ public class AutoActionHandler {
 
         addNextActionsToCurrent();
 
-        //printStatus();
+        printStatus();
     }
 
     /**
@@ -56,7 +56,7 @@ public class AutoActionHandler {
     public void run(){
         for (AutoActions action : currentActions) action.runAction();
 
-        //printStatus();
+        printStatus();
 
         tryNextAction();
     }
@@ -88,13 +88,14 @@ public class AutoActionHandler {
         actionList.add(new AutoActions(action, async, robot, value));
     }
 
+    public void add(int action, boolean async, int value) {
+        actionList.add(new AutoActions(action, async, robot, value));
+    }
+
     public void add(int action, boolean async, int value, int value2) {
         actionList.add(new AutoActions(action, async, robot, value, value2));
     }
 
-//    public void add(int action, int value){
-//        actionList.add(new AutoActions(action, robot, value));
-//    }
 
     /**
      * @param action the identity of the action (see the public static constant in AutoActions)
