@@ -16,8 +16,8 @@ public class Controller {
     public Button dpad_up = new Button();
     public Button dpad_down = new Button();
 
-    public Trigger left_trigger;
-    public Trigger right_trigger;
+    public Trigger left_trigger = new Trigger();
+    public Trigger right_trigger = new Trigger();
 
     public double left_stick_x;
     public double left_stick_y;

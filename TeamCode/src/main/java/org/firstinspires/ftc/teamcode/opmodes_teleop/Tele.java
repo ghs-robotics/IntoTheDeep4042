@@ -61,19 +61,21 @@ public class Tele extends LinearOpMode {
             if (gp2.dpad_up.pressed()) robot.arm.setEncodersTeleStartPos();
 
             if (gp2.a.pressed()) robot.arm.stopAuto();
-            else if (gp2.y.pressed()) {
-                robot.grabber.setGrabberState(false, 2);
+            else if (gp2.x.pressed()) {
+                robot.grabber.setGrabberState(true, 2);
                 robot.arm.setAutoMove(1);
             }
-            if (gp2.x.pressed()) {
-                robot.grabber.setGrabberState(true, -1);
+            if (gp2.y.pressed()) {
+                robot.grabber.setGrabberState(false, -1);
                 robot.arm.setAutoMove(0);
             }
 
             robot.arm.armControllerMovement(
-                gp2.left_stick_y,
+                -gp2.left_stick_y,
                 gp2.right_trigger.pressing() ? gp2.right_stick_y * extLiftSlowScaler : gp2.right_stick_y
             );
+
+
 
             robot.arm.setLimitState(gp2.dpad_left.pressing());
             if (gp2.dpad_right.pressed()) robot.arm.resetEncoders();

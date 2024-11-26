@@ -15,8 +15,8 @@ public class Grabber {
     private boolean grabberOpen;
     private int grabberRotState;
 
-    private static final double grabberOpenPos = 0.83;
-    private static final double grabberClosePos = 0.750;
+    private static final double grabberOpenPos = 0.76                                                                                                                                                                          ;
+    private static final double grabberClosePos = 0.60;
 
     private static final double grabberRotLeftPos = 0.805;
     private static final double grabberRotLeftMiddlePos = 0.64;
