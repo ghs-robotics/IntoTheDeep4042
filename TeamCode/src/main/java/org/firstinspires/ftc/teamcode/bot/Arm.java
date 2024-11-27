@@ -21,7 +21,8 @@ public class Arm {
 
     private boolean autoMoving = false;
     private boolean startAutoOnExt = false;
-    private static final int autoRotThreshold = 1500;
+    //If the extension motor position is above this value, the arm will retract first in auto
+    private static final int autoMaxExtForRot = 1500;
     private int currentAutoStep = 0;
 
     private int rotTargetPos;
@@ -85,9 +86,10 @@ public class Arm {
         }
     }
 
+    //Initializes auto movement
     public void setAutoMove(int posID) {
         autoMoving = true;
-        startAutoOnExt = extensionM1.getCurrentPosition() > autoRotThreshold;
+        startAutoOnExt = extensionM1.getCurrentPosition() > autoMaxExtForRot;
 
         switch (posID) {
             case 0: //min position
@@ -105,6 +107,7 @@ public class Arm {
         }
     }
 
+    //Called every frame of auto movement
     public boolean autoMove() {
         switch (currentAutoStep) {
             case 0:
@@ -174,6 +177,7 @@ public class Arm {
     public void setLimitState(boolean buttonPressed) { limitsEnabled = !buttonPressed; }
 
     //Smooths input between 1 and 0 as the rotation motor approaches its min and max positions
+    //Cushions stopping of motor on endpoints
     private double smoothRotInput(double rotInput) {
         double p = 6; // must be even and >= 2; adjusts aggressiveness of dampening curve
         double h = (minRotPos + maxRotPos) / 2;
