@@ -17,6 +17,9 @@ public class Grabber {
 
     private static final double grabberOpenPos = 0.76                                                                                                                                                                          ;
     private static final double grabberClosePos = 0.60;
+    //Tuning Variables
+    private static final double grabberOpenPos = 0.83;
+    private static final double grabberClosePos = 0.750;
 
     private static final double grabberRotLeftPos = 0.805;
     private static final double grabberRotLeftMiddlePos = 0.64;
@@ -40,7 +43,7 @@ public class Grabber {
     public void grabberControllerMovement(boolean toggleGrabber, boolean changeRot) {
         setGrabberState(
             toggleGrabber ? !grabberOpen : grabberOpen,
-            changeRot ? (grabberRotState + 1) % 4: grabberRotState
+            changeRot ? (grabberRotState + 1) % 4 : grabberRotState
         );
     }
 

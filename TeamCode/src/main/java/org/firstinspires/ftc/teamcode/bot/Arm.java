@@ -21,7 +21,8 @@ public class Arm {
 
     private boolean autoMoving = false;
     private boolean startAutoOnExt = false;
-    private static final int autoRotThreshold = 1500;
+    //If the extension motor position is above this value, the arm will retract first in auto
+    private static final int autoMaxExtForRot = 1500;
     private int currentAutoStep = 0;
 
     private int rotTargetPos;
@@ -67,17 +68,15 @@ public class Arm {
     //Clamps controller input to keep motors for continuing past hardware limit
     //Then sets motor power to input
     public void armControllerMovement(double rotInput, double extInput) {
-        extInputGlobal = extInput;
-
         if (autoMoving) autoMove();
         else {
             double maxExtPos = getRotM1Position() < loweredRotThreshold ? maxLoweredExtPos : maxRaisedExtPos;
 
             if (limitsEnabled) {
-                //if (getRotM1Position() <= minRotPos) rotInput = MathHelper.clamp(rotInput,-1,0);
-                //if (getRotM1Position() >= maxRotPos) rotInput = MathHelper.clamp(rotInput,0,-1);
-                //if (extensionM1.getCurrentPosition() < minExtPos) extInput = MathHelper.clamp(extInput,-1,0);
-                if (extensionM1.getCurrentPosition() > maxExtPos) extInput = MathHelper.clamp(extInput,0,1);
+                if (getRotM1Position() <= minRotPos) rotInput = MathHelper.clamp(rotInput,0,1);
+                if (getRotM1Position() >= maxRotPos) rotInput = MathHelper.clamp(rotInput,-1,0);
+                if (extensionM1.getCurrentPosition() <= minExtPos) extInput = MathHelper.clamp(extInput,0,1);
+                if (extensionM1.getCurrentPosition() >= maxExtPos) extInput = MathHelper.clamp(extInput,-1,0);
             }
 
             rotInput = smoothRotInput(rotInput);
@@ -89,9 +88,10 @@ public class Arm {
         }
     }
 
+    //Initializes auto movement
     public void setAutoMove(int posID) {
         autoMoving = true;
-        startAutoOnExt = rotationM1.getCurrentPosition() < autoRotThreshold;
+        startAutoOnExt = extensionM1.getCurrentPosition() > autoMaxExtForRot;
 
         switch (posID) {
             case 0: //min position
@@ -109,28 +109,30 @@ public class Arm {
         }
     }
 
-    private void autoMove() {
+    //Called every frame of auto movement
+    public boolean autoMove() {
         switch (currentAutoStep) {
             case 0:
-                if (!startAutoOnExt) autoDriveRot();
-                else autoDriveExt();
-                break;
-
-            case 1:
                 if (startAutoOnExt) autoDriveExt();
                 else autoDriveRot();
-                break;
+                return false;
+
+            case 1:
+                if (!startAutoOnExt) autoDriveExt();
+                else autoDriveRot();
+                return false;
 
             case 2:
                 stopAuto();
                 break;
         }
+        return true;
     }
 
     private void autoDriveRot() {
         double error = getRotM1Position() - rotTargetPos;
         if (Math.abs(error) > 15) {
-            rotationM1.setPower(Math.signum(error) * 0.75);
+            rotationM1.setPower(Math.signum(error) * -0.75);
             rotationM2.setPower(Math.signum(error) * -0.75);
         }
         else {
@@ -142,7 +144,7 @@ public class Arm {
     private void autoDriveExt() {
         double error = extensionM1.getCurrentPosition() - extTargetPos;
         if (Math.abs(error) > 15) {
-            extensionM1.setPower(Math.signum(error) * 0.75);
+            extensionM1.setPower(Math.signum(error) * -0.75);
             //extensionM2.setPower(Math.signum(error) * -0.75);
         }
         else {
@@ -179,6 +181,7 @@ public class Arm {
     public void setLimitState(boolean buttonPressed) { limitsEnabled = !buttonPressed; }
 
     //Smooths input between 1 and 0 as the rotation motor approaches its min and max positions
+    //Cushions stopping of motor on endpoints
     private double smoothRotInput(double rotInput) {
         double p = 6; // must be even and >= 2; adjusts aggressiveness of dampening curve
         double h = (minRotPos + maxRotPos) / 2;
@@ -186,7 +189,9 @@ public class Arm {
         double a = -1 / Math.pow(minRotPos - h, p);
         double x = getRotM1Position();
 
-        return rotInput * (a * Math.pow(x - h, p) + k);
+        double minOutput = 0.2;
+
+        return rotInput * MathHelper.clamp(a * Math.pow(x - h, p) + k, minOutput, 1);
     }
 
     public void printMotorPositions() {
