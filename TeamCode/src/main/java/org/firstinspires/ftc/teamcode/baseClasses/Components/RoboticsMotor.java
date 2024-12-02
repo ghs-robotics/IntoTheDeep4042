@@ -12,17 +12,15 @@ public abstract class RoboticsMotor {
 
     public RoboticsMotor(MotorParameters params) {
         this.params = params;
-        motor = HardwareSingle.hardwareMap.get(DcMotor.class, params.name());
 
-        motor.setDirection(params.motorDirection());
+        motor = HardwareSingle.hardwareMap.get(DcMotor.class, params.getName());
 
-        //TODO: make parameter
-        motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        motor.setDirection(params.getMotorDirection());
+        motor.setZeroPowerBehavior(params.getZeroPowerBehavior());
 
         resetEncoder();
 
-        //TODO: make parameter
-        motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motor.setMode(params.getRunMode());
     }
 
     public void resetEncoder() { motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER); }

@@ -14,34 +14,60 @@ public class ServoParameters {
     private final Servo.Direction servoDirection;
     private final LinkedHashMap<String, Double> positions;
 
+    public ServoParameters(String name) {
+        this.name = name;
+        continuousRotation = false;
+        servoDirection = Servo.Direction.FORWARD;
+        positions = new LinkedHashMap<>();
+    }
+
+    public ServoParameters( String name, LinkedHashMap <String, Double> positions) {
+        this.name = name;
+        this.continuousRotation = false;
+        this.servoDirection = Servo.Direction.FORWARD;
+        this.positions = positions;
+    }
+
+    public ServoParameters(String name, boolean continuousRotation) {
+        this.name = name;
+        this.continuousRotation = continuousRotation;
+        this.servoDirection = Servo.Direction.FORWARD;
+        positions = new LinkedHashMap<>();
+    }
+
+    public ServoParameters(String name, boolean continuousRotation, Servo.Direction servoDirection) {
+        this.name = name;
+        this.continuousRotation = continuousRotation;
+        this.servoDirection = servoDirection;
+        positions = new LinkedHashMap<>();
+    }
 
     public ServoParameters(
             String name,
-            boolean continuousRotation,
             Servo.Direction servoDirection,
             LinkedHashMap <String, Double> positions
     ) {
         this.name = name;
-        this.continuousRotation = continuousRotation;
+        this.continuousRotation = false;
         this.servoDirection = servoDirection;
         this.positions = positions;
     }
 
 
-    public String name() { return name; }
-    public boolean continuousRotation() { return continuousRotation; }
-    public Servo.Direction servoDirection() { return servoDirection; }
-    public LinkedHashMap<String, Double> positions() { return positions; }
+    public String getName() { return name; }
+    public boolean isContinuousRotation() { return continuousRotation; }
+    public Servo.Direction getServoDirection() { return servoDirection; }
+    public LinkedHashMap<String, Double> getPositions() { return positions; }
 
 
     @NonNull
     @Override
     public String toString() {
         return "ServoParameters(" +
-                    "name=" + this.name()
-                + ", continuousRotation=" + this.continuousRotation()
-                + ", servoDirection=" + this.servoDirection()
-                + ", positions=" + this.positions()
+                    "name=" + getName()
+                + ", continuousRotation=" + isContinuousRotation()
+                + ", servoDirection=" + getServoDirection()
+                + ", positions=" + getPositions()
                 + ")";
     }
 
@@ -56,10 +82,10 @@ public class ServoParameters {
             ServoParameters other = (ServoParameters) obj;
 
             if (
-                    name.equals(other.name()) &&
-                    continuousRotation == other.continuousRotation() &&
-                    servoDirection.equals(other.servoDirection()) &&
-                    positions().equals(other.positions())
+                    name.equals(other.getName()) &&
+                    continuousRotation == other.isContinuousRotation() &&
+                    servoDirection.equals(other.getServoDirection()) &&
+                    positions.equals(other.getPositions())
             ) return true;
         }
         return false;

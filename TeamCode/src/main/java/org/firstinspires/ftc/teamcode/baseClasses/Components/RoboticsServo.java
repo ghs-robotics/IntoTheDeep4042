@@ -15,12 +15,14 @@ public abstract class RoboticsServo {
     public RoboticsServo(ServoParameters params) {
         this.params = params;
 
-        if (params.continuousRotation()) crServo = HardwareSingle.hardwareMap.get(CRServo.class, params.name());
-        else servo = HardwareSingle.hardwareMap.get(Servo.class, params.name());
+        if (params.isContinuousRotation()) {
+            crServo = HardwareSingle.hardwareMap.get(CRServo.class, params.getName());
+        }
+        else servo = HardwareSingle.hardwareMap.get(Servo.class, params.getName());
 
         servo.getController().pwmEnable();
 
-        servo.setDirection(params.servoDirection());
+        servo.setDirection(params.getServoDirection());
     }
 }
 

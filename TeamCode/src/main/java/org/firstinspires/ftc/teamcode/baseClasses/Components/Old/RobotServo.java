@@ -14,14 +14,14 @@ public class RobotServo {
     private String currentPositionId;
 
     public RobotServo() {
-        servo = HardwareSingle.hardwareMap.get(Servo.class, servoParams.name());
+        servo = HardwareSingle.hardwareMap.get(Servo.class, servoParams.getName());
 
         servo.getController().pwmEnable();
     }
 
     public void teleTogglePosition(boolean toggle, String pos1Id, String pos2Id) {
-        double pos1 = servoParams.positions().get(pos1Id);
-        double pos2 = servoParams.positions().get(pos2Id);
+        double pos1 = servoParams.getPositions().get(pos1Id);
+        double pos2 = servoParams.getPositions().get(pos2Id);
 
         if (toggle) {
             if (servo.getPosition() != pos1) { setPosition(pos1, pos1Id); }
@@ -37,7 +37,7 @@ public class RobotServo {
 
     public void autoSetPosition(double pos) { setPosition(pos, ""); }
 
-    public void autoSetPositionById(String posId) { setPosition(servoParams.positions().get(posId), posId); }
+    public void autoSetPositionById(String posId) { setPosition(servoParams.getPositions().get(posId), posId); }
 
     private void setPosition(double pos, String posId) {
         servo.setPosition(pos);
