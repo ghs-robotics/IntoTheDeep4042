@@ -81,12 +81,10 @@ public class ServoParameters {
         if (obj instanceof ServoParameters) {
             ServoParameters other = (ServoParameters) obj;
 
-            if (
-                    name.equals(other.getName()) &&
-                    continuousRotation == other.isContinuousRotation() &&
-                    servoDirection.equals(other.getServoDirection()) &&
-                    positions.equals(other.getPositions())
-            ) return true;
+            return name.equals(other.getName()) &&
+                   continuousRotation == other.isContinuousRotation() &&
+                   servoDirection.equals(other.getServoDirection()) &&
+                   positions.equals(other.getPositions());
         }
         return false;
     }

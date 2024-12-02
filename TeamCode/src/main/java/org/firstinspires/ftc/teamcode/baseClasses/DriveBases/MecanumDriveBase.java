@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.baseClasses.DriveBases;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.teamcode.util.HardwareSingle;
 
@@ -12,21 +11,27 @@ public abstract class MecanumDriveBase {
     protected DcMotor leftBackDrive;
     protected DcMotor rightBackDrive;
 
-    public MecanumDriveBase() {
-        //TODO: Create MecanumDriveParameters; add name[]
-        leftFrontDrive = HardwareSingle.hardwareMap.get(DcMotor.class, "leftFront");
-        rightFrontDrive = HardwareSingle.hardwareMap.get(DcMotor.class, "rightFront");
-        leftBackDrive = HardwareSingle.hardwareMap.get(DcMotor.class, "leftBack");
-        rightBackDrive = HardwareSingle.hardwareMap.get(DcMotor.class, "rightBack");
+    protected MecanumDriveParameters params;
 
-        //TODO: set direction[] in MecanumDriveParameters
-        leftFrontDrive.setDirection(DcMotorSimple.Direction.FORWARD);
-        rightFrontDrive.setDirection(DcMotorSimple.Direction.FORWARD);
-        leftBackDrive.setDirection(DcMotorSimple.Direction.FORWARD);
-        rightBackDrive.setDirection(DcMotorSimple.Direction.FORWARD);
+    public MecanumDriveBase(MecanumDriveParameters params) {
+        this.params = params;
 
-        //TODO: set zeroPowerBehavior in MecanumDriveParameters
-        setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        String[] names = params.getMotorNames();
+        leftFrontDrive = HardwareSingle.hardwareMap.get(DcMotor.class, names[0]);
+        rightFrontDrive = HardwareSingle.hardwareMap.get(DcMotor.class, names[1]);
+        leftBackDrive = HardwareSingle.hardwareMap.get(DcMotor.class, names[2]);
+        rightBackDrive = HardwareSingle.hardwareMap.get(DcMotor.class, names[3]);
+
+        DcMotor.Direction[] directions = params.getMotorDirections();
+        leftFrontDrive.setDirection(directions[0]);
+        rightFrontDrive.setDirection(directions[1]);
+        leftBackDrive.setDirection(directions[2]);
+        rightBackDrive.setDirection(directions[3]);
+
+        setZeroPowerBehavior(params.getZeroPowerBehavior());
+
+        //TODO: Determine if runMode ever needs changed using Mecanum drive
+        setRunMode(params.getRunMode());
     }
 
     public void setZeroPowerBehavior(DcMotor.ZeroPowerBehavior behavior) {
@@ -34,5 +39,12 @@ public abstract class MecanumDriveBase {
         rightFrontDrive.setZeroPowerBehavior(behavior);
         leftBackDrive.setZeroPowerBehavior(behavior);
         rightBackDrive.setZeroPowerBehavior(behavior);
+    }
+
+    private void setRunMode(DcMotor.RunMode runMode) {
+        leftFrontDrive.setMode(runMode);
+        rightFrontDrive.setMode(runMode);
+        leftBackDrive.setMode(runMode);
+        rightBackDrive.setMode(runMode);
     }
 }

@@ -8,12 +8,10 @@ public class AutoMecanumDriveBase extends TeleMecanumDriveBase implements AutoDr
     private PIDController yPID;
     private PIDController headingPID;
 
-    public AutoMecanumDriveBase() {
-        super();
-        //TODO: add params ^^^
-    }
+    public AutoMecanumDriveBase(MecanumDriveParameters params) { super(params); }
+
     @Override
     public void moveTo() {
-
+        //TODO: Determine if moveTo initializing method is needed
     }
 }

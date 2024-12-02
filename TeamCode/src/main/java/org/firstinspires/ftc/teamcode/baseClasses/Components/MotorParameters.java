@@ -18,7 +18,7 @@ public class MotorParameters {
 
     public MotorParameters(String name) {
         this.name = name;
-        this.motorDirection = DcMotor.Direction.FORWARD;
+        this.motorDirection = DcMotorSimple.Direction.FORWARD;
         this.runMode = DcMotor.RunMode.RUN_USING_ENCODER;
         this.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE;
         this.positions = new LinkedHashMap<>();
@@ -26,7 +26,7 @@ public class MotorParameters {
 
     public MotorParameters(String name, DcMotor.ZeroPowerBehavior zeroPowerBehavior) {
         this.name = name;
-        this.motorDirection = DcMotor.Direction.FORWARD;
+        this.motorDirection = DcMotorSimple.Direction.FORWARD;
         this.runMode = DcMotor.RunMode.RUN_USING_ENCODER;
         this.zeroPowerBehavior = zeroPowerBehavior;
         this.positions = new LinkedHashMap<>();
@@ -85,13 +85,11 @@ public class MotorParameters {
         if (obj instanceof MotorParameters) {
             MotorParameters other = (MotorParameters) obj;
 
-            if (
-                    name.equals(other.getName()) &&
-                    motorDirection.equals(other.getMotorDirection()) &&
-                    runMode.equals(other.getRunMode()) &&
-                    zeroPowerBehavior.equals(other.getZeroPowerBehavior()) &&
-                    positions.equals(other.getPositions())
-            ) return true;
+            return name.equals(other.getName()) &&
+                   motorDirection.equals(other.getMotorDirection()) &&
+                   runMode.equals(other.getRunMode()) &&
+                   zeroPowerBehavior.equals(other.getZeroPowerBehavior()) &&
+                   positions.equals(other.getPositions());
         }
         return false;
     }

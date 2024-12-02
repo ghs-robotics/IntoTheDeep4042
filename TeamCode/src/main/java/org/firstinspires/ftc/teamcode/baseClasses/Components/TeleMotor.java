@@ -10,7 +10,7 @@ public class TeleMotor extends AutoMotor implements TeleComponent {
     }
 
     @Override
-    public void CyclePositions(boolean left, boolean right) {
+    public void cyclePositions(boolean left, boolean right) {
         //TODO: Consider Moving get next and previous key functions to Helper class
         if (right) {
             //Get nextKey -> moveTo(params.getPositions(nextKey));

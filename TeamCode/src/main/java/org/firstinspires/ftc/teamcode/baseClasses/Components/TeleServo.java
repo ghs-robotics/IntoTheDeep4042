@@ -32,13 +32,13 @@ public class TeleServo extends RoboticsServo implements TeleComponent {
     }
 
     @Override
-    public void CyclePositions(boolean left, boolean right) {
+    public void cyclePositions(boolean left, boolean right) {
         if (params.isContinuousRotation()) return;
 
         if (right) {
             String nextKey = getNextPositionKey();
 
-            if (nextKey == "") {
+            if (nextKey.equals("")) {
                 TeleSingle.tele.addLine("nextKey could not be found in servoParams.positions");
             }
             else setPos(params.getPositions().get(nextKey), nextKey);
@@ -46,7 +46,7 @@ public class TeleServo extends RoboticsServo implements TeleComponent {
         else if (left) {
             String previousKey = getPreviousPositionKey();
 
-            if (previousKey == "") {
+            if (previousKey.equals("")) {
                 TeleSingle.tele.addLine("previousKey could not be found in servoParams.positions");
             }
             else setPos(params.getPositions().get(previousKey), previousKey);
@@ -54,19 +54,19 @@ public class TeleServo extends RoboticsServo implements TeleComponent {
     }
 
     private String getNextPositionKey() {
-        Iterator itr = params.getPositions().keySet().iterator();
+        Iterator<String> itr = params.getPositions().keySet().iterator();
 
         //If currentPosKey is not assigned, return first key in set
-        if (currentPosKey == "") {
-            if (itr.hasNext()) return (String) itr.next();
+        if (currentPosKey.equals("")) {
+            if (itr.hasNext()) return itr.next();
             return "";
         }
 
         while (itr.hasNext()) {
-            String key = (String) itr.next();
+            String key = itr.next();
 
-            if (key == currentPosKey) {
-                if (itr.hasNext()) return (String) itr.next();
+            if (key.equals(currentPosKey)) {
+                if (itr.hasNext()) return itr.next();
                 else return params.getPositions().keySet().iterator().next(); //Returns first key in set
             }
         }
@@ -74,20 +74,20 @@ public class TeleServo extends RoboticsServo implements TeleComponent {
     }
 
     private String getPreviousPositionKey() {
-        Iterator itr = params.getPositions().keySet().iterator();
+        Iterator<String> itr = params.getPositions().keySet().iterator();
 
         //If currentPosKey is not assigned, return first key in set
-        if (currentPosKey == "") {
-            if (itr.hasNext()) return (String) itr.next();
+        if (currentPosKey.equals("")) {
+            if (itr.hasNext()) return itr.next();
             return "";
         }
 
         String lastKey = null;
 
         while (itr.hasNext()) {
-            String key = (String) itr.next();
+            String key = itr.next();
 
-            if (key == currentPosKey) {
+            if (key.equals(currentPosKey)) {
                 if (lastKey != null) return lastKey;
                 else {
                     //Returns last key in set

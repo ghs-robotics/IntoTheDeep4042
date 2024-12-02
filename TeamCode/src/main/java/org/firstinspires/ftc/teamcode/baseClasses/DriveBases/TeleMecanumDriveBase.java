@@ -2,10 +2,7 @@ package org.firstinspires.ftc.teamcode.baseClasses.DriveBases;
 
 public class TeleMecanumDriveBase extends MecanumDriveBase implements TeleDriveBase{
 
-    public TeleMecanumDriveBase(){
-        super();
-        //TODO: add params ^^^
-    }
+    public TeleMecanumDriveBase(MecanumDriveParameters params){ super(params); }
 
     @Override
     public void globalDrive(double xInput, double yInput, double rotationInput, double heading) {
