@@ -32,15 +32,17 @@ public class Arm {
 
     //min and max motor positions to prevent hardware issues.
     private static final int minRotPos = 0;
-    private static final int maxRotPos = 3250;
+    private static final int maxRotPos = 3500;
 
-    private static final int minExtPos = 0;
-    private static final int maxLoweredExtPos = 2500;
-    private static final int maxRaisedExtPos = 4000;
+    private static final int minExtPos = 20;
+    private static final int maxLoweredExtPos = 2000;
+    private static final int maxRaisedExtPos = 3500;
 
-    private static final int startRotPos = 1600;
+    private static final int startRotPos = 600;
 
-    private static final int loweredRotThreshold = 2250;
+    private static final int loweredRotThreshold = 1000;
+
+    double extInputGlobal = 0;
 
     public Arm(HardwareMap hardwareMap, Telemetry telemetry) {
         this.telemetry = telemetry;
@@ -68,7 +70,7 @@ public class Arm {
     public void armControllerMovement(double rotInput, double extInput) {
         if (autoMoving) autoMove();
         else {
-            double maxExtPos = getRotM1Position() > loweredRotThreshold ? maxLoweredExtPos : maxRaisedExtPos;
+            double maxExtPos = getRotM1Position() < loweredRotThreshold ? maxLoweredExtPos : maxRaisedExtPos;
 
             if (limitsEnabled) {
                 if (getRotM1Position() <= minRotPos) rotInput = MathHelper.clamp(rotInput,0,1);
@@ -79,7 +81,7 @@ public class Arm {
 
             rotInput = smoothRotInput(rotInput);
 
-            rotationM1.setPower(-rotInput);
+            rotationM1.setPower(rotInput);
             rotationM2.setPower(-rotInput);
             extensionM1.setPower(extInput);
             //extensionM2.setPower(extInput);
@@ -94,11 +96,11 @@ public class Arm {
 
         switch (posID) {
             case 0: //min position
-                rotTargetPos = maxRotPos - 400;
-                extTargetPos = minExtPos + 250;
+                rotTargetPos = minRotPos + 250;
+                extTargetPos = minExtPos + 450;
                 break;
             case 1: //top bin position
-                rotTargetPos = minRotPos + 250;
+                rotTargetPos = maxRotPos - 250;
                 extTargetPos = maxRaisedExtPos - 115;
                 break;
             case 2: //Fit in box
@@ -172,10 +174,12 @@ public class Arm {
 
         relativeRotPos = 0;
     }
+
     public void setEncodersTeleStartPos() {
         resetEncoders();
         relativeRotPos = startRotPos;
     }
+
     public void setLimitState(boolean buttonPressed) { limitsEnabled = !buttonPressed; }
 
     //Smooths input between 1 and 0 as the rotation motor approaches its min and max positions
@@ -198,6 +202,8 @@ public class Arm {
         telemetry.addLine("Rot motor 1 pos:" + getRotM1Position());
         telemetry.addLine("Rot motor 2 pos:" + getRotM2Position());
         telemetry.addLine("Ext motor 1 pos:" + extensionM1.getCurrentPosition());
+        telemetry.addLine("Ext input:" + extInputGlobal);
+        telemetry.addLine("Auto step:" + currentAutoStep);
         //telemetry.addLine("Ext motor 2 pos:" + extensionM2.getCurrentPosition());
     }
 
