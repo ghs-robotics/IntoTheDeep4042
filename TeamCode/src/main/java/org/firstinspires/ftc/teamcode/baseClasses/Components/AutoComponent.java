@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.baseClasses.Components;
 
 public interface AutoComponent {
-    void moveTo(double pos);
+    boolean moveTo(double pos);
 
-    void moveToStored(String key);
+    boolean moveToStored(String key);
 }

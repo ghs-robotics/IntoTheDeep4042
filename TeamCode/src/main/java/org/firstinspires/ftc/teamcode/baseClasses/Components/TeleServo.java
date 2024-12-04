@@ -11,17 +11,19 @@ public class TeleServo extends RoboticsServo implements TeleComponent {
     public TeleServo(ServoParameters params) { super(params); }
 
     @Override
-    public void moveTo(double pos) {
-        if (params.isContinuousRotation()) return;
+    public boolean moveTo(double pos) {
+        if (params.isContinuousRotation()) return false;
 
         setPos(pos, "");
+        return true;
     }
 
     @Override
-    public void moveToStored(String key) {
-        if (params.isContinuousRotation() || !params.getPositions().containsValue(key)) return;
+    public boolean moveToStored(String key) {
+        if (params.isContinuousRotation() || !params.getPositions().containsValue(key)) return false;
 
         setPos(params.getPositions().get(key), key);
+        return true;
     }
 
     @Override

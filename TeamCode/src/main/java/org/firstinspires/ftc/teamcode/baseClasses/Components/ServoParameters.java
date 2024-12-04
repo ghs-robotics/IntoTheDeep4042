@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.baseClasses.Components;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import java.util.LinkedHashMap;

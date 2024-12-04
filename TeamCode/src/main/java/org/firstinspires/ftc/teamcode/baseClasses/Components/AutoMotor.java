@@ -9,16 +9,34 @@ public class AutoMotor extends RoboticsMotor implements AutoComponent {
     }
 
     @Override
-    public void moveTo(double pos) {
-        //TODO: Consider PID or seperate PID method
+    public boolean moveTo(double targetPos) {
         //TODO: Figure out how to seperate initializing variables and calling move to every frame
+        double error = motor.getCurrentPosition() - targetPos;
+
+        if (Math.abs(error) > 15/*threshold variable*/) motor.setPower(-Math.signum(error));
+        else {
+            motor.setPower(0);
+            return true;
+        }
+
+        return false;
+    }
+
+    public boolean moveToPID(double targetPos) {
+        //TODO: Implement
+        return false;
     }
 
     @Override
-    public void moveToStored(String key) {
-        //TODO: Consider PID or seperate PID method
-        if (!params.getPositions().containsValue(key)) return;
+    public boolean moveToStored(String key) {
+        if (!params.getPositions().containsValue(key)) return false;
 
-        moveTo(params.getPositions().get(key));
+        return moveTo(params.getPositions().get(key));
+    }
+
+    public boolean moveToStoredPID(String key) {
+        if (!params.getPositions().containsValue(key)) return false;
+
+        return moveToPID(params.getPositions().get(key));
     }
 }
