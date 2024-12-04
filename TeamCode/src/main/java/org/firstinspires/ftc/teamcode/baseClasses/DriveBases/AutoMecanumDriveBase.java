@@ -1,12 +1,12 @@
 package org.firstinspires.ftc.teamcode.baseClasses.DriveBases;
 
-import org.firstinspires.ftc.teamcode.bot.control.PIDController;
+import org.firstinspires.ftc.teamcode.baseClasses.Navigation.NavigationController;
 
 public class AutoMecanumDriveBase extends TeleMecanumDriveBase implements AutoDriveBase {
 
-    private PIDController xPID;
-    private PIDController yPID;
-    private PIDController headingPID;
+    private NavigationController xCtr;
+    private NavigationController yCtr;
+    private NavigationController headingCtr;
 
     public AutoMecanumDriveBase(MecanumDriveParameters params) { super(params); }
 

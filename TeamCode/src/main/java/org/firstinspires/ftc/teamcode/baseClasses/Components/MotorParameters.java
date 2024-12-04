@@ -40,6 +40,29 @@ public class MotorParameters {
         this.positions = new LinkedHashMap<>();
     }
 
+    public MotorParameters(
+            String name,
+            LinkedHashMap <String, Double> positions
+    ) {
+        this.name = name;
+        this.motorDirection = DcMotorSimple.Direction.FORWARD;
+        this.runMode = DcMotor.RunMode.RUN_USING_ENCODER;
+        this.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE;
+        this.positions = positions;
+    }
+
+    public MotorParameters(
+            String name,
+            DcMotor.Direction motorDirection,
+            LinkedHashMap <String, Double> positions
+    ) {
+        this.name = name;
+        this.motorDirection = motorDirection;
+        this.runMode = DcMotor.RunMode.RUN_USING_ENCODER;
+        this.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE;
+        this.positions = positions;
+    }
+
     //TODO: Figure out how to use RunMode.RUN_TO_POSITION and see if you can remove constructor redundancy
     public MotorParameters(
             String name,

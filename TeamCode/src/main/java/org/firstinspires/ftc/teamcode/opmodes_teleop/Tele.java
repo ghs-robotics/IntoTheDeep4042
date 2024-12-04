@@ -3,10 +3,18 @@ package org.firstinspires.ftc.teamcode.opmodes_teleop;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.baseClasses.Components.AutoMotor;
+import org.firstinspires.ftc.teamcode.baseClasses.Components.AutoServo;
+import org.firstinspires.ftc.teamcode.baseClasses.Components.MotorParameters;
+import org.firstinspires.ftc.teamcode.baseClasses.Components.RoboticsMotor;
+import org.firstinspires.ftc.teamcode.baseClasses.Components.ServoParameters;
+import org.firstinspires.ftc.teamcode.baseClasses.Components.TeleMotor;
 import org.firstinspires.ftc.teamcode.bot.Robot;
 import org.firstinspires.ftc.teamcode.opmodes_teleop.input.Controller;
 import org.firstinspires.ftc.teamcode.util.MathHelper;
 import org.firstinspires.ftc.teamcode.util.TeleSingle;
+
+import java.util.LinkedHashMap;
 
 @TeleOp
 public class Tele extends LinearOpMode {

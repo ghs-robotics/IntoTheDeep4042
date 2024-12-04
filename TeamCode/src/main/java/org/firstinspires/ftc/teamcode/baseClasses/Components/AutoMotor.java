@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.baseClasses.Components;
 
 public class AutoMotor extends RoboticsMotor implements AutoComponent {
 
+    protected boolean autoMoving = false;
+
     public AutoMotor(MotorParameters params) {
         super(params);
     }
@@ -9,6 +11,7 @@ public class AutoMotor extends RoboticsMotor implements AutoComponent {
     @Override
     public void moveTo(double pos) {
         //TODO: Consider PID or seperate PID method
+        //TODO: Figure out how to seperate initializing variables and calling move to every frame
     }
 
     @Override
