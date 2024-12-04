@@ -4,10 +4,12 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.auto_execution.AutoActionHandler;
+import org.firstinspires.ftc.teamcode.bot.Arm;
 import org.firstinspires.ftc.teamcode.bot.Robot;
 import org.firstinspires.ftc.teamcode.util.MathHelper;
 import org.firstinspires.ftc.teamcode.util.TeleSingle;
 
+import static org.firstinspires.ftc.teamcode.auto_execution.AutoActions.ARM;
 import static org.firstinspires.ftc.teamcode.auto_execution.AutoActions.MOVE;
 import static org.firstinspires.ftc.teamcode.auto_execution.AutoActions.WAIT;
 
@@ -37,6 +39,7 @@ public class AutoTesting extends LinearOpMode {
         actionHandler.add(MOVE,false, MathHelper.tilesToMM(1), MathHelper.tilesToMM(1), 0);
         actionHandler.add(WAIT,false,0.25);
         actionHandler.add(MOVE,false, MathHelper.tilesToMM(0.5), MathHelper.tilesToMM(0.5), 180);
+        actionHandler.add(ARM, false, 1);
 
 //        actionHandler.add(MOVE,false, 0, MathHelper.tilesToMM(2), 0);
 

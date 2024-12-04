@@ -91,6 +91,7 @@ public class Arm {
     //Initializes auto movement
     public void setAutoMove(int posID) {
         autoMoving = true;
+        //If lift is extended, first retract
         startAutoOnExt = extensionM1.getCurrentPosition() > autoMaxExtForRot;
 
         switch (posID) {
@@ -110,6 +111,7 @@ public class Arm {
     }
 
     //Called every frame of auto movement
+    //Performs Ext and Rot in an order based on if we need to retract lift first
     public boolean autoMove() {
         switch (currentAutoStep) {
             case 0:
