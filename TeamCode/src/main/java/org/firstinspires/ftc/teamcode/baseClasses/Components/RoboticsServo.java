@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.util.HardwareSingle;
+import org.firstinspires.ftc.teamcode.util.TeleSingle;
 
 public abstract class RoboticsServo {
 

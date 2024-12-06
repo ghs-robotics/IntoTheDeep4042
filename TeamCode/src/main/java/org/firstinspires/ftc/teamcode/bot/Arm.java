@@ -204,7 +204,6 @@ public class Arm {
         telemetry.addLine("Ext motor 1 pos:" + extensionM1.getCurrentPosition());
         telemetry.addLine("Ext input:" + extInputGlobal);
         telemetry.addLine("Auto step:" + currentAutoStep);
-        //telemetry.addLine("Ext motor 2 pos:" + extensionM2.getCurrentPosition());
     }
 
     private int getRotM1Position() { return rotationM1.getCurrentPosition() + relativeRotPos; }

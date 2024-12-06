@@ -3,18 +3,11 @@ package org.firstinspires.ftc.teamcode.opmodes_teleop;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.baseClasses.Components.AutoMotor;
-import org.firstinspires.ftc.teamcode.baseClasses.Components.AutoServo;
-import org.firstinspires.ftc.teamcode.baseClasses.Components.MotorParameters;
-import org.firstinspires.ftc.teamcode.baseClasses.Components.RoboticsMotor;
-import org.firstinspires.ftc.teamcode.baseClasses.Components.ServoParameters;
-import org.firstinspires.ftc.teamcode.baseClasses.Components.TeleMotor;
 import org.firstinspires.ftc.teamcode.bot.Robot;
 import org.firstinspires.ftc.teamcode.opmodes_teleop.input.Controller;
 import org.firstinspires.ftc.teamcode.util.MathHelper;
 import org.firstinspires.ftc.teamcode.util.TeleSingle;
 
-import java.util.LinkedHashMap;
 
 @TeleOp
 public class Tele extends LinearOpMode {
@@ -39,6 +32,8 @@ public class Tele extends LinearOpMode {
 
         TeleSingle.init(telemetry);
 
+        robot.arm.setEncodersTeleStartPos();
+
         waitForStart();
 
         while (opModeIsActive()){
@@ -50,11 +45,14 @@ public class Tele extends LinearOpMode {
             //                                   Input:
             //           Forward: left_stick_y | Strafe: left_stick_x | Drive Slow: Dpad
             //                           Rotation: right_stick_x
+            //                          Change Hang Lift State: a
             //-------------------------------------------------------------------------------------
 
             double[] input = getInput();
 
             robot.drive.localScaledDrive(input[0], input[1], input[2]);
+
+            if (gp1.a.pressed()) robot.hangArm.changePosition();
 
             //-------------------------------------------------------------------------------------
             //                                  GAMEPAD 2
@@ -81,12 +79,10 @@ public class Tele extends LinearOpMode {
                 gp2.right_trigger.pressing() ? gp2.right_stick_y * extLiftSlowScaler : gp2.right_stick_y
             );
 
-
+            robot.grabber.grabberControllerMovement(gp2.left_bumper.pressed(),gp2.right_bumper.pressed());
 
             robot.arm.setLimitState(gp2.dpad_left.pressing());
             if (gp2.dpad_right.pressed()) robot.arm.resetEncoders();
-
-            robot.grabber.grabberControllerMovement(gp2.left_bumper.pressed(),gp2.right_bumper.pressed());
 
             //-------------------------------------------------------------------------------------
             //                                  TELEMETRY
@@ -98,8 +94,7 @@ public class Tele extends LinearOpMode {
             telemetry.addLine("Right Trigger Value:" + gp2.right_trigger.getValue());
             telemetry.addLine("Right Trigger Pressing:" + gp2.right_trigger.pressing());
 
-//            robot.arm.printMotorPositions();
-//            robot.grabber.printServoPositions();
+            robot.arm.printMotorPositions();
 
             telemetry.update();
         }

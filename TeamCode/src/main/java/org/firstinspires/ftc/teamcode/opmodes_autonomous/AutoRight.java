@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.util.TeleSingle;
 //import org.firstinspires.ftc.teamcode.bot.Robot;
 
 @Autonomous
-public class AutoParkRight extends LinearOpMode {
+public class AutoRight extends LinearOpMode {
     Robot robot;
     AutoActionHandler actionHandler;
 

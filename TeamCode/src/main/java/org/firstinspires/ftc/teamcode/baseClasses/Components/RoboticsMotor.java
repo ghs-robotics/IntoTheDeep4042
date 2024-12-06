@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.baseClasses.Components;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.util.HardwareSingle;
+import org.firstinspires.ftc.teamcode.util.TeleSingle;
 
 public abstract class RoboticsMotor {
 
@@ -24,5 +25,9 @@ public abstract class RoboticsMotor {
     }
 
     public void resetEncoder() { motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER); }
+
+    public void printPosition() {
+        TeleSingle.tele.addLine("\n" + params.getName() + " Motor pos: " + motor.getCurrentPosition());
+    }
 }
 

@@ -1,24 +1,19 @@
 package org.firstinspires.ftc.teamcode.opmodes_autonomous;
 
-import static org.firstinspires.ftc.teamcode.auto_execution.AutoActions.MOVE;
-import static org.firstinspires.ftc.teamcode.auto_execution.AutoActions.WAIT;
+import static org.firstinspires.ftc.teamcode.auto_execution.AutoActions.ARM;
+import static org.firstinspires.ftc.teamcode.auto_execution.AutoActions.GRABBER;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.auto_execution.AutoActionHandler;
 import org.firstinspires.ftc.teamcode.bot.Robot;
-import org.firstinspires.ftc.teamcode.util.MathHelper;
 import org.firstinspires.ftc.teamcode.util.TeleSingle;
-
-//import org.firstinspires.ftc.teamcode.bot.Robot;
 
 @Autonomous
 public class AutoSetStart extends LinearOpMode {
     Robot robot;
     AutoActionHandler actionHandler;
-
-    boolean hasRun = false;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -26,23 +21,17 @@ public class AutoSetStart extends LinearOpMode {
 
         TeleSingle.init(telemetry);
 
-//        actionHandler = new AutoActionHandler(robot, telemetry);
-//
-//        actionHandler.add(WAIT,false,0.25);
-//        actionHandler.add(MOVE,false, MathHelper.tilesToMM(1.4), 20, 0);
-//
-//        actionHandler.init();
+        actionHandler = new AutoActionHandler(robot, telemetry);
+
+        actionHandler.add(GRABBER,true, 0, 0);
+        actionHandler.add(ARM,false, 2);
+
+        actionHandler.init();
 
         waitForStart();
 
         while (opModeIsActive()){
-            if (!hasRun) {
-                robot.grabber.setGrabberState(false, 0);
-                robot.arm.setAutoMove(2);
-
-                hasRun = true;
-            }
-            //actionHandler.run();
+            actionHandler.run();
         }
     }
 }

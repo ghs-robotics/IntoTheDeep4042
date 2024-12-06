@@ -4,21 +4,28 @@ public class AutoMotor extends RoboticsMotor implements AutoComponent {
 
     protected boolean autoMoving = false;
 
-    public AutoMotor(MotorParameters params) {
-        super(params);
+    private double targetPos;
+
+    public AutoMotor(MotorParameters params) { super(params); }
+
+    public void update() {
+        if (autoMoving) moveTo(targetPos);
     }
 
     @Override
     public boolean moveTo(double targetPos) {
-        //TODO: Figure out how to seperate initializing variables and calling move to every frame
+        this.targetPos = targetPos;
+
         double error = motor.getCurrentPosition() - targetPos;
 
         if (Math.abs(error) > 15/*threshold variable*/) motor.setPower(-Math.signum(error));
         else {
             motor.setPower(0);
+            autoMoving = false;
             return true;
         }
 
+        autoMoving = true;
         return false;
     }
 
