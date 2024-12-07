@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.bot.Robot;
 import org.firstinspires.ftc.teamcode.opmodes_teleop.input.Controller;
+import org.firstinspires.ftc.teamcode.util.HardwareSingle;
 import org.firstinspires.ftc.teamcode.util.MathHelper;
 import org.firstinspires.ftc.teamcode.util.TeleSingle;
 
@@ -25,12 +26,13 @@ public class Tele extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
+        TeleSingle.init(telemetry);
+        HardwareSingle.init(hardwareMap);
+
         robot = new Robot(hardwareMap, telemetry);
 
         gp1 = new Controller(gamepad1);
         gp2 = new Controller(gamepad2);
-
-        TeleSingle.init(telemetry);
 
         robot.arm.setEncodersTeleStartPos();
 
@@ -52,8 +54,6 @@ public class Tele extends LinearOpMode {
 
             robot.drive.localScaledDrive(input[0], input[1], input[2]);
 
-            if (gp1.a.pressed()) robot.hangArm.changePosition();
-
             //-------------------------------------------------------------------------------------
             //                                  GAMEPAD 2
             //                                   Input:
@@ -66,23 +66,23 @@ public class Tele extends LinearOpMode {
 
             if (gp2.a.pressed()) robot.arm.stopAuto();
             else if (gp2.x.pressed()) {
-                robot.grabber.setGrabberState(true, 2);
-                robot.arm.setAutoMove(1);
+                robot.grabber.setGrabberState(true, -1);
+                robot.arm.setAutoMove(0);
             }
             if (gp2.y.pressed()) {
-                robot.grabber.setGrabberState(false, -1);
-                robot.arm.setAutoMove(0);
+                robot.grabber.setGrabberState(false, 2);
+                robot.arm.setAutoMove(1);
             }
 
             robot.arm.armControllerMovement(
                 -gp2.left_stick_y,
-                gp2.right_trigger.pressing() ? gp2.right_stick_y * extLiftSlowScaler : gp2.right_stick_y
+                gp2.right_trigger.pressing() ? -gp2.right_stick_y * extLiftSlowScaler : -gp2.right_stick_y
             );
 
             robot.grabber.grabberControllerMovement(gp2.left_bumper.pressed(),gp2.right_bumper.pressed());
 
             robot.arm.setLimitState(gp2.dpad_left.pressing());
-            if (gp2.dpad_right.pressed()) robot.arm.resetEncoders();
+            if (gp2.dpad_right.pressed()) robot.arm.setEncodersTeleStartPos();
 
             //-------------------------------------------------------------------------------------
             //                                  TELEMETRY

@@ -16,14 +16,14 @@ public class Grabber {
     private int grabberRotState;
 
     private static final double grabberOpenPos = 0.76;                                                                                                                                                                          ;
-    private static final double grabberClosePos = 0.60;
+    private static final double grabberClosePos = 0.65;
     //Tuning Variables
 //    private static final double grabberOpenPos = 0.83;
 //    private static final double grabberClosePos = 0.750;
 
-    private static final double grabberRotLeftPos = 0.805;
+    private static final double grabberRotLeftPos = 0.79;
     private static final double grabberRotLeftMiddlePos = 0.64;
-    private static final double grabberRotForwardPos = 0.475;
+    private static final double grabberRotForwardPos = 0.45;
     private static final double grabberRotRightMiddlePos = 0.31;
 
     public Grabber (HardwareMap hardwareMap, Telemetry telemetry) {

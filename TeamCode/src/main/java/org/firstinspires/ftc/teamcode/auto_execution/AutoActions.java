@@ -119,7 +119,7 @@ public class AutoActions {
         double outputRot = MathHelper.clamp(rotPID.getPIDOutput(currentPos[2]), -PIDRampLimit, PIDRampLimit);
         TeleSingle.tele.update();
 
-        pidOutput = new double[] {outputX, outputY, outputRot};
+        pidOutput = new double[] {outputX, -outputY, outputRot};
 
         boolean hasArrived = xPID.hasArrived() && yPID.hasArrived() && rotPID.hasArrived();
 

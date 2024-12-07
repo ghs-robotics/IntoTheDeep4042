@@ -32,13 +32,13 @@ public class AutoTesting extends LinearOpMode {
 //        actionHandler.add(MOVE,false, 0, 0, 20);
 
 
-        actionHandler.add(MOVE,false, MathHelper.tilesToMM(1), MathHelper.tilesToMM(2), 90);
+        actionHandler.add(MOVE,false, MathHelper.tilesToMM(1), MathHelper.tilesToMM(-2), -120);
         actionHandler.add(WAIT,false,0.25);
-        actionHandler.add(MOVE,false, MathHelper.tilesToMM(1), MathHelper.tilesToMM(1), 90);
+        actionHandler.add(MOVE,false, MathHelper.tilesToMM(-1), MathHelper.tilesToMM(1), 240);
         actionHandler.add(WAIT,false,0.25);
-        actionHandler.add(MOVE,false, MathHelper.tilesToMM(1), MathHelper.tilesToMM(1), 0);
+        actionHandler.add(MOVE,false, MathHelper.tilesToMM(1), MathHelper.tilesToMM(1), 120);
         actionHandler.add(WAIT,false,0.25);
-        actionHandler.add(MOVE,false, MathHelper.tilesToMM(0.5), MathHelper.tilesToMM(0.5), 180);
+        actionHandler.add(MOVE,false, MathHelper.tilesToMM(0.5), MathHelper.tilesToMM(0.5), -240);
         actionHandler.add(ARM, false, 1);
 
 //        actionHandler.add(MOVE,false, 0, MathHelper.tilesToMM(2), 0);

@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.baseClasses.Components;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.util.HardwareSingle;
 import org.firstinspires.ftc.teamcode.util.TeleSingle;
@@ -14,7 +15,7 @@ public abstract class RoboticsMotor {
     public RoboticsMotor(MotorParameters params) {
         this.params = params;
 
-        motor = HardwareSingle.hardwareMap.get(DcMotor.class, params.getName());
+        motor = HardwareSingle.hardwareMap.get(DcMotor.class, "hang");
 
         motor.setDirection(params.getMotorDirection());
         motor.setZeroPowerBehavior(params.getZeroPowerBehavior());

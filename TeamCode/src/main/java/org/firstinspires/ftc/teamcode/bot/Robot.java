@@ -18,7 +18,6 @@ public class Robot {
 
     public Arm arm;
     public Grabber grabber;
-    public HangArm hangArm;
 
     public boolean RED;
 
@@ -31,7 +30,6 @@ public class Robot {
 
         arm = new Arm(hardwareMap, telemetry);
         grabber = new Grabber(hardwareMap, telemetry);
-        hangArm = new HangArm();
     }
 
     public void shutOff(){
