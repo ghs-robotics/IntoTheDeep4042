@@ -15,6 +15,14 @@ public class TeleMotor extends AutoMotor implements TeleComponent {
         motor.setPower(input);
     }
 
+    /**
+     * Iterates left or right through the map of positions specified in the Motor Parameters
+     * class passed into the motor constructor. If the method runs into the end of the map,
+     * it will loop around to the other end.
+     *
+     * @param left if true, method will iterate backwards through list (right takes priority)
+     * @param right if true, method will iterate forwards through list
+     */
     @Override
     public void cyclePositions(boolean left, boolean right) {
         //TODO: Consider Moving get next and previous key functions to Helper class

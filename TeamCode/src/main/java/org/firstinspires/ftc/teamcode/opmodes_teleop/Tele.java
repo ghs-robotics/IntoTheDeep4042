@@ -34,9 +34,10 @@ public class Tele extends LinearOpMode {
         gp1 = new Controller(gamepad1);
         gp2 = new Controller(gamepad2);
 
-        robot.arm.setEncodersTeleStartPos();
+        robot.arm.setEncodersStartPos();
 
         waitForStart();
+
 
         while (opModeIsActive()){
             gp1.update();
@@ -47,7 +48,6 @@ public class Tele extends LinearOpMode {
             //                                   Input:
             //           Forward: left_stick_y | Strafe: left_stick_x | Drive Slow: Dpad
             //                           Rotation: right_stick_x
-            //                          Change Hang Lift State: a
             //-------------------------------------------------------------------------------------
 
             double[] input = getInput();
@@ -60,7 +60,7 @@ public class Tele extends LinearOpMode {
             //           Arm Rotation: left_stick_y | Arm Extension: right_stick_y
             //                   Slow Lift Extension: right_trigger (held)
             //               Auto Lift: Down: x | Box: y | Emergency Stop: a
-            //      Toggle Grabber: left_bumper | Change Grabber Rotation: right_bumper
+            //      Toggle Grabber: right_bumper | Change Grabber Rotation: left_bumper
             //      Remove Limits: dpad_left (held) | Reset lift 0 positions: dpad_right
             //-------------------------------------------------------------------------------------
 
@@ -75,24 +75,18 @@ public class Tele extends LinearOpMode {
             }
 
             robot.arm.armControllerMovement(
-                -gp2.left_stick_y,
+                gp2.right_trigger.pressing()? 0.03 : -gp2.left_stick_y,
                 gp2.right_trigger.pressing() ? -gp2.right_stick_y * extLiftSlowScaler : -gp2.right_stick_y
             );
 
-            robot.grabber.grabberControllerMovement(gp2.left_bumper.pressed(),gp2.right_bumper.pressed());
+            robot.grabber.grabberControllerMovement(gp2.right_bumper.pressed(),gp2.left_bumper.pressed());
 
             robot.arm.setLimitState(gp2.dpad_left.pressing());
-            if (gp2.dpad_right.pressed()) robot.arm.setEncodersTeleStartPos();
+            if (gp2.dpad_right.pressed()) robot.arm.setEncodersStartPos();
 
             //-------------------------------------------------------------------------------------
             //                                  TELEMETRY
             //-------------------------------------------------------------------------------------
-
-            telemetry.clear();
-            telemetry.addLine();
-            telemetry.addLine("Input-------------------|");
-            telemetry.addLine("Right Trigger Value:" + gp2.right_trigger.getValue());
-            telemetry.addLine("Right Trigger Pressing:" + gp2.right_trigger.pressing());
 
             robot.arm.printMotorPositions();
 

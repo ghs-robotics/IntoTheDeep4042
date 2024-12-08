@@ -24,4 +24,9 @@ public class MathHelper {
     public static double tilesToMM(double tiles) {
         return tiles * TILES_TO_MM;
     }
+
+    public static double angleIn360(double angle) {
+        while (angle < 0) angle += 360;
+        return angle % 360;
+    }
 }

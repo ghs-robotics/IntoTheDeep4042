@@ -31,6 +31,8 @@ public class AutoRight extends LinearOpMode {
 
         actionHandler.init();
 
+        robot.arm.setEncodersStartPos();
+
         waitForStart();
 
         while (opModeIsActive()){

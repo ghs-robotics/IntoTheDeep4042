@@ -32,13 +32,13 @@ public class Arm {
 
     //min and max motor positions to prevent hardware issues.
     private static final int minRotPos = 0;
-    private static final int maxRotPos = 1375;
+    private static final int maxRotPos = 1345;
 
     private static final int minExtPos = 0;
     private static final int maxLoweredExtPos = 2000;
-    private static final int maxRaisedExtPos = 3800;
+    private static final int maxRaisedExtPos = 3865;
 
-    private static final int startRotPos = maxRotPos;
+    private static final int startRotPos = maxRotPos + 40;
 
     private static final int loweredRotThreshold = 900;
 
@@ -74,7 +74,7 @@ public class Arm {
                 if (getRotM1Position() <= minRotPos) rotInput = MathHelper.clamp(rotInput,-1,0);
                 if (getRotM1Position() >= maxRotPos) rotInput = MathHelper.clamp(rotInput,0,1);
                 if (extensionM1.getCurrentPosition() <= minExtPos) extInput = MathHelper.clamp(extInput,0,1);
-                if (extensionM1.getCurrentPosition() >= maxExtPos) extInput = MathHelper.clamp(extInput,-1,0.05);
+                if (extensionM1.getCurrentPosition() >= maxExtPos) extInput = MathHelper.clamp(extInput,-1,0.03);
             }
 
             //rotInput = smoothRotInput(rotInput);
@@ -83,7 +83,6 @@ public class Arm {
             rotationM1.setPower(-rotInput);
             rotationM2.setPower(-rotInput);
             extensionM1.setPower(extInput);
-            //extensionM2.setPower(extInput);
         }
     }
 
@@ -102,8 +101,24 @@ public class Arm {
                 rotTargetPos = minRotPos;
                 extTargetPos = maxRaisedExtPos;
                 break;
-            case 2: //Fit in box
-                rotTargetPos = startRotPos;
+            case 2: //Grab block
+                rotTargetPos = maxRotPos;
+                extTargetPos = 1540;
+                break;
+            case 3: //Arm on submersible
+                rotTargetPos = 600;
+                extTargetPos = 1100;
+                break;
+            case 4: //top bin position
+                rotTargetPos = minRotPos + 110;
+                extTargetPos = maxRaisedExtPos;
+                break;
+            case 5: //lowered position
+                rotTargetPos = maxRotPos - 300;
+                extTargetPos = 1540;
+                break;
+            case 6: //lowered position
+                rotTargetPos = maxRotPos - 300;
                 extTargetPos = minExtPos;
                 break;
         }
@@ -133,8 +148,10 @@ public class Arm {
     private void autoDriveRot() {
         double error = getRotM1Position() - rotTargetPos;
         if (Math.abs(error) > 15) {
-            rotationM1.setPower(Math.signum(error) * -0.45);
-            rotationM2.setPower(Math.signum(error) * -0.45);
+            rotationM1.setPower(Math.signum(error)
+                    * (extensionM1.getCurrentPosition() > autoMaxExtForRot ? -0.15 : -0.5));
+            rotationM2.setPower(Math.signum(error)
+                    * (extensionM1.getCurrentPosition() > autoMaxExtForRot ? -0.15 : -0.5));
         }
         else {
             rotationM1.setPower(0);
@@ -144,8 +161,8 @@ public class Arm {
     }
     private void autoDriveExt() {
         double error = extensionM1.getCurrentPosition() - extTargetPos;
-        if (Math.abs(error) > 15) {
-            extensionM1.setPower(Math.signum(error) * -0.75);
+        if (Math.abs(error) > 30) {
+            extensionM1.setPower(Math.signum(error) * -0.9);
         }
         else {
             extensionM1.setPower(0);
@@ -162,17 +179,15 @@ public class Arm {
         rotationM1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rotationM2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         extensionM1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        //extensionM2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         rotationM1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rotationM2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         extensionM1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        //extensionM2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         relativeRotPos = 0;
     }
 
-    public void setEncodersTeleStartPos() {
+    public void setEncodersStartPos() {
         resetEncoders();
         relativeRotPos = startRotPos;
     }

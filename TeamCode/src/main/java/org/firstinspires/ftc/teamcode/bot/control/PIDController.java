@@ -33,20 +33,20 @@ public class PIDController {
     private static final PIDCoefficients PIDGainPos = new PIDCoefficients(.0023, 0.006, 0.0009);
     private static final PIDCoefficients PIDGainRot = new PIDCoefficients(.012, 0.07, 0.0006);
 
-    private static final double arrivedDistThresholdPos = 8; //mm
+    private static final double arrivedDistThresholdPos = 10; //mm
     private static final double arrivedDistThresholdRot = 1; //deg
 
     private ElapsedTime PIDTimer;
 
     public PIDController(double targetPos, boolean isPIDRot) {
-        this.targetPos = isPIDRot ? ((targetPos + 360) % 360) : targetPos;
+        this.targetPos = isPIDRot ? MathHelper.angleIn360(targetPos) : targetPos;
         this.isPIDRot = isPIDRot;
         PIDTimer = new ElapsedTime();
     }
 
     public double getPIDOutput (double currentPos) {
         if (isPIDRot) {
-            error = ((currentPos + 360) % 360) - targetPos;
+            error = MathHelper.angleIn360(MathHelper.angleIn360(currentPos) - targetPos);
             if (error > 180) error -= 360;
         }
         else error = currentPos - targetPos;
