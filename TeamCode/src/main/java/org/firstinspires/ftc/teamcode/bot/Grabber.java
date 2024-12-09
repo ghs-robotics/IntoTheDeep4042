@@ -33,8 +33,8 @@ public class Grabber {
         grabberRot = hardwareMap.get(Servo.class, "grabberRot");
 
         //enable if needed
-        grabber.getController().pwmEnable();
-        grabberRot.getController().pwmEnable();
+        //grabber.getController().pwmEnable();
+        //grabberRot.getController().pwmEnable();
 
         grabberOpen = false;
         grabberRotState = 0;

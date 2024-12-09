@@ -11,6 +11,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.auto_execution.AutoActionHandler;
 import org.firstinspires.ftc.teamcode.bot.Grabber;
 import org.firstinspires.ftc.teamcode.bot.Robot;
+import org.firstinspires.ftc.teamcode.util.HardwareSingle;
 import org.firstinspires.ftc.teamcode.util.MathHelper;
 import org.firstinspires.ftc.teamcode.util.TeleSingle;
 
@@ -21,14 +22,17 @@ public class AutoLeft extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        robot = new Robot(hardwareMap, telemetry);
+        int num = 0;
 
         TeleSingle.init(telemetry);
+        HardwareSingle.init(hardwareMap);
+
+        robot = new Robot(hardwareMap, telemetry);
 
         actionHandler = new AutoActionHandler(robot, telemetry);
 
         //Drive to box
-        actionHandler.add(MOVE,true, MathHelper.tilesToMM(0.825), MathHelper.tilesToMM(-0.525), -125);
+        actionHandler.add(MOVE,true, MathHelper.tilesToMM(0.855), MathHelper.tilesToMM(-0.495), -125);
         actionHandler.add(GRABBER,true, 0, 0);
         actionHandler.add(ARM,false, 1);
 
@@ -47,13 +51,13 @@ public class AutoLeft extends LinearOpMode {
         actionHandler.add(ARM,false, 2);
         actionHandler.add(WAIT, false, 0.1);
         actionHandler.add(GRABBER,false, 0, 2);
-        actionHandler.add(WAIT, false, 0.1);
+        actionHandler.add(WAIT, false, 0.15);
         actionHandler.add(GRABBER,true, 0, 0);
         actionHandler.add(ARM,false, 5);
         actionHandler.add(ARM,false, 6);
 
         //Drive to box
-        actionHandler.add(MOVE,true, MathHelper.tilesToMM(0.825), MathHelper.tilesToMM(-0.525), -125);
+        actionHandler.add(MOVE,true, MathHelper.tilesToMM(0.855), MathHelper.tilesToMM(-0.495), -125);
         actionHandler.add(ARM,false, 1);
 
         //Drop
@@ -65,19 +69,19 @@ public class AutoLeft extends LinearOpMode {
         //Move to second ground block
         actionHandler.add(ARM,true, 0);
         actionHandler.add(GRABBER,true, 1, 2);
-        actionHandler.add(MOVE, false, MathHelper.tilesToMM(1.14), MathHelper.tilesToMM(-0.70), 0);
+        actionHandler.add(MOVE, false, MathHelper.tilesToMM(1.168), MathHelper.tilesToMM(-0.70), 0);
 
         //Grab second ground block
         actionHandler.add(ARM,false, 2);
         actionHandler.add(WAIT, false, 0.1);
         actionHandler.add(GRABBER,false, 0, 2);
-        actionHandler.add(WAIT, false, 0.1);
+        actionHandler.add(WAIT, false, 0.15);
         actionHandler.add(GRABBER,true, 0, 0);
         actionHandler.add(ARM,false, 5);
         actionHandler.add(ARM,false, 6);
 
         //Drive to box
-        actionHandler.add(MOVE,true, MathHelper.tilesToMM(0.825), MathHelper.tilesToMM(-0.525), -125);
+        actionHandler.add(MOVE,true, MathHelper.tilesToMM(0.855), MathHelper.tilesToMM(-0.495), -125);
         actionHandler.add(ARM,false, 1);
 
         //Drop
@@ -88,7 +92,7 @@ public class AutoLeft extends LinearOpMode {
 
         actionHandler.add(ARM,true, 0);
         actionHandler.add(GRABBER,true, 0, 2);
-        actionHandler.add(MOVE,true, MathHelper.tilesToMM(0.825), MathHelper.tilesToMM(-0.525), -125);
+        actionHandler.add(MOVE,true, MathHelper.tilesToMM(0.855), MathHelper.tilesToMM(-0.495), -125);
 
 
         actionHandler.init();
@@ -99,6 +103,10 @@ public class AutoLeft extends LinearOpMode {
 
         while (opModeIsActive()){
             actionHandler.run();
+            telemetry.clear();
+            num++;
+            telemetry.addLine("Frame: " + num / 10);
+            telemetry.update();
         }
     }
 }

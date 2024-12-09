@@ -110,7 +110,7 @@ public class Arm {
                 extTargetPos = 1100;
                 break;
             case 4: //top bin position
-                rotTargetPos = minRotPos + 110;
+                rotTargetPos = minRotPos + 100;
                 extTargetPos = maxRaisedExtPos;
                 break;
             case 5: //lowered position

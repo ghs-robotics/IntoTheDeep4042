@@ -26,7 +26,7 @@ public class MathHelper {
     }
 
     public static double angleIn360(double angle) {
-        while (angle < 0) angle += 360;
+        while (angle < 0) { angle += 360; }
         return angle % 360;
     }
 }

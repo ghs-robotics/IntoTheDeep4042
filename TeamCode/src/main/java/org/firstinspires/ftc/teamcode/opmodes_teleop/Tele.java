@@ -38,7 +38,6 @@ public class Tele extends LinearOpMode {
 
         waitForStart();
 
-
         while (opModeIsActive()){
             gp1.update();
             gp2.update();

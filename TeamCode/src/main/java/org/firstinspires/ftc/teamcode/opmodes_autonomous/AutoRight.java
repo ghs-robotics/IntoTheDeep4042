@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.auto_execution.AutoActionHandler;
 import org.firstinspires.ftc.teamcode.bot.Robot;
+import org.firstinspires.ftc.teamcode.util.HardwareSingle;
 import org.firstinspires.ftc.teamcode.util.MathHelper;
 import org.firstinspires.ftc.teamcode.util.TeleSingle;
 
@@ -20,14 +21,15 @@ public class AutoRight extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        robot = new Robot(hardwareMap, telemetry);
-
         TeleSingle.init(telemetry);
+        HardwareSingle.init(hardwareMap);
+
+        robot = new Robot(hardwareMap, telemetry);
 
         actionHandler = new AutoActionHandler(robot, telemetry);
 
         actionHandler.add(WAIT,false,0.25);
-        actionHandler.add(MOVE,false, MathHelper.tilesToMM(-1.4), 20, 0);
+        actionHandler.add(MOVE,false, MathHelper.tilesToMM(-1.4), -80, 0);
 
         actionHandler.init();
 

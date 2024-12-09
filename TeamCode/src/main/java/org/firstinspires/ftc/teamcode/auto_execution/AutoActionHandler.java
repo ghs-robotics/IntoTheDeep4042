@@ -46,8 +46,6 @@ public class AutoActionHandler {
         totalActions = actionList.size();
 
         addNextActionsToCurrent();
-
-        printStatus();
     }
 
     /**
